@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/solution.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    
+    <title>Parth.Portfolio</title>
+</head>
+<style>
+    body {
+      
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+
+    .icon-square {
+        width: 3rem;
+        height: 3rem;
+        border-radius: .75rem;
+    }
+
+    .nav-link {
+        color: gray;
+    }
+
+    .heroImage {
+        height: 100vh; 
+    width: 100vw;
+    object-fit: cover; 
+
+    }
+    .heroText>h1 {
+        color: black;
+    }
+    .heroText>p {
+        width: 400px;
+        font-size: large;
+        font-style: italic;
+        
+    }
+    .designerWord {
+  font-family: "Great Vibes", cursive;
+  font-style:italic;
+  color: orange;
+  font-size: 2rem;
+  word-spacing: 0.5rem;
+  padding-bottom: -40px;
+font-style: italic;
+  
+}
+
+    .hero {
+        position: relative;
+    background-image: url('imgs/hero2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100vw;
+    }
+    .heroText {
+         position: absolute;
+    top: 50%;
+    left: 70px; /* Adjust this value to position the text horizontally */
+    transform: translateY(-50%);
+    color: gray; /* Change this based on the background image */
+    
+    padding: 20px;
+    border-radius: 10px;
+    }
+
+    .skillSection, .projectSection, .getInTouchSection {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding-top: 30px;
+    }
+
+    .aboutMeSection {
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        align-items: left;
+        padding-top: 30px;
+    }
+
+    .skillSection>p, .projectSection>p, .aboutMeSection>p {
+        color: gray;
+        font-style: italic;
+    }
+
+    .getInTouch>p {
+        color: gray;
+        font-style: italic;
+        display: flex;
+    }
+
+   
+
+    .projectSection {
+        background-color: #E3E7F1;
+        color: black;
+    }
+
+    .editorial {
+  display: block;
+  width: 100%;
+  height: 60px;
+  max-height: 60px;
+  margin: 0;
+  z-index:5;
+  bottom:0;
+  position:absolute;
+  left:0px;
+  float:left;
+}
+
+.parallax1 > use {
+  animation: move-forever1 10s linear infinite;
+  &:nth-child(1) {
+    animation-delay: -2s;
+  }
+}
+.parallax2 > use {
+  animation: move-forever2 8s linear infinite;
+  &:nth-child(1) {
+    animation-delay: -2s;
+  }
+}
+.parallax3 > use {
+  animation: move-forever3 6s linear infinite;
+  &:nth-child(1) {
+    animation-delay: -2s;
+  }
+}
+.parallax4 > use {
+  animation: move-forever4 4s linear infinite;
+  &:nth-child(1) {
+    animation-delay: -2s;
+  }
+}
+@keyframes move-forever1 {
+  0% {
+    transform: translate(85px, 0%);
+  }
+  100% {
+    transform: translate(-90px, 0%);
+  }
+}
+@keyframes move-forever2 {
+  0% {
+    transform: translate(-90px, 0%);
+  }
+  100% {
+    transform: translate(85px, 0%);
+  }
+}
+@keyframes move-forever3 {
+  0% {
+    transform: translate(85px, 0%);
+  }
+  100% {
+    transform: translate(-90px, 0%);
+  }
+}
+@keyframes move-forever4 {
+  0% {
+    transform: translate(-90px, 0%);
+  }
+  100% {
+    transform: translate(85px, 0%);
+  }
+}
+
+a {
+  
+    text-decoration: underline;
+    color: black;
+}
+
+.beyond {
+    text-align: center;
+    padding-bottom: 40px;
+    position: relative;
+}
+.getInTouchSection {
+    padding-bottom: 40px;
+}
+
+
+.eduSectio {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+    justify-content: center;
+}
+
+.colors {
+    position: absolute;
+    top: 20%;
+    z-index: -1;
+}
+
+</style>
+
+
+<body>
+    <section class="heroSection">
+        <div class="hero">
+            <header class="d-flex justify-content-left py-3 px-4">
+            <ul class="nav nav-underline">
+                <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Home</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Projects</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Resume</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+            </ul>
+            </header>
+
+    
+        <div class="heroText">
+            <h1>👋 <br>Hello, I'm Parth</h1>
+            <p>A developer / <span class="designerWord">Designer!</span><br>with expertise in Swift, SwiftUI, React, and Node.js, building high-performance iOS and web applications
+            tailored to client needs. I focus on delivering seamless user experiences with scalable, maintainable solutions.</p>
+        </div>
+    
+        </div>
+    </section>
+    <svg class="editorial" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+        viewBox="0 24 150 28 " preserveAspectRatio="none">
+        <defs>
+            <path id="gentle-wave" d="M-160 44c30 0 
+                    58-18 88-18s
+                    58 18 88 18 
+                    58-18 88-18 
+                    58 18 88 18
+                    v44h-352z" />
+        </defs>
+        <g class="parallax1">
+            <use xlink:href="#gentle-wave" x="50" y="3" fill="#f461c1" />
+        </g>
+        <g class="parallax2">
+            <use xlink:href="#gentle-wave" x="50" y="0" fill="#4579e2" />
+        </g>
+        <g class="parallax3">
+            <use xlink:href="#gentle-wave" x="50" y="9" fill="#3461c1" />
+        </g>
+        <g class="parallax4">
+            <use xlink:href="#gentle-wave" x="50" y="6" fill="#fff" />
+        </g>
+    </svg>
+
+    <section class="skillSection container">
+        <h1>Unleashing My Arsenal</h1>
+        <p>Explore the Weapons in My Creative Toolbox</p>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
+            <div class="col d-flex align-items-start">
+                
+                <div>
+                    
+                    <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">iOS Development</h3>
+                    <p>I specialize in crafting innovative iOS applications with Swift, UIKit, and SwiftUI. My expertise extends to iOS
+                    frameworks like Core Data and Core Animation, ensuring seamless user experiences.</p>
+                </div>
+            </div>
+            <div class="col d-flex align-items-start">
+                
+                <div>
+                    <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Web Development</h3>
+                    <p>I build interactive web applications using React.js for frontend and Node.js/Express.js for backend development. With
+                    HTML5 and CSS3 skills, I create responsive and visually appealing websites.</p>
+                </div>
+            </div>
+            <div class="col d-flex align-items-start">
+             
+                <div>
+                    <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Version Control</h3>
+                    <p>Proficient in Git, I streamline collaboration and project management, ensuring code integrity and successful teamwork.</p>
+                </div>
+            </div>
+            <div class="col d-flex align-items-start">
+               
+                <div>
+                    <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Deployment</h3>
+                    <p>From iOS apps to web projects, I handle deployment seamlessly. Whether it's the App Store or hosting platforms like
+                    Heroku, I ensure smooth and successful deployment.</p>
+                </div>
+            </div>
+            
+            <div class="col d-flex align-items-start">
+                
+                <div>
+                    <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">problem-solving Skills</h3>
+                    <p>I possess strong problem-solving abilities, enabling me to tackle complex challenges with confidence and creativity. I
+                    approach problems methodically, breaking them down into manageable tasks and finding effective solutions to ensure
+                    project success.</p>
+                </div>
+            </div>
+
+            
+
+            <div class="col d-flex align-items-start">
+               
+                <div>
+                    <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Adaptability</h3>
+                    <p>With a keen ability to adapt to new technologies and environments, I thrive in dynamic and evolving settings. I embrace
+                    change as an opportunity for growth, quickly learning and mastering new skills to meet project requirements and exceed
+                    expectations.</p>
+                </div>
+            </div>
+
+            <div class="col d-flex align-items-start">
+               
+                <div>
+                    <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Effective Communication</h3>
+                    <p>I excel in communication, both verbal and written, allowing me to collaborate seamlessly with team members,
+                    stakeholders, and clients. I ensure that project goals are clearly understood and effectively communicated, fostering a
+                    collaborative and productive work environment.</p>
+                </div>
+            </div>
+
+            <div class="col d-flex align-items-start">
+                
+                <div>
+                    <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Attention to Detail</h3>
+                    <p>I have a meticulous attention to detail, ensuring that every aspect of a project is carefully considered and executed to
+                    the highest standards. From coding to design, I take pride in delivering work that is polished, precise, and meets the
+                    needs of end-users..</p>
+                </div>
+            </div>
+
+            
+           
+        </div>
+
+    </section>
+
+    <section class="projectSection">
+        <h1>Portfolio Of Creations</h1>
+        <p>Unveiling My Journey Through Code and Design</p>
+        <div class="container">
+        <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+            <div class="col-10 col-sm-8 col-lg-6">
+                <img src="imgs/xcode-seeklogo.svg" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="400"
+                   loading="lazy">
+            </div>
+            <div class="col-lg-6">
+                <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">iOS Showroom</h1>
+                <p class="lead">Welcome to my iOS Showroom, where innovation meets elegance. Explore a curated collection of my finest mobile
+                applications, each crafted with precision and creativity. From sleek interfaces to seamless functionality, these
+                projects showcase my dedication to delivering exceptional user experiences. Click to discover the unique solutions and
+                sophisticated designs that set my iOS apps apart.</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    <a href="/Portfolio/iOSProjects" type="button" class="btn btn-primary btn-lg px-4 me-md-2">Explore</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+            <hr>
+
+            <div class="col-lg-6">
+                <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Web Craftsmanship</h1>
+                <p class="lead">Discover the art of digital excellence through my web projects. Each creation is a testament to my dedication to
+                innovation, design, and functionality. Click to explore these meticulously crafted solutions, where every detail is
+                tailored to deliver an exceptional user experience.</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    <button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Explore</button>
+                </div>
+            </div>
+            <div class="col-10 col-sm-8 col-lg-6">
+                <img src="imgs/visual-studio-code-seeklogo.svg" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="400"
+                    loading="lazy">
+            </div>
+        </div>
+
+        <div class="beyond">
+            <img src="./imgs/colorSpash.png" height="150px" class="colors">
+            <h2><span class="designerWord" style="font-size: 3rem;">Beyond </span> the Code...</h2>
+            <p>When I'm not coding, I immerse myself in a variety of creative pursuits. I love sketching, where I can translate my
+            ideas into visual art, adding a unique dimension to my design thinking. Music is another passion; whether I'm
+            playing an
+            instrument or discovering new genres, it fuels my creativity and often inspires my projects. I'm an avid reader,
+            constantly exploring new books that broaden my perspective and deepen my knowledge. Additionally, I enjoy tackling
+            DIY
+            projects, from crafting unique home decor to building small gadgets. These hobbies not only relax me but also
+            inspire my
+            work, allowing me to approach development with a fresh and innovative mindset.</p>
+        </div>
+        <hr>
+        <div class="eduSectio">
+            <h2 style="text-align: center;">Learning Odyssey 📚</h2>
+            <div id="humber">
+                <h5>Post-Graduation in Information Technology Solutions</h5>
+                <p>Humber College</p>
+            </div>
+            <div id="gtu">
+                <h5>Bachelor's in Computer Engineering</h5>
+                <p>Gujarat Technological University</p>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="getInTouchSection container">
+        
+        <div class="getInTouch container">
+            
+                <h2>Let's Get in Touch</h2>
+                <p>Let's Collaborate! Whether you have a project in mind, want to discuss the latest trends in tech, or just want to say
+                    hello, I'd love to hear from you. I'm always open to new opportunities and exciting challenges.</p>
+                    <div></div>
+                    <div class="contactInfo">
+                <p><a href="mailto:parthantala09@gmail.com">Email Me </a><a
+                    href="https://www.linkedin.com/in/parthantala/?lipi=urn%3Ali%3Apage%3Ad_flagship3_search_srp_jobs%3ByC0%2BgUn%2BQd6KxalcRVDcXw%3D%3D">
+                    | Connect on LinkedIn</a></p>
+                
+                </div>
+        </div>
+    </section>
+
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <div class="col-md-4 d-flex align-items-center">
+            <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+                <svg class="bi" width="30" height="24">
+                    <use xlink:href="#bootstrap"></use>
+                </svg>
+            </a>
+            <span class="mb-3 mb-md-0 text-body-secondary">© Parth Antala</span>
+        </div>
+    
+        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24">
+                        <use xlink:href="#twitter"></use>
+                    </svg></a></li>
+            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24">
+                        <use xlink:href="#instagram"></use>
+                    </svg></a></li>
+            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24">
+                        <use xlink:href="#facebook"></use>
+                    </svg></a></li>
+        </ul>
+    </footer>
+   
+</body>
+</html>

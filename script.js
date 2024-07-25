@@ -1,0 +1,96 @@
+document.addEventListener('DOMContentLoaded', (event) => {
+    // Create the custom cursor element
+    const cursor = document.createElement('div');
+    cursor.classList.add('cursor');
+    document.body.appendChild(cursor);
+
+    // Update the cursor position
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.left = `${e.clientX}px`;
+        cursor.style.top = `${e.clientY}px`;
+    });
+
+    // Optional: Add some interactivity (e.g., scale effect on click)
+    document.addEventListener('mousedown', () => {
+        cursor.style.transform = 'scale(0.8)';
+    });
+
+    document.addEventListener('mouseup', () => {
+        cursor.style.transform = 'scale(1)';
+    });
+});
+// Matter.js module aliases
+const Engine = Matter.Engine,
+      Render = Matter.Render,
+      World = Matter.World,
+      Bodies = Matter.Bodies,
+      Body = Matter.Body;
+
+// Create a Matter.js engine with minimal gravity
+const engine = Engine.create();
+engine.world.gravity.y = 0.01; // Minimal gravity for buoyancy effect
+
+const world = engine.world;
+
+// Create a Matter.js renderer
+const render = Render.create({
+    element: document.body,
+    engine: engine,
+    options: {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        wireframes: true,
+        wireframeBackground: 'transparent'
+    }
+});
+
+// Create boundaries
+const boundaries = [
+    Bodies.rectangle(window.innerWidth / 2, -25, window.innerWidth, 50, { isStatic: true }),
+    Bodies.rectangle(window.innerWidth / 2, window.innerHeight + 25, window.innerWidth, 50, { isStatic: true }),
+    Bodies.rectangle(-25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true }),
+    Bodies.rectangle(window.innerWidth + 25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true })
+];
+
+World.add(world, boundaries);
+
+// Add images to the world
+const icons = document.querySelectorAll('.icon');
+icons.forEach(icon => {
+    const rect = icon.getBoundingClientRect();
+    const body = Bodies.rectangle(
+        Math.random() * window.innerWidth,
+        Math.random() * window.innerHeight,
+        rect.width,
+        rect.height,
+        { restitution: 0.9 }
+    );
+    World.add(world, body);
+
+    // Apply random initial force
+    Body.applyForce(body, body.position, {
+        x: (Math.random() - 0.5) * 0.02,
+        y: (Math.random() - 0.5) * 0.02
+    });
+
+    // Apply continuous random forces to keep them floating
+    (function applyRandomForces() {
+        Body.applyForce(body, body.position, {
+            x: (Math.random() - 0.5) * 0.002,
+            y: (Math.random() - 0.5) * 0.002
+        });
+        setTimeout(applyRandomForces, 100);
+    })();
+
+    // Synchronize the DOM element with the physics body
+    (function update() {
+        icon.style.left = `${body.position.x - rect.width / 2}px`;
+        icon.style.top = `${body.position.y - rect.height / 2}px`;
+        icon.style.transform = `rotate(${body.angle}rad)`;
+        requestAnimationFrame(update);
+    })();
+});
+
+// Run the engine and renderer
+Engine.run(engine);
+Render.run(render);
