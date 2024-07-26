@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Parth.Portfolio</title>
     <style>
         body {
@@ -36,7 +36,7 @@
     border-bottom: 1px solid #ddd; /* Optional: Add a border for separation */
     width: 80%; /* Adjust width as needed */
     box-sizing: border-box; /* Ensure padding is included in the width */
-    z-index: 100; /* Ensure it's above other content */
+    z-index: 10; /* Ensure it's above other content */
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 1cm;
 }
@@ -45,7 +45,7 @@
     position: relative;
     width: 100%;
     height: 100%;
-    z-index: 10; /* Ensure it's below the hero section */
+    z-index: 1; /* Ensure it's below the hero section */
 }
 
         .icon-container {
@@ -54,9 +54,11 @@
             cursor: pointer;
         }
 
-        .icon {
-            width: 100px;
-            height: 100px;
+         .icon {
+            width: 10vw; /* Responsive width */
+            height: 10vw; /* Maintain aspect ratio */
+            max-width: 100px; /* Max size for large screens */
+            max-height: 100px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             border-radius: 22%;
             object-fit: cover;
@@ -68,7 +70,7 @@
             left: 50%;
             transform: translateX(-50%);
             padding: 5px 10px;
-            font-size: 14px;
+            font-size: 1.5vw; /* Responsive font size */
             color: #fff;
             background: rgba(0, 0, 0, 0.75);
             border-radius: 5px;
@@ -96,11 +98,29 @@
             z-index: 1000;
             display: none;
         }
+
+        .toggle-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 10px;
+            background-color: #3d3d3d3a;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            z-index: 100; /* Higher than hero and portfolio */
+        }
     </style>
 </head>
 
 <body>
 <div class="hero-section">
+    <button class="toggle-button">
+        <div class="toggle-icon">
+        <img src="imgs/toggle.svg" width="22" height="22">
+        </div>
+    </button>
     <img class="d-block mx-auto mb-4" src="imgs/xcode-seeklogo.svg" alt="" width="172" height="157">
     <h1 class="display-5 fw-bold text-body-emphasis">iOS Showroom</h1>
     <div class="col-lg-6 mx-auto">
@@ -209,6 +229,27 @@
             document.addEventListener('mouseup', () => {
                 cursor.style.transform = 'scale(1)';
             });
+
+            const toggleButton = document.querySelector('.toggle-button');
+            const toggleIcon = document.querySelector('.toggle-icon')
+            let isPortfolioOnTop = true; // Track the z-index state
+
+            toggleButton.addEventListener('click', () => {
+                const portfolio = document.getElementById('portfolio');
+                const heroSection = document.querySelector('.hero-section');
+                
+                if (isPortfolioOnTop) {
+                    portfolio.style.zIndex = '20'; // Bring portfolio below hero section
+                    heroSection.style.zIndex = '3';
+                    toggleIcon.innerHTML = '<img src="imgs/toggleLite.svg" width="22" height="22">'
+                } else {
+                    portfolio.style.zIndex = '1'; // Bring portfolio above hero section
+                    heroSection.style.zIndex = '2'; // Bring hero section below portfolio
+                    toggleIcon.innerHTML = '<img src="imgs/toggle.svg" width="22" height="22">'
+                }
+
+                isPortfolioOnTop = !isPortfolioOnTop; // Toggle the state
+            });
         });
 
         const Engine = Matter.Engine,
@@ -218,7 +259,7 @@
             Body = Matter.Body;
 
         const engine = Engine.create();
-        engine.world.gravity.y = 0.3;
+        engine.world.gravity.y = 1;
 
         const world = engine.world;
 
