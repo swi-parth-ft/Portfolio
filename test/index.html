@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integration Test</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f0f0f0;
+        }
+
+        .icon-container {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.5s ease, z-index 0.5s ease;
+        }
+
+        .icon {
+            width: 100%;
+            height: 100%;
+        }
+
+        .icon-container.clicked {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1.5);
+            z-index: 100;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="icon-container">
+        <img class="icon" src="https://via.placeholder.com/100" alt="Icon">
+    </div>
+
+    <script>
+        document.querySelector('.icon-container').addEventListener('click', function () {
+            this.classList.toggle('clicked');
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.17.1/matter.min.js"></script>
+    <script>
+        const { Engine, Render, World, Bodies } = Matter;
+        const engine = Engine.create();
+        const world = engine.world;
+
+        const render = Render.create({
+            element: document.body,
+            engine: engine,
+            options: {
+                width: window.innerWidth,
+                height: window.innerHeight,
+                wireframes: false,
+                background: 'transparent'
+            }
+        });
+
+        // Add boundaries
+        const boundaries = [
+            Bodies.rectangle(window.innerWidth / 2, -25, window.innerWidth, 50, { isStatic: true }),
+            Bodies.rectangle(window.innerWidth / 2, window.innerHeight + 25, window.innerWidth, 50, { isStatic: true }),
+            Bodies.rectangle(-25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true }),
+            Bodies.rectangle(window.innerWidth + 25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true })
+        ];
+
+        World.add(world, boundaries);
+
+        // Run engine and renderer
+        Engine.run(engine);
+        Render.run(render);
+    </script>
+    <script>
+        const iconContainer = document.querySelector('.icon-container');
+        const rect = iconContainer.getBoundingClientRect();
+        const iconBody = Bodies.rectangle(
+            Math.random() * window.innerWidth,
+            Math.random() * window.innerHeight,
+            rect.width,
+            rect.height,
+            { restitution: 0.9, friction: 0.1, render: { fillStyle: 'transparent' } }
+        );
+        World.add(world, iconBody);
+
+        (function update() {
+            const { x, y, angle } = iconBody.position;
+            iconContainer.style.left = `${x - rect.width / 2}px`;
+            iconContainer.style.top = `${y - rect.height / 2}px`;
+            iconContainer.style.transform = `rotate(${angle}rad)`;
+            requestAnimationFrame(update);
+        })();
+    </script>
+    <script>
+        document.querySelector('.icon-container').addEventListener('click', function () {
+            this.classList.toggle('clicked');
+        });
+    </script>
+
+
+
+
+</body>
+
+</html>

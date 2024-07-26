@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -25,43 +24,54 @@
             background-size: cover;
         }
 
-      .hero-section {
-    position: absolute;
-    top: 2%;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.8); /* Optional: Add a background color to make the text more readable */
-    border-bottom: 1px solid #ddd; /* Optional: Add a border for separation */
-    width: 80%; /* Adjust width as needed */
-    box-sizing: border-box; /* Ensure padding is included in the width */
-    z-index: 10; /* Ensure it's above other content */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 1cm;
-}
+        .hero-section {
+            position: absolute;
+            top: 2%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.8);
+            /* Optional: Add a background color to make the text more readable */
+            border-bottom: 1px solid #ddd;
+            /* Optional: Add a border for separation */
+            width: 80%;
+            /* Adjust width as needed */
+            box-sizing: border-box;
+            /* Ensure padding is included in the width */
+            z-index: 10;
+            /* Ensure it's above other content */
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 1cm;
+        }
 
-#portfolio {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    z-index: 1; /* Ensure it's below the hero section */
-}
+        #portfolio {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            /* Ensure it's below the hero section */
+        }
+
+        .icon {
+            width: 10vw;
+            /* Responsive width */
+            height: 10vw;
+            /* Maintain aspect ratio */
+            max-width: 100px;
+            /* Max size for large screens */
+            max-height: 100px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 22%;
+            object-fit: cover;
+        }
 
         .icon-container {
             position: absolute;
             display: inline-block;
             cursor: pointer;
-        }
-
-         .icon {
-            width: 10vw; /* Responsive width */
-            height: 10vw; /* Maintain aspect ratio */
-            max-width: 100px; /* Max size for large screens */
-            max-height: 100px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 22%;
-            object-fit: cover;
+            transition: transform 0.5s ease;
+            /* Smooth transition for animation */
         }
 
         .tooltip {
@@ -70,7 +80,8 @@
             left: 50%;
             transform: translateX(-50%);
             padding: 5px 10px;
-            font-size: 1.5vw; /* Responsive font size */
+            font-size: 1.5vw;
+            /* Responsive font size */
             color: #fff;
             background: rgba(0, 0, 0, 0.75);
             border-radius: 5px;
@@ -109,214 +120,286 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            z-index: 100; /* Higher than hero and portfolio */
+            z-index: 100;
+            /* Higher than hero and portfolio */
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            z-index: 1000;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 60%;
+             max-width: 500px;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
         }
     </style>
 </head>
 
 <body>
-<div class="hero-section">
-    <button class="toggle-button">
-        <div class="toggle-icon">
-        <img src="imgs/toggle.svg" width="22" height="22">
-        </div>
-    </button>
-    <img class="d-block mx-auto mb-4" src="imgs/xcode-seeklogo.svg" alt="" width="172" height="157">
-    <h1 class="display-5 fw-bold text-body-emphasis">iOS Showroom</h1>
-    <div class="col-lg-6 mx-auto">
-        <p class="lead mb-4">Explore a diverse collection of my iOS projects, each designed to bring creativity and functionality to life. My work showcases a commitment to quality and user experience.</p>
-        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-        <a href="https://github.com/swi-parth-ft" class="btn btn-dark btn-lg px-4 gap-3">
-            <i class="fab fa-github"></i> GitHub
-        </a>
-        <a href="https://apps.apple.com/us/developer/yourdeveloperid" class="btn btn-primary btn-lg px-4">
-            <i class="fab fa-app-store-ios"></i> App Store
-        </a>
+    <div class="hero-section">
+        <button class="toggle-button">
+            <div class="toggle-icon">
+                <img src="imgs/toggle.svg" width="22" height="22">
+            </div>
+        </button>
+        <img class="d-block mx-auto mb-4" src="imgs/xcode-seeklogo.svg" alt="" width="172" height="157">
+        <h1 class="display-5 fw-bold text-body-emphasis">iOS Showroom</h1>
+        <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4">Explore a diverse collection of my iOS projects, each designed to bring creativity and
+                functionality to life. My work showcases a commitment to quality and user experience.</p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <a href="https://github.com/swi-parth-ft" class="btn btn-dark btn-lg px-4 gap-3">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="https://apps.apple.com/us/developer/yourdeveloperid" class="btn btn-primary btn-lg px-4">
+                    <i class="fab fa-app-store-ios"></i> App Store
+                </a>
+            </div>
         </div>
     </div>
-</div>
     <div id="portfolio">
-        <div class="icon-container">
-            <img class="icon" src="imgs/books.png" alt="Project 1">
+        <div class="icon-container" data-title="Book Nerd" data-image="imgs/books.png">
+            <img class="icon" src="imgs/books.png" alt="Book Nerd">
             <div class="tooltip">Book Nerd</div>
         </div>
-        <div class="icon-container">
-            <img class="icon" src="imgs/filters.png" alt="Project 2">
+        <div class="icon-container" data-title="Filter Up" data-image="imgs/filters.png">
+            <img class="icon" src="imgs/filters.png" alt="Filter Up">
             <div class="tooltip">Filter Up</div>
         </div>
-        <div class="icon-container">
-            <img class="icon" src="imgs/Flags.png" alt="Project 3">
-            <div class="tooltip">Flags everywhere</div>
+        <div class="icon-container" data-title="Flags Everywhere" data-image="imgs/Flags.png">
+            <img class="icon" src="imgs/Flags.png" alt="Flags Everywhere">
+            <div class="tooltip">Flags Everywhere</div>
         </div>
-        <div class="icon-container">
-            <img class="icon" src="imgs/flash.png" alt="Project 4">
+        <div class="icon-container" data-title="Flash" data-image="imgs/flash.png">
+            <img class="icon" src="imgs/flash.png" alt="Flash">
             <div class="tooltip">Flash</div>
         </div>
-        <div class="icon-container">
-            <img class="icon" src="imgs/hotProspects.png" alt="Project 5">
+        <div class="icon-container" data-title="Hot Prospects" data-image="imgs/hotProspects.png">
+            <img class="icon" src="imgs/hotProspects.png" alt="Hot Prospects">
             <div class="tooltip">Hot Prospects</div>
         </div>
-        <div class="icon-container">
-            <img class="icon" src="imgs/IKnow.png" alt="Project 6">
+        <div class="icon-container" data-title="I Know" data-image="imgs/IKnow.png">
+            <img class="icon" src="imgs/IKnow.png" alt="I Know">
             <div class="tooltip">I Know</div>
         </div>
-        <div class="icon-container">
-            <img class="icon" src="imgs/habits.png" alt="Project 7">
+        <div class="icon-container" data-title="Habits" data-image="imgs/habits.png">
+            <img class="icon" src="imgs/habits.png" alt="Habits">
             <div class="tooltip">Habits</div>
         </div>
-        <div class="icon-container">
-            <img class="icon" src="imgs/Randevous.png" alt="Project 8">
+        <div class="icon-container" data-title="Randevous" data-image="imgs/Randevous.png">
+            <img class="icon" src="imgs/Randevous.png" alt="Randevous">
             <div class="tooltip">Randevous</div>
         </div>
-        <div class="icon-container">
-            <img class="icon" src="imgs/rollingStones.png" alt="Project 9">
+        <div class="icon-container" data-title="Rolling Stones" data-image="imgs/rollingStones.png">
+            <img class="icon" src="imgs/rollingStones.png" alt="Rolling Stones">
             <div class="tooltip">Rolling Stones</div>
         </div>
-        <div class="icon-container">
-            <img class="icon" src="imgs/RPS.png" alt="Project 10">
+        <div class="icon-container" data-title="RPS" data-image="imgs/RPS.png">
+            <img class="icon" src="imgs/RPS.png" alt="RPS">
             <div class="tooltip">RPS</div>
         </div>
-        <div class="icon-container">
-            <img class="icon" src="imgs/slzzp.png" alt="Project 11">
+        <div class="icon-container" data-title="Slzzp" data-image="imgs/slzzp.png">
+            <img class="icon" src="imgs/slzzp.png" alt="Slzzp">
             <div class="tooltip">Slzzp</div>
         </div>
-        <div class="icon-container">
-            <img class="icon" src="imgs/spendMuch.png" alt="Project 12">
+        <div class="icon-container" data-title="Spend Much?" data-image="imgs/spendMuch.png">
+            <img class="icon" src="imgs/spendMuch.png" alt="Spend Much?">
             <div class="tooltip">Spend Much?</div>
         </div>
-        <div class="icon-container">
-            <img class="icon" src="imgs/splitNtip.png" alt="Project 13">
-            <div class="tooltip">Split N Tip</div>
+        <div class="icon-container" data-title="t'the Moon" data-image="imgs/ttheMoon.png">
+            <img class="icon" src="imgs/ttheMoon.png" alt="t'the Moon">
+            <div class="tooltip">t'the Moon</div>
         </div>
-        <div class="icon-container">
-            <img class="icon" src="imgs/sweetTooth.png" alt="Project 14">
+        <div class="icon-container" data-title="Measures" data-image="imgs/measures.png">
+            <img class="icon" src="imgs/measures.png" alt="Mission Tracker">
+            <div class="tooltip">Units onTheGo</div>
+        </div>
+        <div class="icon-container" data-title="splitNTip" data-image="imgs/splitNtip.png">
+            <img class="icon" src="imgs/splitNtip.png" alt="splitNtip">
+            <div class="tooltip">Spli N Tip</div>
+        </div>
+        <div class="icon-container" data-title="Sweet Tooth" data-image="imgs/sweetTooth.png">
+            <img class="icon" src="imgs/sweetTooth.png" alt="sweetTooth">
             <div class="tooltip">Sweet Tooth</div>
         </div>
-        <div class="icon-container">
-            <img class="icon" src="imgs/where'sSnow.png" alt="Project 15">
-            <div class="tooltip">Where's Snow</div>
+        <div class="icon-container" data-title="where's Snow" data-image="imgs/where'sSnow.png">
+            <img class="icon" src="imgs/where'sSnow.png" alt="where'sSnow">
+            <div class="tooltip">where'sSnow</div>
         </div>
-        <div class="icon-container">
-            <img class="icon" src="imgs/wordScramble.png" alt="Project 16">
+        <div class="icon-container" data-title="Word Scramble" data-image="imgs/wordScramble.png">
+            <img class="icon" src="imgs/wordScramble.png" alt="wordScramble">
             <div class="tooltip">Word Scramble</div>
         </div>
-        <div class="icon-container">
-            <img class="icon" src="imgs/measures.png" alt="Project 17">
-            <div class="tooltip">Measures</div>
+    </div>
+
+
+    <!-- Modal -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <img id="modalImage" src="" alt="Project Image" style="width: 100%;">
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.17.1/matter.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const cursor = document.createElement('div');
-            cursor.classList.add('cursor');
-            document.body.appendChild(cursor);
+        document.addEventListener('DOMContentLoaded', () => {
+            const iconContainers = document.querySelectorAll('.icon-container');
+            const modal = document.getElementById('projectModal');
+            const closeBtn = document.querySelector('.close');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalImage = document.getElementById('modalImage');
 
-            document.addEventListener('mousemove', (e) => {
-                cursor.style.left = `${e.clientX}px`;
-                cursor.style.top = `${e.clientY}px`;
-                cursor.style.display = 'block';
-            });
-
-            document.addEventListener('mousedown', () => {
-                cursor.style.transform = 'scale(0.8)';
-            });
-
-            document.addEventListener('mouseup', () => {
-                cursor.style.transform = 'scale(1)';
-            });
-
+            // Toggle button logic (unchanged)
             const toggleButton = document.querySelector('.toggle-button');
-            const toggleIcon = document.querySelector('.toggle-icon')
-            let isPortfolioOnTop = true; // Track the z-index state
+            const toggleIcon = document.querySelector('.toggle-icon');
+            let isPortfolioOnTop = true;
 
             toggleButton.addEventListener('click', () => {
                 const portfolio = document.getElementById('portfolio');
                 const heroSection = document.querySelector('.hero-section');
-                
+
                 if (isPortfolioOnTop) {
-                    portfolio.style.zIndex = '20'; // Bring portfolio below hero section
+                    portfolio.style.zIndex = '20';
                     heroSection.style.zIndex = '3';
-                    toggleIcon.innerHTML = '<img src="imgs/toggleLite.svg" width="22" height="22">'
+                    toggleIcon.innerHTML = '<img src="imgs/toggleLite.svg" width="22" height="22">';
                 } else {
-                    portfolio.style.zIndex = '1'; // Bring portfolio above hero section
-                    heroSection.style.zIndex = '2'; // Bring hero section below portfolio
-                    toggleIcon.innerHTML = '<img src="imgs/toggle.svg" width="22" height="22">'
+                    portfolio.style.zIndex = '1';
+                    heroSection.style.zIndex = '2';
+                    toggleIcon.innerHTML = '<img src="imgs/toggle.svg" width="22" height="22">';
                 }
 
-                isPortfolioOnTop = !isPortfolioOnTop; // Toggle the state
-            });
-        });
-
-        const Engine = Matter.Engine,
-            Render = Matter.Render,
-            World = Matter.World,
-            Bodies = Matter.Bodies,
-            Body = Matter.Body;
-
-        const engine = Engine.create();
-        engine.world.gravity.y = 1;
-
-        const world = engine.world;
-
-        const render = Render.create({
-            element: document.body,
-            engine: engine,
-            options: {
-                width: window.innerWidth,
-                height: window.innerHeight,
-                wireframes: false,
-                background: 'transparent'
-            }
-        });
-
-        const boundaries = [
-            Bodies.rectangle(window.innerWidth / 2, -25, window.innerWidth, 50, { isStatic: true }),
-            Bodies.rectangle(window.innerWidth / 2, window.innerHeight + 25, window.innerWidth, 50, { isStatic: true }),
-            Bodies.rectangle(-25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true }),
-            Bodies.rectangle(window.innerWidth + 25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true })
-        ];
-
-        World.add(world, boundaries);
-
-        const iconContainers = document.querySelectorAll('.icon-container');
-        iconContainers.forEach(container => {
-            const rect = container.getBoundingClientRect();
-            const body = Bodies.rectangle(
-                Math.random() * window.innerWidth,
-                Math.random() * window.innerHeight,
-                rect.width,
-                rect.height,
-                { restitution: 0.9, render: { fillStyle: 'transparent' } }
-            );
-            World.add(world, body);
-
-            Body.applyForce(body, body.position, {
-                x: (Math.random() - 0.5) * 0.02,
-                y: (Math.random() - 0.5) * 0.02
+                isPortfolioOnTop = !isPortfolioOnTop;
             });
 
-            (function applyRandomForces() {
-                Body.applyForce(body, body.position, {
-                    x: (Math.random() - 0.5) * 0.002,
-                    y: (Math.random() - 0.5) * 0.002
+            // Display modal with project info
+            iconContainers.forEach(container => {
+                container.addEventListener('click', () => {
+                    const title = container.getAttribute('data-title');
+                    const image = container.getAttribute('data-image');
+
+                    modalTitle.textContent = title;
+                    modalImage.src = image;
+                    modal.style.display = 'block';
                 });
-                setTimeout(applyRandomForces, 100);
-            })();
+            });
+
+            // Close modal
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            window.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Matter.js setup
+            const Engine = Matter.Engine,
+                Render = Matter.Render,
+                World = Matter.World,
+                Bodies = Matter.Bodies,
+                Body = Matter.Body;
+
+            const engine = Engine.create();
+            engine.world.gravity.y = 0; // Set gravity to 0 for floating effect
+
+            const world = engine.world;
+
+            const render = Render.create({
+                element: document.body,
+                engine: engine,
+                options: {
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                    wireframes: false,
+                    background: 'transparent'
+                }
+            });
+
+            const boundaries = [
+                Bodies.rectangle(window.innerWidth / 2, -25, window.innerWidth, 50, { isStatic: true }),
+                Bodies.rectangle(window.innerWidth / 2, window.innerHeight + 25, window.innerWidth, 50, { isStatic: true }),
+                Bodies.rectangle(-25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true }),
+                Bodies.rectangle(window.innerWidth + 25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true })
+            ];
+
+            World.add(world, boundaries);
+
+            const bodies = [];
+            iconContainers.forEach(container => {
+                const rect = container.getBoundingClientRect();
+                const body = Bodies.rectangle(
+                    Math.random() * window.innerWidth,
+                    Math.random() * window.innerHeight,
+                    rect.width,
+                    rect.height,
+                    { restitution: 0.9, friction: 0.1, render: { fillStyle: 'transparent' } }
+                );
+                World.add(world, body);
+                bodies.push({ container, body });
+
+                Body.applyForce(body, body.position, {
+                    x: (Math.random() - 0.5) * 0.05,
+                    y: (Math.random() - 0.5) * 0.05
+                });
+
+                (function applyRandomForces() {
+                    Body.applyForce(body, body.position, {
+                        x: (Math.random() - 0.5) * 0.005,
+                        y: (Math.random() - 0.5) * 0.005
+                    });
+                    setTimeout(applyRandomForces, 200);
+                })();
+            });
 
             (function update() {
-                container.style.left = `${body.position.x - rect.width / 2}px`;
-                container.style.top = `${body.position.y - rect.height / 2}px`;
-                container.style.transform = `rotate(${body.angle}rad)`;
+                bodies.forEach(({ container, body }) => {
+                    container.style.left = `${body.position.x - container.clientWidth / 2}px`;
+                    container.style.top = `${body.position.y - container.clientHeight / 2}px`;
+                    container.style.transform = `rotate(${body.angle}rad)`;
+                });
                 requestAnimationFrame(update);
             })();
+
+            Render.run(render);
+            Engine.run(engine);
         });
-
-        render.canvas.style.background = 'transparent';
-
-        Engine.run(engine);
-        Render.run(render);
     </script>
 </body>
 
