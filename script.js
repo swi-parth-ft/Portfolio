@@ -39,8 +39,8 @@ const render = Render.create({
     options: {
         width: window.innerWidth,
         height: window.innerHeight,
-        wireframes: true,
-        wireframeBackground: 'transparent'
+        wireframes: false,
+        background: 'transparent'
     }
 });
 
@@ -90,7 +90,7 @@ icons.forEach(icon => {
         requestAnimationFrame(update);
     })();
 });
-
+render.canvas.style.background = 'transparent';
 // Run the engine and renderer
 Engine.run(engine);
 Render.run(render);
