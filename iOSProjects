@@ -12,212 +12,238 @@
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
     <title>Parth.Portfolio</title>
-<style>
-    body {
-        margin: 0;
-        overflow: hidden;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background: url('imgs/iOSBackground.jpeg') no-repeat center center fixed;
-        background-size: cover;
-    }
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('imgs/iOSBackground.jpeg') no-repeat center center fixed;
+            background-size: cover;
+        }
 
-    #portfolio {
-        position: relative;
-        width: 100%;
-        height: 100%;
-    }
+        #portfolio {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
 
-    .icon {
-        position: absolute;
-        width: 100px;
-        height: 100px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-        border-radius: 22%;
-        object-fit: cover;
-        cursor: pointer;
-        /* Pointer cursor for interactivity */
-    }
+        .icon-container {
+            position: absolute;
+            display: inline-block;
+            cursor: pointer;
+        }
 
-    .tooltip {
-        position: absolute;
-        bottom: 120%;
-        left: 50%;
-        transform: translateX(-50%);
-        padding: 5px 10px;
-        font-size: 14px;
-        color: #fff;
-        background: rgba(0, 0, 0, 0.75);
-        border-radius: 5px;
-        white-space: nowrap;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.3s ease;
-        backdrop-filter: blur(5px);
-        z-index: 10;
-        /* Ensure tooltip is above other elements */
-    }
+        .icon {
+            width: 100px;
+            height: 100px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 22%;
+            object-fit: cover;
+        }
 
-    .icon:hover .tooltip {
-        opacity: 1;
-        transform: translateX(-50%) translateY(-10px);
-    }
+        .tooltip {
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 10px;
+            font-size: 14px;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.75);
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 10;
+        }
 
-    .cursor {
-        width: 20px;
-        height: 20px;
-        border: 2px solid #fff;
-        border-radius: 50%;
-        position: absolute;
-        transform: translate(-50%, -50%);
-        pointer-events: none;
-        transition: transform 0.2s ease;
-        z-index: 1000;
-        display: none;
-        /* Hide the custom cursor initially */
-    }
-</style>
+        .icon-container:hover .tooltip {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-10px);
+        }
+
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            transition: transform 0.2s ease;
+            z-index: 1000;
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
     <div id="portfolio">
-
-        <div class="icon">
-            <img src="imgs/books.png" alt="Project 1">
+        <div class="icon-container">
+            <img class="icon" src="imgs/books.png" alt="Project 1">
             <div class="tooltip">Book Nerd</div>
         </div>
-        <div class="icon">
-            <img src="imgs/filters.png" alt="Project 2">
+        <div class="icon-container">
+            <img class="icon" src="imgs/filters.png" alt="Project 2">
             <div class="tooltip">Filter Up</div>
         </div>
-        <div class="icon">
-            <img src="imgs/Flags.png" alt="Project 3">
+        <div class="icon-container">
+            <img class="icon" src="imgs/Flags.png" alt="Project 3">
             <div class="tooltip">Flags everywhere</div>
         </div>
-        
-        <!-- Add data-title attributes to icons where needed -->
-        <img class="icon" src="imgs/books.png" alt="Project 1" data-title="Book Nerd">
-        <img class="icon" src="imgs/filters.png" alt="Project 2" data-title="Filter Up">
-        <img class="icon" src="imgs/Flags.png" alt="Project 3" data-title="Flags everywhere">
-        <img class="icon" src="imgs/flash.png" alt="Project 4" data-title="Flash">
-        <img class="icon" src="imgs/hotProspects.png" alt="Project 5" data-title="Hot Prospects">
-        <img class="icon" src="imgs/IKnow.png" alt="Project 6" data-title="I Know">
-        <img class="icon" src="imgs/habits.png" alt="Project 7" data-title="Habits">
-        <img class="icon" src="imgs/Randevous.png" alt="Project 8" data-title="Randevous">
-        <img class="icon" src="imgs/rollingStones.png" alt="Project 9" data-title="Rolling Stones">
-        <img class="icon" src="imgs/RPS.png" alt="Project 10" data-title="RPS">
-        <img class="icon" src="imgs/slzzp.png" alt="Project 11" data-title="Slzzp">
-        <img class="icon" src="imgs/spendMuch.png" alt="Project 12" data-title="Spend Much?">
-        <img class="icon" src="imgs/splitNtip.png" alt="Project 13" data-title="Split N Tip">
-        <img class="icon" src="imgs/sweetTooth.png" alt="Project 14" data-title="Sweet Tooth">
-        <img class="icon" src="imgs/where'sSnow.png" alt="Project 15" data-title="Where's Snow">
-        <img class="icon" src="imgs/wordScramble.png" alt="Project 16" data-title="Word Scramble">
-        <img class="icon" src="imgs/measures.png" alt="Project 17" data-title="Measures">
+        <div class="icon-container">
+            <img class="icon" src="imgs/flash.png" alt="Project 4">
+            <div class="tooltip">Flash</div>
+        </div>
+        <div class="icon-container">
+            <img class="icon" src="imgs/hotProspects.png" alt="Project 5">
+            <div class="tooltip">Hot Prospects</div>
+        </div>
+        <div class="icon-container">
+            <img class="icon" src="imgs/IKnow.png" alt="Project 6">
+            <div class="tooltip">I Know</div>
+        </div>
+        <div class="icon-container">
+            <img class="icon" src="imgs/habits.png" alt="Project 7">
+            <div class="tooltip">Habits</div>
+        </div>
+        <div class="icon-container">
+            <img class="icon" src="imgs/Randevous.png" alt="Project 8">
+            <div class="tooltip">Randevous</div>
+        </div>
+        <div class="icon-container">
+            <img class="icon" src="imgs/rollingStones.png" alt="Project 9">
+            <div class="tooltip">Rolling Stones</div>
+        </div>
+        <div class="icon-container">
+            <img class="icon" src="imgs/RPS.png" alt="Project 10">
+            <div class="tooltip">RPS</div>
+        </div>
+        <div class="icon-container">
+            <img class="icon" src="imgs/slzzp.png" alt="Project 11">
+            <div class="tooltip">Slzzp</div>
+        </div>
+        <div class="icon-container">
+            <img class="icon" src="imgs/spendMuch.png" alt="Project 12">
+            <div class="tooltip">Spend Much?</div>
+        </div>
+        <div class="icon-container">
+            <img class="icon" src="imgs/splitNtip.png" alt="Project 13">
+            <div class="tooltip">Split N Tip</div>
+        </div>
+        <div class="icon-container">
+            <img class="icon" src="imgs/sweetTooth.png" alt="Project 14">
+            <div class="tooltip">Sweet Tooth</div>
+        </div>
+        <div class="icon-container">
+            <img class="icon" src="imgs/where'sSnow.png" alt="Project 15">
+            <div class="tooltip">Where's Snow</div>
+        </div>
+        <div class="icon-container">
+            <img class="icon" src="imgs/wordScramble.png" alt="Project 16">
+            <div class="tooltip">Word Scramble</div>
+        </div>
+        <div class="icon-container">
+            <img class="icon" src="imgs/measures.png" alt="Project 17">
+            <div class="tooltip">Measures</div>
+        </div>
     </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.17.1/matter.min.js"></script>
-   <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        // Create the custom cursor element
-        const cursor = document.createElement('div');
-        cursor.classList.add('cursor');
-        document.body.appendChild(cursor);
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const cursor = document.createElement('div');
+            cursor.classList.add('cursor');
+            document.body.appendChild(cursor);
 
-        // Update the cursor position
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = `${e.clientX}px`;
-            cursor.style.top = `${e.clientY}px`;
-            cursor.style.display = 'block'; // Ensure the cursor is visible
-        });
-
-        // Optional: Add some interactivity (e.g., scale effect on click)
-        document.addEventListener('mousedown', () => {
-            cursor.style.transform = 'scale(0.8)';
-        });
-
-        document.addEventListener('mouseup', () => {
-            cursor.style.transform = 'scale(1)';
-        });
-    });
-
-    // Matter.js module aliases
-    const Engine = Matter.Engine,
-        Render = Matter.Render,
-        World = Matter.World,
-        Bodies = Matter.Bodies,
-        Body = Matter.Body;
-
-    // Create a Matter.js engine with minimal gravity
-    const engine = Engine.create();
-    engine.world.gravity.y = 0.01; // Minimal gravity for buoyancy effect
-
-    const world = engine.world;
-
-    // Create a Matter.js renderer
-    const render = Render.create({
-        element: document.body,
-        engine: engine,
-        options: {
-            width: window.innerWidth,
-            height: window.innerHeight,
-            wireframes: false,
-            background: 'transparent'
-        }
-    });
-
-    // Create boundaries
-    const boundaries = [
-        Bodies.rectangle(window.innerWidth / 2, -25, window.innerWidth, 50, { isStatic: true }),
-        Bodies.rectangle(window.innerWidth / 2, window.innerHeight + 25, window.innerWidth, 50, { isStatic: true }),
-        Bodies.rectangle(-25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true }),
-        Bodies.rectangle(window.innerWidth + 25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true })
-    ];
-
-    World.add(world, boundaries);
-
-    // Add images to the world
-    const icons = document.querySelectorAll('.icon img');
-    icons.forEach(icon => {
-        const rect = icon.getBoundingClientRect();
-        const body = Bodies.rectangle(
-            Math.random() * window.innerWidth,
-            Math.random() * window.innerHeight,
-            rect.width,
-            rect.height,
-            { restitution: 0.9, render: { fillStyle: 'transparent' } }
-        );
-        World.add(world, body);
-
-        // Apply random initial force
-        Body.applyForce(body, body.position, {
-            x: (Math.random() - 0.5) * 0.02,
-            y: (Math.random() - 0.5) * 0.02
-        });
-
-        // Apply continuous random forces to keep them floating
-        (function applyRandomForces() {
-            Body.applyForce(body, body.position, {
-                x: (Math.random() - 0.5) * 0.002,
-                y: (Math.random() - 0.5) * 0.002
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = `${e.clientX}px`;
+                cursor.style.top = `${e.clientY}px`;
+                cursor.style.display = 'block';
             });
-            setTimeout(applyRandomForces, 100);
-        })();
 
-        // Synchronize the DOM element with the physics body
-        (function update() {
-            icon.style.left = `${body.position.x - rect.width / 2}px`;
-            icon.style.top = `${body.position.y - rect.height / 2}px`;
-            icon.style.transform = `rotate(${body.angle}rad)`;
-            requestAnimationFrame(update);
-        })();
-    });
+            document.addEventListener('mousedown', () => {
+                cursor.style.transform = 'scale(0.8)';
+            });
 
-    render.canvas.style.background = 'transparent';
-    // Run the engine and renderer
-    Engine.run(engine);
-    Render.run(render);
-</script>
+            document.addEventListener('mouseup', () => {
+                cursor.style.transform = 'scale(1)';
+            });
+        });
+
+        const Engine = Matter.Engine,
+            Render = Matter.Render,
+            World = Matter.World,
+            Bodies = Matter.Bodies,
+            Body = Matter.Body;
+
+        const engine = Engine.create();
+        engine.world.gravity.y = 0.01;
+
+        const world = engine.world;
+
+        const render = Render.create({
+            element: document.body,
+            engine: engine,
+            options: {
+                width: window.innerWidth,
+                height: window.innerHeight,
+                wireframes: false,
+                background: 'transparent'
+            }
+        });
+
+        const boundaries = [
+            Bodies.rectangle(window.innerWidth / 2, -25, window.innerWidth, 50, { isStatic: true }),
+            Bodies.rectangle(window.innerWidth / 2, window.innerHeight + 25, window.innerWidth, 50, { isStatic: true }),
+            Bodies.rectangle(-25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true }),
+            Bodies.rectangle(window.innerWidth + 25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true })
+        ];
+
+        World.add(world, boundaries);
+
+        const iconContainers = document.querySelectorAll('.icon-container');
+        iconContainers.forEach(container => {
+            const rect = container.getBoundingClientRect();
+            const body = Bodies.rectangle(
+                Math.random() * window.innerWidth,
+                Math.random() * window.innerHeight,
+                rect.width,
+                rect.height,
+                { restitution: 0.9, render: { fillStyle: 'transparent' } }
+            );
+            World.add(world, body);
+
+            Body.applyForce(body, body.position, {
+                x: (Math.random() - 0.5) * 0.02,
+                y: (Math.random() - 0.5) * 0.02
+            });
+
+            (function applyRandomForces() {
+                Body.applyForce(body, body.position, {
+                    x: (Math.random() - 0.5) * 0.002,
+                    y: (Math.random() - 0.5) * 0.002
+                });
+                setTimeout(applyRandomForces, 100);
+            })();
+
+            (function update() {
+                container.style.left = `${body.position.x - rect.width / 2}px`;
+                container.style.top = `${body.position.y - rect.height / 2}px`;
+                container.style.transform = `rotate(${body.angle}rad)`;
+                requestAnimationFrame(update);
+            })();
+        });
+
+        render.canvas.style.background = 'transparent';
+
+        Engine.run(engine);
+        Render.run(render);
+    </script>
 </body>
 
 </html>
