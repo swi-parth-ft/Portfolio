@@ -9,6 +9,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
     <title>Parth.Portfolio</title>
@@ -24,11 +25,28 @@
             background-size: cover;
         }
 
-        #portfolio {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
+      .hero-section {
+    position: absolute;
+    top: 2%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.8); /* Optional: Add a background color to make the text more readable */
+    border-bottom: 1px solid #ddd; /* Optional: Add a border for separation */
+    width: 80%; /* Adjust width as needed */
+    box-sizing: border-box; /* Ensure padding is included in the width */
+    z-index: 100; /* Ensure it's above other content */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 1cm;
+}
+
+#portfolio {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 10; /* Ensure it's below the hero section */
+}
 
         .icon-container {
             position: absolute;
@@ -78,166 +96,112 @@
             z-index: 1000;
             display: none;
         }
-
-        /* Modal and background effect styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            position: relative;
-            width: 80%;
-            max-width: 600px;
-            padding: 20px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            transform: scale(0);
-            transition: transform 0.3s ease;
-        }
-
-        .modal-overlay.show {
-            display: flex;
-        }
-
-        .modal-overlay.show .modal-content {
-            transform: scale(1);
-        }
-
-        .modal-overlay .modal-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-            transition: clip-path 0.5s ease-out;
-        }
-
-        .modal-overlay.show .modal-background {
-            clip-path: polygon(0 0, 0 0, 100% 100%, 100% 100%);
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 24px;
-            cursor: pointer;
-        }
     </style>
 </head>
 
 <body>
+<div class="hero-section">
+    <img class="d-block mx-auto mb-4" src="imgs/xcode-seeklogo.svg" alt="" width="172" height="157">
+    <h1 class="display-5 fw-bold text-body-emphasis">iOS Showroom</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">Explore a diverse collection of my iOS projects, each designed to bring creativity and functionality to life. From
+        engaging habit trackers and interactive educational tools to innovative financial management apps and entertaining
+        games, my work showcases a commitment to quality and user experience. Dive in and discover the unique solutions and
+        cutting-edge designs that reflect my passion for technology and innovation.</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+        <a href="https://github.com/swi-parth-ft" class="btn btn-dark btn-lg px-4 gap-3">
+            <i class="fab fa-github"></i> GitHub
+        </a>
+        <a href="https://apps.apple.com/us/developer/yourdeveloperid" class="btn btn-primary btn-lg px-4">
+            <i class="fab fa-app-store-ios"></i> App Store
+        </a>
+        </div>
+    </div>
+</div>
     <div id="portfolio">
-        <div class="icon-container" data-title="Book Nerd">
+        <div class="icon-container">
             <img class="icon" src="imgs/books.png" alt="Project 1">
             <div class="tooltip">Book Nerd</div>
         </div>
-        <div class="icon-container" data-title="Filter Up">
+        <div class="icon-container">
             <img class="icon" src="imgs/filters.png" alt="Project 2">
             <div class="tooltip">Filter Up</div>
         </div>
-        <div class="icon-container" data-title="Flags everywhere">
+        <div class="icon-container">
             <img class="icon" src="imgs/Flags.png" alt="Project 3">
             <div class="tooltip">Flags everywhere</div>
         </div>
-        <div class="icon-container" data-title="Flash">
+        <div class="icon-container">
             <img class="icon" src="imgs/flash.png" alt="Project 4">
             <div class="tooltip">Flash</div>
         </div>
-        <div class="icon-container" data-title="Hot Prospects">
+        <div class="icon-container">
             <img class="icon" src="imgs/hotProspects.png" alt="Project 5">
             <div class="tooltip">Hot Prospects</div>
         </div>
-        <div class="icon-container" data-title="I Know">
+        <div class="icon-container">
             <img class="icon" src="imgs/IKnow.png" alt="Project 6">
             <div class="tooltip">I Know</div>
         </div>
-        <div class="icon-container" data-title="Habits">
+        <div class="icon-container">
             <img class="icon" src="imgs/habits.png" alt="Project 7">
             <div class="tooltip">Habits</div>
         </div>
-        <div class="icon-container" data-title="Randevous">
+        <div class="icon-container">
             <img class="icon" src="imgs/Randevous.png" alt="Project 8">
             <div class="tooltip">Randevous</div>
         </div>
-        <div class="icon-container" data-title="Rolling Stones">
+        <div class="icon-container">
             <img class="icon" src="imgs/rollingStones.png" alt="Project 9">
             <div class="tooltip">Rolling Stones</div>
         </div>
-        <div class="icon-container" data-title="RPS">
+        <div class="icon-container">
             <img class="icon" src="imgs/RPS.png" alt="Project 10">
             <div class="tooltip">RPS</div>
         </div>
-        <div class="icon-container" data-title="Slzzp">
+        <div class="icon-container">
             <img class="icon" src="imgs/slzzp.png" alt="Project 11">
             <div class="tooltip">Slzzp</div>
         </div>
-        <div class="icon-container" data-title="Spend Much?">
+        <div class="icon-container">
             <img class="icon" src="imgs/spendMuch.png" alt="Project 12">
             <div class="tooltip">Spend Much?</div>
         </div>
-        <div class="icon-container" data-title="Split N Tip">
+        <div class="icon-container">
             <img class="icon" src="imgs/splitNtip.png" alt="Project 13">
             <div class="tooltip">Split N Tip</div>
         </div>
-        <div class="icon-container" data-title="Sweet Tooth">
+        <div class="icon-container">
             <img class="icon" src="imgs/sweetTooth.png" alt="Project 14">
             <div class="tooltip">Sweet Tooth</div>
         </div>
-        <div class="icon-container" data-title="Where's Snow">
+        <div class="icon-container">
             <img class="icon" src="imgs/where'sSnow.png" alt="Project 15">
             <div class="tooltip">Where's Snow</div>
         </div>
-        <div class="icon-container" data-title="Word Scramble">
+        <div class="icon-container">
             <img class="icon" src="imgs/wordScramble.png" alt="Project 16">
             <div class="tooltip">Word Scramble</div>
         </div>
-        <div class="icon-container" data-title="Measures">
+        <div class="icon-container">
             <img class="icon" src="imgs/measures.png" alt="Project 17">
             <div class="tooltip">Measures</div>
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <div id="modal" class="modal-overlay">
-        <div class="modal-background"></div>
-        <div class="modal-content">
-            <span class="modal-close">&times;</span>
-            <h2 id="modal-title"></h2>
-            <p id="modal-details"></p>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.17.1/matter.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
-            // Create the custom cursor element
             const cursor = document.createElement('div');
             cursor.classList.add('cursor');
             document.body.appendChild(cursor);
 
-            // Update the cursor position
             document.addEventListener('mousemove', (e) => {
                 cursor.style.left = `${e.clientX}px`;
                 cursor.style.top = `${e.clientY}px`;
                 cursor.style.display = 'block';
             });
 
-            // Optional: Add some interactivity (e.g., scale effect on click)
             document.addEventListener('mousedown', () => {
                 cursor.style.transform = 'scale(0.8)';
             });
@@ -245,57 +209,19 @@
             document.addEventListener('mouseup', () => {
                 cursor.style.transform = 'scale(1)';
             });
-
-            const icons = document.querySelectorAll('.icon-container');
-            const modal = document.getElementById('modal');
-            const modalTitle = document.getElementById('modal-title');
-            const modalDetails = document.getElementById('modal-details');
-            const modalClose = document.querySelector('.modal-close');
-
-            icons.forEach(icon => {
-                icon.addEventListener('click', () => {
-                    // Stop the Matter.js engine and renderer
-                    Matter.Render.stop(render);
-                    Matter.Engine.clear(engine);
-
-                    // Show modal
-                    modal.classList.add('show');
-                    modalTitle.textContent = icon.getAttribute('data-title');
-                    modalDetails.textContent = 'Details about ' + icon.getAttribute('data-title');
-
-                    // Add tearing effect
-                    setTimeout(() => {
-                        document.body.style.background = 'transparent';
-                    }, 300);
-                });
-            });
-
-            modalClose.addEventListener('click', () => {
-                modal.classList.remove('show');
-                // Restart the Matter.js engine and renderer
-                Matter.Engine.run(engine);
-                Matter.Render.run(render);
-
-                // Reset background
-                document.body.style.background = 'url("imgs/iOSBackground.jpeg") no-repeat center center fixed';
-                document.body.style.backgroundSize = 'cover';
-            });
         });
 
-        // Matter.js module aliases
         const Engine = Matter.Engine,
             Render = Matter.Render,
             World = Matter.World,
             Bodies = Matter.Bodies,
             Body = Matter.Body;
 
-        // Create a Matter.js engine with minimal gravity
         const engine = Engine.create();
-        engine.world.gravity.y = 0.01;
+        engine.world.gravity.y = 0.3;
 
         const world = engine.world;
 
-        // Create a Matter.js renderer
         const render = Render.create({
             element: document.body,
             engine: engine,
@@ -307,7 +233,6 @@
             }
         });
 
-        // Create boundaries
         const boundaries = [
             Bodies.rectangle(window.innerWidth / 2, -25, window.innerWidth, 50, { isStatic: true }),
             Bodies.rectangle(window.innerWidth / 2, window.innerHeight + 25, window.innerWidth, 50, { isStatic: true }),
@@ -317,10 +242,9 @@
 
         World.add(world, boundaries);
 
-        // Add images to the world
-        const icons = document.querySelectorAll('.icon-container');
-        icons.forEach(icon => {
-            const rect = icon.getBoundingClientRect();
+        const iconContainers = document.querySelectorAll('.icon-container');
+        iconContainers.forEach(container => {
+            const rect = container.getBoundingClientRect();
             const body = Bodies.rectangle(
                 Math.random() * window.innerWidth,
                 Math.random() * window.innerHeight,
@@ -330,13 +254,11 @@
             );
             World.add(world, body);
 
-            // Apply random initial force
             Body.applyForce(body, body.position, {
                 x: (Math.random() - 0.5) * 0.02,
                 y: (Math.random() - 0.5) * 0.02
             });
 
-            // Apply continuous random forces to keep them floating
             (function applyRandomForces() {
                 Body.applyForce(body, body.position, {
                     x: (Math.random() - 0.5) * 0.002,
@@ -345,17 +267,16 @@
                 setTimeout(applyRandomForces, 100);
             })();
 
-            // Synchronize the DOM element with the physics body
             (function update() {
-                icon.style.left = `${body.position.x - rect.width / 2}px`;
-                icon.style.top = `${body.position.y - rect.height / 2}px`;
-                icon.style.transform = `rotate(${body.angle}rad)`;
+                container.style.left = `${body.position.x - rect.width / 2}px`;
+                container.style.top = `${body.position.y - rect.height / 2}px`;
+                container.style.transform = `rotate(${body.angle}rad)`;
                 requestAnimationFrame(update);
             })();
         });
 
         render.canvas.style.background = 'transparent';
-        // Run the engine and renderer
+
         Engine.run(engine);
         Render.run(render);
     </script>

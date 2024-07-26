@@ -63,6 +63,7 @@ icons.forEach(icon => {
         Math.random() * window.innerHeight,
         rect.width,
         rect.height,
+         { restitution: 0.9, render: { fillStyle: 'transparent' } },
         { restitution: 0.9 }
     );
     World.add(world, body);
