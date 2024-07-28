@@ -1,0 +1,184 @@
+document.addEventListener('DOMContentLoaded', () => {
+            const iconContainers = document.querySelectorAll('.icon-container');
+            const modal = document.getElementById('projectModal');
+            const closeBtn = document.querySelector('.close');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalImage = document.getElementById('modalImage');
+            const githubLink = document.getElementById('githubLink');
+            const description = document.getElementById('modalDescription')
+            // Toggle button logic (unchanged)
+            const toggleButton = document.querySelector('.toggle-button');
+            const toggleIcon = document.querySelector('.toggle-icon');
+            const icon = document.querySelector('.icon');
+            let isPortfolioOnTop = true;
+
+            toggleButton.addEventListener('click', () => {
+                const portfolio = document.getElementById('portfolio');
+                const heroSection = document.querySelector('.hero-section');
+
+                if (isPortfolioOnTop) {
+                    portfolio.style.zIndex = '20';
+                    heroSection.style.zIndex = '3';
+                    heroSection.classList.add("grayScale")
+                    toggleIcon.innerHTML = '<img src="imgs/toggleLite.svg" width="22" height="22">';
+                } else {
+                    portfolio.style.zIndex = '1';
+                    heroSection.style.zIndex = '2';
+                    heroSection.classList.remove("grayScale")
+                    toggleIcon.innerHTML = '<img src="imgs/toggle.svg" width="22" height="22">';
+                }
+
+                isPortfolioOnTop = !isPortfolioOnTop;
+            });
+
+            
+
+            // Close modal
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+                resetGravityAndGrayscale();
+                
+            });
+
+            window.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                    resetGravityAndGrayscale();
+                }
+            });
+
+            document.getElementById('downloadProject').addEventListener('click', function () {
+
+                const zipUrl = `${githubLink}/archive/refs/heads/main.zip`;
+                window.location.href = zipUrl;
+            });
+
+
+            // Matter.js setup
+            const Engine = Matter.Engine,
+                Render = Matter.Render,
+                World = Matter.World,
+                Bodies = Matter.Bodies,
+                Body = Matter.Body;
+
+            const engine = Engine.create();
+            engine.world.gravity.y = 0; // Set gravity to 0 for floating effect
+
+            const world = engine.world;
+
+            const render = Render.create({
+                element: document.body,
+                engine: engine,
+                options: {
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                    wireframes: false,
+                    background: 'transparent'
+                }
+            });
+
+
+            // Display modal with project info
+            iconContainers.forEach(container => {
+                container.addEventListener('click', () => {
+                    const title = container.getAttribute('data-title');
+                    const image = container.getAttribute('data-image');
+                    const gitHub = container.getAttribute('data-github');
+                    const des = container.getAttribute('data-Dec');
+
+                    modalTitle.textContent = title;
+                    modalImage.src = image;
+                    githubLink.href = gitHub;
+                    description.textContent = des;
+                    modal.style.display = 'block';
+
+                    engine.world.gravity.y = 2;
+                    applyGrayscale(container);
+                    
+
+                });
+            });
+
+            const boundaries = [
+                Bodies.rectangle(window.innerWidth / 2, -25, window.innerWidth, 50, { isStatic: true }),
+                Bodies.rectangle(window.innerWidth / 2, window.innerHeight + 25, window.innerWidth, 50, { isStatic: true }),
+                Bodies.rectangle(-25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true }),
+                Bodies.rectangle(window.innerWidth + 25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true })
+            ];
+
+            World.add(world, boundaries);
+
+            const bodies = [];
+            iconContainers.forEach(container => {
+                const rect = container.getBoundingClientRect();
+                const body = Bodies.rectangle(
+                    Math.random() * window.innerWidth,
+                    Math.random() * window.innerHeight,
+                    rect.width,
+                    rect.height,
+                    { restitution: 0.9, friction: 0.1, render: { fillStyle: 'transparent' } }
+                );
+                World.add(world, body);
+                bodies.push({ container, body });
+
+                Body.applyForce(body, body.position, {
+                    x: (Math.random() - 0.5) * 0.05,
+                    y: (Math.random() - 0.5) * 0.05
+                });
+
+                (function applyRandomForces() {
+                    Body.applyForce(body, body.position, {
+                        x: (Math.random() - 0.5) * 0.005,
+                        y: (Math.random() - 0.5) * 0.005
+                    });
+                    setTimeout(applyRandomForces, 200);
+                })();
+            });
+
+            (function update() {
+                bodies.forEach(({ container, body }) => {
+                    container.style.left = `${body.position.x - container.clientWidth / 2}px`;
+                    container.style.top = `${body.position.y - container.clientHeight / 2}px`;
+                    container.style.transform = `rotate(${body.angle}rad)`;
+                });
+                requestAnimationFrame(update);
+            })();
+
+            Render.run(render);
+            Engine.run(engine);
+
+            function applyGrayscale(activeContainer) {
+        iconContainers.forEach(container => {
+            if (container !== activeContainer) {
+                container.style.filter = 'grayscale(100%)';
+            }
+        });
+    }
+
+    function resetGravityAndGrayscale() {
+        const step = 0.05;
+        function decreaseGravity() {
+            if (engine.world.gravity.y > -2) {
+                engine.world.gravity.y -= step;
+                requestAnimationFrame(decreaseGravity);
+            } else {
+                setTimeout(increaseGravityToZero, 1000); // Wait for a second before increasing gravity back to 0
+            }
+        }
+
+        function increaseGravityToZero() {
+            if (engine.world.gravity.y < 0) {
+                engine.world.gravity.y += step;
+                requestAnimationFrame(increaseGravityToZero);
+            } else {
+                engine.world.gravity.y = 0;
+            }
+        }
+
+        decreaseGravity();
+
+        iconContainers.forEach(container => {
+            container.style.filter = 'none';
+        });
+    }
+        });
