@@ -1,17 +1,17 @@
-document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => {
             const iconContainers = document.querySelectorAll('.icon-container');
             const modal = document.getElementById('projectModal');
             const closeBtn = document.querySelector('.close');
             const modalTitle = document.getElementById('modalTitle');
             const modalImage = document.getElementById('modalImage');
             const githubLink = document.getElementById('githubLink');
-            const description = document.getElementById('modalDescription')
-            // Toggle button logic (unchanged)
+            const description = document.getElementById('modalDescription');
             const toggleButton = document.querySelector('.toggle-button');
             const toggleIcon = document.querySelector('.toggle-icon');
-            const icon = document.querySelector('.icon');
             let isPortfolioOnTop = true;
+            const bodies = [];
 
+            // Toggle button logic
             toggleButton.addEventListener('click', () => {
                 const portfolio = document.getElementById('portfolio');
                 const heroSection = document.querySelector('.hero-section');
@@ -19,25 +19,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (isPortfolioOnTop) {
                     portfolio.style.zIndex = '20';
                     heroSection.style.zIndex = '3';
-                    heroSection.classList.add("grayScale")
+                    heroSection.classList.add("grayScale");
                     toggleIcon.innerHTML = '<img src="imgs/toggleLite.svg" width="22" height="22">';
                 } else {
                     portfolio.style.zIndex = '1';
                     heroSection.style.zIndex = '2';
-                    heroSection.classList.remove("grayScale")
+                    heroSection.classList.remove("grayScale");
                     toggleIcon.innerHTML = '<img src="imgs/toggle.svg" width="22" height="22">';
                 }
 
                 isPortfolioOnTop = !isPortfolioOnTop;
             });
 
-            
-
             // Close modal
             closeBtn.addEventListener('click', () => {
                 modal.style.display = 'none';
                 resetGravityAndGrayscale();
-                
             });
 
             window.addEventListener('click', (event) => {
@@ -48,18 +45,19 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             document.getElementById('downloadProject').addEventListener('click', function () {
-
-                const zipUrl = `${githubLink}/archive/refs/heads/main.zip`;
+                const zipUrl = `${githubLink.href}/archive/refs/heads/main.zip`;
                 window.location.href = zipUrl;
             });
-
 
             // Matter.js setup
             const Engine = Matter.Engine,
                 Render = Matter.Render,
+                Runner = Matter.Runner,
                 World = Matter.World,
                 Bodies = Matter.Bodies,
                 Body = Matter.Body;
+
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
             const engine = Engine.create();
             engine.world.gravity.y = 0; // Set gravity to 0 for floating effect
@@ -73,32 +71,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     width: window.innerWidth,
                     height: window.innerHeight,
                     wireframes: false,
-                    background: 'transparent'
+                    background: 'transparent',
+                    pixelRatio: isMobile ? 'auto' : 1
                 }
             });
 
+            Render.run(render);
+            Engine.run(engine);
 
-            // Display modal with project info
-            iconContainers.forEach(container => {
-                container.addEventListener('click', () => {
-                    const title = container.getAttribute('data-title');
-                    const image = container.getAttribute('data-image');
-                    const gitHub = container.getAttribute('data-github');
-                    const des = container.getAttribute('data-Dec');
+            const runner = Runner.create();
+            Runner.run(runner, engine);
 
-                    modalTitle.textContent = title;
-                    modalImage.src = image;
-                    githubLink.href = gitHub;
-                    description.textContent = des;
-                    modal.style.display = 'block';
+            
 
-                    engine.world.gravity.y = 2;
-                    applyGrayscale(container);
-                    
-
-                });
-            });
-
+            // Create boundaries
             const boundaries = [
                 Bodies.rectangle(window.innerWidth / 2, -25, window.innerWidth, 50, { isStatic: true }),
                 Bodies.rectangle(window.innerWidth / 2, window.innerHeight + 25, window.innerWidth, 50, { isStatic: true }),
@@ -108,7 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             World.add(world, boundaries);
 
-            const bodies = [];
+            // Create icon bodies
+            
             iconContainers.forEach(container => {
                 const rect = container.getBoundingClientRect();
                 const body = Bodies.rectangle(
@@ -116,7 +103,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     Math.random() * window.innerHeight,
                     rect.width,
                     rect.height,
-                    { restitution: 0.9, friction: 0.1, render: { fillStyle: 'transparent' } }
+                    { 
+                        restitution: isMobile ? 0.5 : 0.9, 
+                        friction: isMobile ? 0.1 : 0.05, 
+                        render: { fillStyle: 'transparent' } 
+                    }
                 );
                 World.add(world, body);
                 bodies.push({ container, body });
@@ -135,6 +126,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 })();
             });
 
+
+
             (function update() {
                 bodies.forEach(({ container, body }) => {
                     container.style.left = `${body.position.x - container.clientWidth / 2}px`;
@@ -144,41 +137,58 @@ document.addEventListener('DOMContentLoaded', () => {
                 requestAnimationFrame(update);
             })();
 
-            Render.run(render);
-            Engine.run(engine);
+            // Display modal with project info
+            iconContainers.forEach(container => {
+                container.addEventListener('click', () => {
+                    const title = container.getAttribute('data-title');
+                    const image = container.getAttribute('data-image');
+                    const gitHub = container.getAttribute('data-github');
+                    const des = container.getAttribute('data-dec');
+
+                    modalTitle.textContent = title;
+                    modalImage.src = image;
+                    githubLink.href = gitHub;
+                    description.textContent = des;
+                    modal.style.display = 'block';
+
+                    engine.world.gravity.y = 1;
+                    applyGrayscale(container);
+                });
+            });
 
             function applyGrayscale(activeContainer) {
-        iconContainers.forEach(container => {
-            if (container !== activeContainer) {
-                container.style.filter = 'grayscale(100%)';
+                iconContainers.forEach(container => {
+                    if (container !== activeContainer) {
+                        container.style.filter = 'grayscale(100%)';
+                    }
+                });
             }
-        });
-    }
 
-    function resetGravityAndGrayscale() {
-        const step = 0.05;
-        function decreaseGravity() {
-            if (engine.world.gravity.y > -2) {
-                engine.world.gravity.y -= step;
-                requestAnimationFrame(decreaseGravity);
-            } else {
-                setTimeout(increaseGravityToZero, 1000); // Wait for a second before increasing gravity back to 0
+            function resetGravityAndGrayscale() {
+                const step = 0.05;
+
+                function decreaseGravity() {
+                    if (engine.world.gravity.y > -0.5) {
+                        engine.world.gravity.y -= step;
+                        requestAnimationFrame(decreaseGravity);
+                    } else {
+                        setTimeout(increaseGravityToZero, 100); // Wait for a second before increasing gravity back to 0
+                    }
+                }
+
+                function increaseGravityToZero() {
+                    if (engine.world.gravity.y < 0) {
+                        engine.world.gravity.y += step;
+                        requestAnimationFrame(increaseGravityToZero);
+                    } else {
+                        engine.world.gravity.y = 0;
+                    }
+                }
+
+                decreaseGravity();
+
+                iconContainers.forEach(container => {
+                    container.style.filter = 'none';
+                });
             }
-        }
-
-        function increaseGravityToZero() {
-            if (engine.world.gravity.y < 0) {
-                engine.world.gravity.y += step;
-                requestAnimationFrame(increaseGravityToZero);
-            } else {
-                engine.world.gravity.y = 0;
-            }
-        }
-
-        decreaseGravity();
-
-        iconContainers.forEach(container => {
-            container.style.filter = 'none';
-        });
-    }
         });
