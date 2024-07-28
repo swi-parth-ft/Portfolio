@@ -16,7 +16,7 @@ body {
     transform: translateX(-50%);
     text-align: center;
     padding: 2rem;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.85);
     /* Optional: Add a background color to make the text more readable */
     border-bottom: 1px solid #ddd;
     /* Optional: Add a border for separation */
@@ -212,3 +212,21 @@ body {
     text-decoration: none;
     cursor: pointer;
 }
+
+.fade {
+    opacity: 0;
+        /* Initially hidden */
+        animation: fadeIn 4s forwards;
+        /* Animation to apply */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
