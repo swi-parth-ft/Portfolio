@@ -140,7 +140,7 @@ body {
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 50%;
+    width: 80%;
     max-width: 700px;
     border-radius: 25px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.51);
@@ -154,12 +154,20 @@ body {
         flex-direction: column;
         /* Change to column on mobile screens */
     }
+
+        #githubLink,
+        #downloadProject {
+            font-size: 14px;
+            /* Smaller font size */
+            padding: 6px 12px;
+            /* Reduced padding */
+            white-space: nowrap;/
+        }
 }
 
 
 
 .grayScale {
-
     -webkit-filter: grayscale(100%);
 }
 
