@@ -15,7 +15,7 @@
     <title>Parth.Portfolio</title>
 </head>
 <body>
-    <section class="heroSection">
+    <section class="heroSection fade">
         <div class="hero">
             <header class="d-flex justify-content-left py-3 px-4">
             <ul class="nav nav-underline">
@@ -60,7 +60,7 @@
         </g>
     </svg>
 
-    <section class="skillSection container">
+    <section class="skillSection container fade">
         <h1>Unleashing My Arsenal</h1>
         <p>Explore the Weapons in My Creative Toolbox</p>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
@@ -149,7 +149,7 @@
         <h1>Portfolio Of Creations</h1>
         <p>Unveiling My Journey Through Code and Design</p>
         <div class="container">
-        <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+        <div class="row flex-lg-row-reverse align-items-center g-5 py-5 fade">
             <div class="col-10 col-sm-8 col-lg-6">
                 <img src="imgs/xcode-seeklogo.svg" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="350"
                    loading="lazy" id="xcode">
@@ -166,7 +166,7 @@
             </div>
         </div>
 
-        <div class="row flex-lg-row-reverse align-items-center g-5 py-5 vscodeContainer">
+        <div class="row flex-lg-row-reverse align-items-center g-5 py-5 vscodeContainer fade">
             <hr>
 
             <div class="col-lg-6 vscode1">
@@ -184,7 +184,7 @@
             </div>
         </div>
 
-        <div class="beyond">
+        <div class="beyond fade">
            
             <h2><span class="designerWord" style="font-size: 3rem;">Beyond </span> the Code...</h2>
             <p>When I'm not coding, I immerse myself in a variety of creative pursuits. I love sketching, where I can translate my
@@ -198,7 +198,7 @@
             work, allowing me to approach development with a fresh and innovative mindset.</p>
         </div>
         <hr>
-        <div class="eduSectio">
+        <div class="eduSectio fade">
             <h2 style="text-align: center;">Learning Odyssey 📚</h2>
             <div id="humber">
                 <h5>Post-Graduation in Information Technology Solutions</h5>
@@ -212,7 +212,7 @@
     </section>
 
 
-    <section class="getInTouchSection container" id="contact">
+    <section class="getInTouchSection container fade" id="contact">
         
         <div class="getInTouch container">
             
@@ -251,6 +251,32 @@
                     </svg></a></li>
         </ul>
     </footer>
-   
+   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Select all elements with the 'fade-in' class
+        const fadeElements = document.querySelectorAll('.fade');
+
+        // Create an Intersection Observer instance
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Add 'visible' class to the element when it comes into view
+                    entry.target.classList.add('visible');
+                    // Optionally, stop observing the element after it has appeared
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            // Set the threshold to determine when the element should be considered in view
+            threshold: 0.1
+        });
+
+        // Observe each element with the 'fade-in' class
+        fadeElements.forEach(element => {
+            observer.observe(element);
+        });
+    });
+</script>
+
 </body>
 </html>

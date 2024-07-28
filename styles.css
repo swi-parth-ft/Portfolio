@@ -1,29 +1,279 @@
-body {
-    margin: 0;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f0f0f0;
+ body {
+     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+ }
+
+ .icon-square {
+     width: 3rem;
+     height: 3rem;
+     border-radius: .75rem;
+ }
+
+ .nav-link {
+     color: gray;
+ }
+
+ .heroImage {
+     height: 100vh;
+     width: 100vw;
+     object-fit: cover;
+ }
+
+ .heroText>h1 {
+     color: black;
+ }
+
+ .heroText>p {
+     width: 100%;
+     font-size: large;
+     font-style: italic;
+     text-align: center;
+ }
+
+ .designerWord {
+     font-family: "Great Vibes", cursive;
+     color: orange;
+     font-size: 2rem;
+     word-spacing: 0.5rem;
+     font-style: italic;
+ }
+
+ .hero {
+     position: relative;
+     background-image: url('imgs/hero2.jpg');
+     background-size: cover;
+     background-position: center;
+     background-repeat: no-repeat;
+     height: 100vh;
+     width: 100vw;
+ }
+
+ .heroText {
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     color: gray;
+     padding: 20px;
+     border-radius: 10px;
+     text-align: center;
+ }
+
+ .skillSection,
+ .projectSection,
+ .getInTouchSection {
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     padding: 30px 0;
+ }
+
+ .aboutMeSection {
+     display: flex;
+     flex-direction: column;
+     align-items: flex-start;
+     padding: 30px 0;
+ }
+
+ .skillSection>p,
+ .projectSection>p,
+ .aboutMeSection>p,
+ .getInTouch>p {
+     color: gray;
+     font-style: italic;
+     text-align: center;
+ }
+
+ .projectSection {
+     background-color: #E3E7F1;
+     color: black;
+ }
+
+ .editorial {
+     display: block;
+     width: 100%;
+     height: 60px;
+     max-height: 60px;
+     margin: 0;
+     z-index: 5;
+     bottom: 0;
+     position: absolute;
+     left: 0;
+     float: left;
+ }
+
+ .parallax1>use {
+     animation: move-forever1 10s linear infinite;
+ }
+
+ .parallax2>use {
+     animation: move-forever2 8s linear infinite;
+ }
+
+ .parallax3>use {
+     animation: move-forever3 6s linear infinite;
+ }
+
+ .parallax4>use {
+     animation: move-forever4 4s linear infinite;
+ }
+
+ @keyframes move-forever1 {
+     0% {
+         transform: translate(85px, 0%);
+     }
+
+     100% {
+         transform: translate(-90px, 0%);
+     }
+ }
+
+ @keyframes move-forever2 {
+     0% {
+         transform: translate(-90px, 0%);
+     }
+
+     100% {
+         transform: translate(85px, 0%);
+     }
+ }
+
+ @keyframes move-forever3 {
+     0% {
+         transform: translate(85px, 0%);
+     }
+
+     100% {
+         transform: translate(-90px, 0%);
+     }
+ }
+
+ @keyframes move-forever4 {
+     0% {
+         transform: translate(-90px, 0%);
+     }
+
+     100% {
+         transform: translate(85px, 0%);
+     }
+ }
+
+ a {
+     text-decoration: underline;
+     color: black;
+ }
+
+ .beyond {
+     text-align: center;
+     padding-bottom: 40px;
+     position: relative;
+ }
+
+ .getInTouchSection {
+     padding-bottom: 40px;
+ }
+
+ .eduSectio {
+     margin-top: 30px;
+     margin-bottom: 30px;
+     text-align: center;
+ }
+
+ .colors {
+     position: absolute;
+     top: 20%;
+     z-index: -1;
+ }
+
+.fade {
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
 }
 
-#portfolio {
-    position: relative;
-    width: 100%;
-    height: 100%;
+.fade.visible {
+    opacity: 1;
 }
 
-.icon {
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    background-color: #3498db;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    font-size: 16px;
-    text-align: center;
-}
+
+ /* Responsive Styles */
+ @media (max-width: 768px) {
+     .heroText {
+         width: 90%;
+
+         padding: 10px;
+         font-size: smaller;
+         text-align: center;
+     }
+
+     .heroText>p {
+         font-size: small;
+     }
+
+     .projectSection {
+         padding: 15px;
+     }
+
+     .projectSection img {
+         width: 100%;
+         max-width: 300px;
+     }
+
+     .editorial {
+         height: 40px;
+     }
+
+     .vscodeContainer {
+         flex-direction: column;
+     }
+
+     .vscode1 {
+         order: 2;
+     }
+
+     .vscode2 {
+         order: 1;
+     }
+ }
+
+ @media (max-width: 576px) {
+     .heroText {
+         width: 100%;
+
+         padding: 5px;
+         font-size: smaller;
+         text-align: center;
+     }
+
+     .skillSection,
+     .projectSection,
+     .getInTouchSection {
+         padding: 15px 0;
+     }
+
+     .projectSection img {
+         width: 100%;
+         max-width: 250px;
+     }
+
+     .beyond {
+         padding-bottom: 20px;
+     }
+
+     #xcode,
+     #vscode {
+         width: 200px;
+     }
+
+     .vscodeContainer {
+         flex-direction: column;
+     }
+
+     .vscode1 {
+         order: 2;
+     }
+
+     .vscode2 {
+         order: 1;
+     }
+
+ }
