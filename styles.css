@@ -12,6 +12,14 @@
      color: gray;
  }
 
+ .nav-link:hover {
+    color: orange;
+ }
+
+ .active {
+     color: blue;
+ }
+
  .heroImage {
      height: 100vh;
      width: 100vw;
@@ -85,9 +93,11 @@
  }
 
  .projectSection {
-     background-color: #E3E7F1;
-     color: black;
- }
+    background-image: linear-gradient(to bottom left, rgb(63, 177, 248), black, black, black, black);
+    color: rgb(255, 255, 255);
+ } 
+
+ 
 
  .editorial {
      display: block;
@@ -167,6 +177,8 @@
      text-align: center;
      padding-bottom: 40px;
      position: relative;
+    background-image: linear-gradient(to top right, orange, black, black);
+    padding: 20px;
  }
 
  .getInTouchSection {
@@ -233,6 +245,12 @@
      .vscode2 {
          order: 1;
      }
+
+         .skillSection {
+             padding: 20px;
+             font-size: small;
+             text-align: center;
+         }
  }
 
  @media (max-width: 576px) {
@@ -274,6 +292,12 @@
 
      .vscode2 {
          order: 1;
+     }
+
+     .skillSection {
+        padding: 20px;
+        font-size: small;
+        text-align: center;
      }
 
  }
