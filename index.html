@@ -28,6 +28,11 @@
 .ladybug {
     width: 15px; /* Adjust size as needed */
     height: 15px; /* Adjust size as needed */
+    cursor: url('imgs/hammer.svg') 8 8 , auto;
+     background-size: cover;
+            padding: 20px; /* Add padding to increase the clickable area */
+            box-sizing: content-box;
+  
 }
 
 .bug-message {
@@ -343,6 +348,12 @@
         const bugMessage = document.getElementById('bugMessage');
         const projectSection = document.querySelector('.divider');
         const heroSection = document.querySelector('.heroSection');
+
+        const ladybugImages = [
+        'imgs/ladyBug.png', // Original image
+        'imgs/splash.png' // New image after clicking
+    ];
+
         let isStopped = false;
         const maxSpeed = 2;
 
@@ -369,6 +380,17 @@
             }
         }
 
+        function killbug() {
+            if (!isStopped) {
+                isStopped = true;
+                ladybug.src = ladybugImages[1];
+                setTimeout(() => {
+                    isStopped = false;
+             ladybug.src = ladybugImages[0];
+                }, 10000);
+            }
+        }
+
         function animate() {
             if (isStopped) {
                 return;
@@ -377,6 +399,10 @@
             let y = Math.random() * window.innerHeight;
             let dx = getRandomSpeed();
             let dy = getRandomSpeed();
+
+            
+
+            
 
             function move() {
                 if (!isStopped) {
@@ -418,6 +444,15 @@
 
         // Start the ladybug animation
         animate();
+
+        ladybug.addEventListener('click', function () {
+           
+            killbug();
+
+            // Change to the new image
+
+
+        });
     });
 </script>
 

@@ -88,8 +88,7 @@
 
  .skillSection>p,
  .projectSection>p,
- .aboutMeSection>p,
- .getInTouch>p {
+ .aboutMeSection>p {
      color: gray;
      font-style: italic;
      text-align: center;
