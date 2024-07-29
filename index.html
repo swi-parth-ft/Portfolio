@@ -17,16 +17,50 @@
 <style>
   
 
-    .ladybug {
-    position: absolute;
-    width: 15px; /* Adjust size as needed */
-    height: 15px; /* Adjust size as needed */
+.ladybug-container {
+    position: fixed;
+    top: 20px; /* Adjust as needed */
+    left: 20px; /* Adjust as needed */
     transform: translate(-50%, -50%);
     z-index: 1000; /* Ensure it stays on top of other content */
 }
+
+.ladybug {
+    width: 15px; /* Adjust size as needed */
+    height: 15px; /* Adjust size as needed */
+}
+
+.bug-message {
+        position: relative;
+   
+    transform: translateX(-50%) translateY(-10px);
+
+   padding: 5px;
+    font-size: 1vw;
+    /* Responsive font size */
+    color: #fff;
+    background: rgb(199, 103, 52);
+    border-radius: 5px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 10000;
+}
+
+
+
+
+
+
+
 </style>
 <body>
+<div class="ladybug-container">
     <img src="imgs/ladyBug.png" alt="Ladybug" class="ladybug fade">
+    <div id="bugMessage" class="bug-message">Hey, Check it out </div>
+    
+</div>
     <section class="heroSection fade">
         <div class="hero">
             <header class="d-flex justify-content-left py-3 px-4">
@@ -160,6 +194,7 @@
 </section>
 
     <section class="projectSection">
+        
         <h1>Portfolio Of Creations</h1>
         <p>Unveiling My Journey Through Code and Design</p>
         <div class="container">
@@ -175,11 +210,11 @@
                 projects showcase my dedication to delivering exceptional user experiences. Click to discover the unique solutions and
                 sophisticated designs that set my iOS apps apart.</p>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                    <a href="/Portfolio/iOSProjects.html" type="button" class="btn btn-primary btn-lg px-4 me-md-2" id="iosButton">Explore</a>
+                    <a href="/Portfolio/iOSProjects.html" type="button" class="btn btn-primary btn-lg px-4 me-md-2 tilt-button" id="iosButton">Explore</a>
                 </div>
             </div>
         </div>
-<iframe src="codeLine.html" style="border: none; width: 100%; height: 50px;" class="fade"></iframe>
+<iframe src="codeLine.html" style="border: none; width: 100%; height: 50px;" class="fade divider"></iframe>
 
 <iframe src="codeLineWeb.html" style="border: none; width: 100%; height: 50px;" class="fade"></iframe>
         <div class="row flex-lg-row-reverse align-items-center g-5 py-5 vscodeContainer fade">
@@ -191,7 +226,7 @@
                 innovation, design, and functionality. Click to explore these meticulously crafted solutions, where every detail is
                 tailored to deliver an exceptional user experience.</p>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                    <button type="button" class="btn btn-primary btn-lg px-4 me-md-2" id="webButton">Explore</button>
+                    <button type="button" class="btn btn-primary btn-lg px-4 me-md-2 tilt-button" id="webButton">Explore</button>
                 </div>
             </div>
             <div class="col-10 col-sm-8 col-lg-6 vscode2">
@@ -240,8 +275,8 @@
                 <p><a href="mailto:parthantala09@gmail.com">Email Me </a><a
                     href="https://www.linkedin.com/in/parthantala/?lipi=urn%3Ali%3Apage%3Ad_flagship3_search_srp_jobs%3ByC0%2BgUn%2BQd6KxalcRVDcXw%3D%3D">
                     | Connect on LinkedIn</a></p>
-                
                 </div>
+                
         </div>
     </section>
 
@@ -294,50 +329,108 @@
     });
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', function () {
         const ladybug = document.querySelector('.ladybug');
-        let x = Math.random() * window.innerWidth;
-        let y = Math.random() * window.innerHeight;
-        let dx = (Math.random() - 0.5) * 4; // Random initial speed in x direction
-        let dy = (Math.random() - 0.5) * 4; // Random initial speed in y direction
-        const maxSpeed = 4; // Maximum speed for the ladybug
+        const bugMessage = document.getElementById('bugMessage');
+        const projectSection = document.querySelector('.divider');
+        const heroSection = document.querySelector('.heroSection');
+        let isStopped = false;
+        const maxSpeed = 2;
 
         function getRandomSpeed() {
             return (Math.random() - 0.5) * maxSpeed;
         }
 
         function calculateRotation(dx, dy) {
-            return Math.atan2(dy, dx) * (180 / Math.PI); // Convert radians to degrees
+            return Math.atan2(dy, dx) * (180 / Math.PI);
+        }
+
+        function stopLadybug() {
+            if (!isStopped) {
+                isStopped = true;
+                bugMessage.style.opacity = '1';
+                ladybug.style.height = '25px';
+                ladybug.style.width = '25px';
+                setTimeout(() => {
+                    isStopped = false;
+                    bugMessage.style.opacity = '0';
+                    ladybug.style.height = '15px';
+                    ladybug.style.width = '15px';
+                }, 4000);
+            }
         }
 
         function animate() {
-            x += dx;
-            y += dy;
-
-            // Reverse direction if hitting the edge of the viewport
-            if (x <= 0 || x >= window.innerWidth - ladybug.offsetWidth) {
-                dx = getRandomSpeed();
+            if (isStopped) {
+                return;
             }
-            if (y <= 0 || y >= window.innerHeight - ladybug.offsetHeight) {
-                dy = getRandomSpeed();
+            let x = Math.random() * window.innerWidth;
+            let y = Math.random() * window.innerHeight;
+            let dx = getRandomSpeed();
+            let dy = getRandomSpeed();
+
+            function move() {
+                if (!isStopped) {
+                    x += dx;
+                    y += dy;
+
+                    if (x <= 0 || x >= window.innerWidth - ladybug.offsetWidth) {
+                        dx = getRandomSpeed();
+                    }
+                    if (y <= 0 || y >= window.innerHeight - ladybug.offsetHeight) {
+                        dy = getRandomSpeed();
+                    }
+
+                    if (Math.random() < 0.02) {
+                        dx = getRandomSpeed();
+                        dy = getRandomSpeed();
+                    }
+
+                    const rotation = calculateRotation(dx, dy);
+                    ladybug.style.transform = `translate(${x}px, ${y}px) rotate(${rotation + 90}deg)`;
+                    bugMessage.style.transform = `translate(${x}px, ${y}px) rotate(${rotation + 90}deg)`;
+                }
+
+                requestAnimationFrame(move);
             }
 
-            // Randomly change direction after some time
-            if (Math.random() < 0.02) { // 2% chance to change direction in each frame
-                dx = getRandomSpeed();
-                dy = getRandomSpeed();
-            }
-
-            // Calculate the angle for rotation
-            const rotation = calculateRotation(dx, dy);
-
-            // Apply transformations
-            ladybug.style.transform = `translate(${x}px, ${y}px) rotate(${rotation + 90}deg)`;
-
-            requestAnimationFrame(animate);
+            move();
         }
 
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    stopLadybug();
+                }
+            });
+        }, { threshold: 0.1 });
+
+        observer.observe(projectSection);
+
+        // Start the ladybug animation
         animate();
+    });
+</script>
+
+<script>
+    const buttons = document.querySelectorAll('.tilt-button');
+    const radius = 200;
+
+    document.addEventListener('mousemove', (e) => {
+        buttons.forEach(button => {
+            const rect = button.getBoundingClientRect();
+            const buttonX = rect.left + rect.width / 2;
+            const buttonY = rect.top + rect.height / 2;
+
+            const distance = Math.sqrt(Math.pow(buttonX - e.clientX, 2) + Math.pow(buttonY - e.clientY, 2));
+
+            if (distance < radius) {
+                const angle = Math.atan2(e.clientY - buttonY, e.clientX - buttonX) * (180 / Math.PI) / 10;
+                button.style.transform = `scale(1.1) rotate(${angle}deg)`;
+            } else {
+                button.style.transform = 'scale(1) rotate(0deg)';
+            }
+        });
     });
 </script>
 

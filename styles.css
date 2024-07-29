@@ -91,6 +91,9 @@
      text-align: center;
    
  }
+ .skillSection {
+    text-align: center;
+ }
 
  .projectSection {
     background-image: linear-gradient(to bottom left, orange, black, black, black, black);
