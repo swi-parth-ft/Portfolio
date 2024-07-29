@@ -8,6 +8,9 @@
             const description = document.getElementById('modalDescription');
             const toggleButton = document.querySelector('.toggle-button');
             const toggleIcon = document.querySelector('.toggle-icon');
+            const heroSection = document.querySelector('.heroBlurable');
+
+                const portfolio = document.getElementById('portfolio');
             let isPortfolioOnTop = true;
             const bodies = [];
 
@@ -15,8 +18,7 @@
 
             // Toggle button logic
             toggleButton.addEventListener('click', () => {
-                const portfolio = document.getElementById('portfolio');
-                const heroSection = document.querySelector('.hero-section');
+                
 
                 if (isPortfolioOnTop) {
                     portfolio.style.zIndex = '20';
@@ -36,13 +38,18 @@
             // Close modal
             closeBtn.addEventListener('click', () => {
                 modal.style.display = 'none';
+                heroSection.classList.remove("grayScale");
                 resetGravityAndGrayscale();
+               portfolio.style.zIndex = '1';
             });
 
             window.addEventListener('click', (event) => {
                 if (event.target === modal) {
                     modal.style.display = 'none';
+                    heroSection.classList.remove("grayScale");
                     resetGravityAndGrayscale();
+                    portfolio.style.zIndex = '1';
+                  
                 }
             });
 
@@ -152,7 +159,7 @@
                     githubLink.href = gitHub;
                     description.textContent = des;
                     modal.style.display = 'block';
-
+                    heroSection.classList.add("grayScale");
                     engine.world.gravity.y = 1;
                     applyGrayscale(container);
                 });

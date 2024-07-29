@@ -26,9 +26,6 @@
      object-fit: cover;
  }
 
- .heroText>h1 {
-     color: black;
- }
 
  .heroText>p {
      width: 100%;
@@ -75,7 +72,9 @@
      align-items: center;
      padding: 30px 0;
  }
-
+.skills {
+    background-image: linear-gradient(to top left, orange, white, white, white, white);
+}
  .aboutMeSection {
      display: flex;
      flex-direction: column;
@@ -90,10 +89,11 @@
      color: gray;
      font-style: italic;
      text-align: center;
+   
  }
 
  .projectSection {
-    background-image: linear-gradient(to bottom left, rgb(63, 177, 248), black, black, black, black);
+    background-image: linear-gradient(to bottom left, orange, black, black, black, black);
     color: rgb(255, 255, 255);
  } 
 
@@ -177,7 +177,7 @@
      text-align: center;
      padding-bottom: 40px;
      position: relative;
-    background-image: linear-gradient(to top right, orange, black, black);
+    background-image: radial-gradient(orange, black, black);
     padding: 20px;
  }
 
@@ -302,3 +302,12 @@
 
  }
 
+ #iosButton {
+    background-color: orange;
+        border-color: orange;
+ }
+
+  #webButton {
+      background-color: rgb(200, 170, 0);
+      border-color: rgb(200, 170, 0);
+  }
