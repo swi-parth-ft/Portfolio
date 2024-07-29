@@ -82,7 +82,7 @@
         <div class="heroText">
             <img src="imgs/avatar.png" width="150px" class="avatar">
             <h1>Hello, I'm Parth 👋</h1>
-            <p>A developer / <span class="designerWord">Designer!</span><br>with expertise in Swift, SwiftUI, React, and Node.js, building high-performance iOS and web applications
+            <p class="textHero">A developer / <span class="designerWord">Designer!</span><br>with expertise in Swift, SwiftUI, React, and Node.js, building high-performance iOS and web applications
             tailored to client needs. I focus on delivering seamless user experiences with scalable, maintainable solutions. </p>
         </div>
     
@@ -348,6 +348,7 @@
         const bugMessage = document.getElementById('bugMessage');
         const projectSection = document.querySelector('.divider');
         const heroSection = document.querySelector('.heroSection');
+        const heroText = document.querySelector('.textHero');
 
         const ladybugImages = [
         'imgs/ladyBug.png', // Original image
@@ -384,6 +385,7 @@
             if (!isStopped) {
                 isStopped = true;
                 ladybug.src = ladybugImages[1];
+                heroText.innerHTML = 'A developer / <span class="designerWord">Designer!</span><br>with expertise in Swift, SwiftUI, React, and Node.js, building high-performance iOS and web applications tailored to client needs.I focus on delivering seamless user experiences with scalable, maintainable solutions.';
                 setTimeout(() => {
                     isStopped = false;
              ladybug.src = ladybugImages[0];
@@ -424,6 +426,7 @@
                     const rotation = calculateRotation(dx, dy);
                     ladybug.style.transform = `translate(${x}px, ${y}px) rotate(${rotation + 90}deg)`;
                     bugMessage.style.transform = `translate(${x}px, ${y}px) rotate(${rotation + 90}deg)`;
+                    checkCollision();
                 }
 
                 requestAnimationFrame(move);
@@ -453,6 +456,46 @@
 
 
         });
+        
+       
+
+       
+               function checkCollision() {
+            const rect = ladybug.getBoundingClientRect();
+            const bugCenterX = rect.left + rect.width / 2;
+            const bugCenterY = rect.top + rect.height / 2;
+
+            const heroRect = heroText.getBoundingClientRect();
+
+            if (
+                bugCenterX > heroRect.left && bugCenterX < heroRect.right &&
+                bugCenterY > heroRect.top && bugCenterY < heroRect.bottom
+            ) {
+                destroyText(heroText);
+            }
+        }
+
+         
+            const fakeTags = ['<b>', '<i>', '<strong>', '<em>', '<mark>', '<small>', '<del>', '<ins>', '<sub>', '<sup>'];
+        const colors = ['red', 'blue', 'green', 'purple', 'orange'];
+
+        function destroyText(element) {
+            const text = element.innerText;
+            const words = text.split(' ');
+
+            // Choose random words to wrap with fake tags and change color
+            for (let i = 0; i < words.length; i++) {
+                if (Math.random() < 0.3) { // 30% chance to wrap with a fake tag
+                    const randomTag = fakeTags[Math.floor(Math.random() * fakeTags.length)];
+                    words[i] = `${randomTag}${words[i]}${randomTag.replace('<', '</')}`;
+                } else if (Math.random() < 0.3) { // 30% chance to change color
+                    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                    words[i] = `<span style="color: ${randomColor};">${words[i]}</span>`;
+                }
+            }
+
+            element.innerHTML = words.join(' ');
+        }
     });
 </script>
 
