@@ -95,3 +95,40 @@ render.canvas.style.background = 'transparent';
 // Run the engine and renderer
 Engine.run(engine);
 Render.run(render);
+document.addEventListener('DOMContentLoaded', () => {
+            const ladybug = document.querySelector('.ladybug');
+            let x = Math.random() * window.innerWidth;
+            let y = Math.random() * window.innerHeight;
+            let dx = (Math.random() - 0.5) * 4; // Random initial speed in x direction
+            let dy = (Math.random() - 0.5) * 4; // Random initial speed in y direction
+            const maxSpeed = 4; // Maximum speed for the ladybug
+
+            function getRandomSpeed() {
+                return (Math.random() - 0.5) * maxSpeed;
+            }
+
+            function animate() {
+                x += dx;
+                y += dy;
+
+                // Reverse direction if hitting the edge of the viewport
+                if (x <= 0 || x >= window.innerWidth - ladybug.offsetWidth) {
+                    dx = getRandomSpeed();
+                }
+                if (y <= 0 || y >= window.innerHeight - ladybug.offsetHeight) {
+                    dy = getRandomSpeed();
+                }
+
+                // Randomly change direction after some time
+                if (Math.random() < 0.02) { // 2% chance to change direction in each frame
+                    dx = getRandomSpeed();
+                    dy = getRandomSpeed();
+                }
+
+                ladybug.style.transform = `translate(${x}px, ${y}px)`;
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        });

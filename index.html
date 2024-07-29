@@ -14,7 +14,19 @@
 
     <title>Parth.Portfolio</title>
 </head>
+<style>
+  
+
+    .ladybug {
+    position: absolute;
+    width: 15px; /* Adjust size as needed */
+    height: 15px; /* Adjust size as needed */
+    transform: translate(-50%, -50%);
+    z-index: 1000; /* Ensure it stays on top of other content */
+}
+</style>
 <body>
+    <img src="imgs/ladyBug.png" alt="Ladybug" class="ladybug fade">
     <section class="heroSection fade">
         <div class="hero">
             <header class="d-flex justify-content-left py-3 px-4">
@@ -168,6 +180,7 @@
             </div>
         </div>
 <iframe src="codeLine.html" style="border: none; width: 100%; height: 50px;" class="fade"></iframe>
+
 <iframe src="codeLineWeb.html" style="border: none; width: 100%; height: 50px;" class="fade"></iframe>
         <div class="row flex-lg-row-reverse align-items-center g-5 py-5 vscodeContainer fade">
             
@@ -278,6 +291,53 @@
         fadeElements.forEach(element => {
             observer.observe(element);
         });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const ladybug = document.querySelector('.ladybug');
+        let x = Math.random() * window.innerWidth;
+        let y = Math.random() * window.innerHeight;
+        let dx = (Math.random() - 0.5) * 4; // Random initial speed in x direction
+        let dy = (Math.random() - 0.5) * 4; // Random initial speed in y direction
+        const maxSpeed = 4; // Maximum speed for the ladybug
+
+        function getRandomSpeed() {
+            return (Math.random() - 0.5) * maxSpeed;
+        }
+
+        function calculateRotation(dx, dy) {
+            return Math.atan2(dy, dx) * (180 / Math.PI); // Convert radians to degrees
+        }
+
+        function animate() {
+            x += dx;
+            y += dy;
+
+            // Reverse direction if hitting the edge of the viewport
+            if (x <= 0 || x >= window.innerWidth - ladybug.offsetWidth) {
+                dx = getRandomSpeed();
+            }
+            if (y <= 0 || y >= window.innerHeight - ladybug.offsetHeight) {
+                dy = getRandomSpeed();
+            }
+
+            // Randomly change direction after some time
+            if (Math.random() < 0.02) { // 2% chance to change direction in each frame
+                dx = getRandomSpeed();
+                dy = getRandomSpeed();
+            }
+
+            // Calculate the angle for rotation
+            const rotation = calculateRotation(dx, dy);
+
+            // Apply transformations
+            ladybug.style.transform = `translate(${x}px, ${y}px) rotate(${rotation + 90}deg)`;
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
     });
 </script>
 

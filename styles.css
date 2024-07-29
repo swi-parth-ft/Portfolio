@@ -305,9 +305,21 @@
  #iosButton {
     background-color: orange;
         border-color: orange;
+        
  }
 
   #webButton {
       background-color: rgb(200, 170, 0);
       border-color: rgb(200, 170, 0);
   }
+
+ .ladybug {
+     width: 50px;
+     /* Adjust size as needed */
+     height: 50px;
+     /* Adjust size as needed */
+     position: absolute;
+     top: 0;
+     left: 0;
+     transform: translate(-50%, -50%);
+ }

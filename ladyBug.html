@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ladybug Animation</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #f0f8ff;
+            /* Light blue background */
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .ladybug {
+            width: 20px;
+            /* Adjust size as needed */
+            height: 20px;
+            /* Adjust size as needed */
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+
+<body>
+    <img src="imgs/ladyBug.png" alt="Ladybug" class="ladybug">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ladybug = document.querySelector('.ladybug');
+            let x = Math.random() * window.innerWidth;
+            let y = Math.random() * window.innerHeight;
+            let dx = (Math.random() - 0.5) * 4; // Random initial speed in x direction
+            let dy = (Math.random() - 0.5) * 4; // Random initial speed in y direction
+            const maxSpeed = 4; // Maximum speed for the ladybug
+
+            function getRandomSpeed() {
+                return (Math.random() - 0.5) * maxSpeed;
+            }
+
+            function animate() {
+                x += dx;
+                y += dy;
+
+                // Reverse direction if hitting the edge of the viewport
+                if (x <= 0 || x >= window.innerWidth - ladybug.offsetWidth) {
+                    dx = getRandomSpeed();
+                }
+                if (y <= 0 || y >= window.innerHeight - ladybug.offsetHeight) {
+                    dy = getRandomSpeed();
+                }
+
+                // Randomly change direction after some time
+                if (Math.random() < 0.02) { // 2% chance to change direction in each frame
+                    dx = getRandomSpeed();
+                    dy = getRandomSpeed();
+                }
+
+                ladybug.style.transform = `translate(${x}px, ${y}px)`;
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        });
+    </script>
+</body>
+
+</html>
