@@ -326,15 +326,27 @@
 
  }
 
+ #xcode, #vscode {
+     transition: transform 0.3s ease;
+     display: block;
+ }
+
+#xcode:hover, #vscode:hover {
+     transform: scale(1.2);
+     /* Adjust the scale value as needed */
+ }
+
  #iosButton {
-    background-color: orange;
-        border-color: orange;
+    background-color: rgb(255, 77, 0);
+        border-color: rgb(255, 77, 0);
+        
         
  }
 
+
   #webButton {
-      background-color: rgb(200, 170, 0);
-      border-color: rgb(200, 170, 0);
+      background-color: rgb(255, 77, 0);
+      border-color: rgb(255, 77, 0);
   }
 
  .ladybug {
