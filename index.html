@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
     <link rel="icon" type="svg" href="imgs/logo.svg" >
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Parth.Portfolio</title>
 </head>
 
@@ -174,7 +174,7 @@
             </div>
             <div class="col-lg-6">
                 <h1>iOS Showroom</h1>
-                <p class="lead">Welcome to my iOS Showroom, where innovation meets elegance. Explore a curated collection of my finest mobile
+                <p class="lead" style="color: gray;">Welcome to my iOS Showroom, where innovation meets elegance. Explore a curated collection of my finest mobile
                 applications, each crafted with precision and creativity. From sleek interfaces to seamless functionality, these
                 projects showcase my dedication to delivering exceptional user experiences. Click to discover the unique solutions and
                 sophisticated designs that set my iOS apps apart.</p>
@@ -191,7 +191,7 @@
 
             <div class="col-lg-6 vscode1">
                 <h1>Web Craftsmanship</h1>
-                <p class="lead">Discover the art of digital excellence through my web projects. Each creation is a testament to my dedication to
+                <p class="lead" style="color: gray;">Discover the art of digital excellence through my web projects. Each creation is a testament to my dedication to
                 innovation, design, and functionality. Click to explore these meticulously crafted solutions, where every detail is
                 tailored to deliver an exceptional user experience.</p>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-start">
@@ -207,7 +207,7 @@
         <div class="beyond fade">
            
             <h2><span class="designerWord" style="font-size: 3rem;">Beyond </span> the Code...</h2>
-            <p>When I'm not coding, I immerse myself in a variety of creative pursuits. I love sketching, where I can translate my
+            <p class="textBeyond">When I'm not coding, I immerse myself in a variety of creative pursuits. I love sketching, where I can translate my
             ideas into visual art, adding a unique dimension to my design thinking. Music is another passion; whether I'm
             playing an
             instrument or discovering new genres, it fuels my creativity and often inspires my projects. I'm an avid reader,
@@ -222,11 +222,12 @@
             <h2 style="text-align: center;">Learning Odyssey 📚</h2>
             <div id="humber">
                 <h5>Post-Graduation in Information Technology Solutions</h5>
-                <p>Humber College</p>
+                <p style="color: gray;">Humber College, <a href="" style="color: gray; text-decoration: none;" >Transcript <i class="fa-solid fa-download"></i></a></p>
+                
             </div>
             <div id="gtu">
                 <h5>Bachelor's in Computer Engineering</h5>
-                <p>Gujarat Technological University</p>
+                <p style="color: gray;">Gujarat Technological University, <a href="" style="color: gray; text-decoration: none;">Transcript <i class="fa-solid fa-download"></i></a></p>
             </div>
         </div>
     </section>
@@ -304,6 +305,7 @@
         const projectSection = document.querySelector('.divider');
         const heroSection = document.querySelector('.heroSection');
         const heroText = document.querySelector('.textHero');
+        const beyondText = document.querySelector('.textBeyond');
 
         const ladybugImages = [
         'imgs/ladyBug.png', // Original image
@@ -311,7 +313,7 @@
     ];
 
         let isStopped = false;
-        const maxSpeed = 2;
+        const maxSpeed = 4;
 
         function getRandomSpeed() {
             return (Math.random() - 0.5) * maxSpeed;
@@ -324,6 +326,7 @@
         function stopLadybug() {
             if (!isStopped) {
                 isStopped = true;
+                bugMessage.innerHTML = 'Hey, Check it out'
                 bugMessage.style.opacity = '1';
                 ladybug.style.height = '25px';
                 ladybug.style.width = '25px';
@@ -341,6 +344,10 @@
                 isStopped = true;
                 ladybug.src = ladybugImages[1];
                 heroText.innerHTML = 'A developer / <span class="designerWord">Designer!</span><br>with expertise in Swift, SwiftUI, React, and Node.js, building high-performance iOS and web applications tailored to client needs.I focus on delivering seamless user experiences with scalable, maintainable solutions.';
+                beyondText.innerHTML = "When I'm not coding, I immerse myself in a variety of creative pursuits.I love sketching, where I can translate my ideas into visual art, adding a unique dimension to my design thinking.Music is another passion; whether I'm playing an instrument or discovering new genres, it fuels my creativity and often inspires my projects.I'm an avid reader, constantly exploring new books that broaden my perspective and deepen my knowledge.Additionally, I enjoy tackling DIY projects, from crafting unique home decor to building small gadgets.These hobbies not only relax me but also inspire my work, allowing me to approach development with a fresh and innovative mindset.";
+                bugMessage.style.opacity = '0';
+                ladybug.style.height = '15px';
+                ladybug.style.width = '15px';
                 setTimeout(() => {
                     isStopped = false;
              ladybug.src = ladybugImages[0];
@@ -356,10 +363,6 @@
             let y = Math.random() * window.innerHeight;
             let dx = getRandomSpeed();
             let dy = getRandomSpeed();
-
-            
-
-            
 
             function move() {
                 if (!isStopped) {
@@ -411,9 +414,6 @@
 
 
         });
-        
-       
-
        
                function checkCollision() {
             const rect = ladybug.getBoundingClientRect();
@@ -421,12 +421,29 @@
             const bugCenterY = rect.top + rect.height / 2;
 
             const heroRect = heroText.getBoundingClientRect();
-
+                   const beyondRect = beyondText.getBoundingClientRect();
             if (
                 bugCenterX > heroRect.left && bugCenterX < heroRect.right &&
                 bugCenterY > heroRect.top && bugCenterY < heroRect.bottom
             ) {
+                console.log('collided with beyond')
                 destroyText(heroText);
+                bugMessage.innerHTML = 'Kill me to fix this!'
+                bugMessage.style.opacity = '1';
+                ladybug.style.height = '25px';
+                ladybug.style.width = '25px';
+
+            } 
+
+            if (
+                 bugCenterX > beyondRect.left && bugCenterX < beyondRect.right &&
+               bugCenterY > beyondRect.top && bugCenterY < beyondRect.bottom
+           ) { console.log('collided with beyond')
+            destroyText(beyondText);
+                   bugMessage.innerHTML = 'Kill me to fix this!'
+                bugMessage.style.opacity = '1';
+            ladybug.style.height = '25px';
+                ladybug.style.width = '25px';
             }
         }
 

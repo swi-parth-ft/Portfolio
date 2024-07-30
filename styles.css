@@ -26,6 +26,9 @@
      width: 100vw;
      object-fit: cover;
  }
+ .eduSectio>p {
+    color: gray;
+ }
 
 
  .heroText>p {
