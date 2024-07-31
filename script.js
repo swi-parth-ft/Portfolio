@@ -18,28 +18,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
     document.addEventListener('mouseup', () => {
         cursor.style.transform = 'scale(1)';
     });
+
+    
 });
 
-const buttons = document.querySelectorAll('.tilt-button');
-    const radius = 200;
 
-    document.addEventListener('mousemove', (e) => {
-        buttons.forEach(button => {
-            const rect = button.getBoundingClientRect();
-            const buttonX = rect.left + rect.width / 2;
-            const buttonY = rect.top + rect.height / 2;
-
-            const distance = Math.sqrt(Math.pow(buttonX - e.clientX, 2) + Math.pow(buttonY - e.clientY, 2));
-
-            if (distance < radius) {
-                const angle = Math.atan2(e.clientY - buttonY, e.clientX - buttonX) * (180 / Math.PI) / 10;
-                button.style.transform = `scale(1.1) rotate(${angle}deg)`;
-            } else {
-                button.style.transform = 'scale(1) rotate(0deg)';
-            }
-        });
-    });
-    
 // Matter.js module aliases
 const Engine = Matter.Engine,
       Render = Matter.Render,

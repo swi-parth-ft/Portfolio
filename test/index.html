@@ -4,70 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        .ladybug-container {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1000;
-        }
-
-        .ladybug {
-            width: 15px;
-            height: 15px;
-        }
-
-        .bug-message {
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            z-index: 1001;
-            display: none;
-        }
-    </style>
-    <title>Test Bug Message</title>
+    <title>Stretch Image on Hover</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <div class="ladybug-container">
-        <img src="imgs/ladyBug.png" alt="Ladybug" class="ladybug">
-        <div class="bug-message" id="bugMessage">Check out</div>
+    <div class="stretch-container">
+        <img src="/Portfolio/imgs/avatar.png" alt="Your Image" class="stretch-image">
     </div>
-
-    <section class="projectSection" style="height: 1000px; background-color: lightgrey;">
-        <h1>Projects Section</h1>
-    </section>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const projectSection = document.querySelector('.projectSection');
-            const bugMessage = document.getElementById('bugMessage');
-
-            // Create an Intersection Observer instance
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        // Show the message when projectSection is in view
-                        bugMessage.style.display = 'block';
-                        // Hide the message after 2 seconds
-                        setTimeout(() => {
-                            bugMessage.style.display = 'none';
-                        }, 2000);
-                    }
-                });
-            }, {
-                threshold: 0.1
-            });
-
-            // Observe the projectSection
-            observer.observe(projectSection);
-        });
-    </script>
 </body>
 
 </html>

@@ -1,17 +1,22 @@
 body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
     margin: 0;
-    overflow: hidden;
-    background-color: #f0f8ff;
-    /* Light blue background */
+    background-color: #f0f0f0;
 }
 
-.ladybug {
-    width: 20px;
-    /* Adjust size as needed */
-    height: 20px;
-    /* Adjust size as needed */
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: translate(-50%, -50%);
+.stretch-container {
+    overflow: hidden;
+}
+
+.stretch-image {
+    transition: transform 0.3s ease;
+    display: block;
+}
+
+.stretch-image:hover {
+    transform: scale(1.2);
+    /* Adjust the scale value as needed */
 }

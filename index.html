@@ -16,12 +16,18 @@
 </head>
 
 <body>
+
+    <div id="splash-screen">
+        <h1 id="headline" class="welcome-text"></h1>
+        <span class="cursor" id="cursor">|</span>
+    </div>
+    <div id="main-content" style="display: none;">
 <div class="ladybug-container">
     <img src="imgs/ladyBug.png" alt="Ladybug" class="ladybug fade">
     <div id="bugMessage" class="bug-message">Hey, Check it out </div>
     
 </div>
-    <section class="heroSection fade">
+    <section class="heroSection">
         <div class="hero">
             <header class="d-flex justify-content-left py-3 px-4">
             <ul class="nav nav-underline">
@@ -249,8 +255,9 @@
                 
         </div>
     </section>
+    </div>
 
-    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top footer">
         <div class="col-md-4 d-flex align-items-center">
             <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
                 <svg class="bi" width="30" height="24">
@@ -454,17 +461,28 @@
         function destroyText(element) {
             const text = element.innerText;
             const words = text.split(' ');
+            const change = true;
 
+            setTimeout(() => {
+                change = false;
+                console.log("Variable changed back to true");
+            }, 2000);
             // Choose random words to wrap with fake tags and change color
+            if (change) {
             for (let i = 0; i < words.length; i++) {
-                if (Math.random() < 0.3) { // 30% chance to wrap with a fake tag
-                    const randomTag = fakeTags[Math.floor(Math.random() * fakeTags.length)];
-                    words[i] = `${randomTag}${words[i]}${randomTag.replace('<', '</')}`;
-                } else if (Math.random() < 0.3) { // 30% chance to change color
-                    const randomColor = colors[Math.floor(Math.random() * colors.length)];
-                    words[i] = `<span style="color: ${randomColor};">${words[i]}</span>`;
+                    if (Math.random() < 0.3) { // 30% chance to wrap with a fake tag
+                        const randomTag = fakeTags[Math.floor(Math.random() * fakeTags.length)];
+                        words[i] = `${randomTag}${words[i]}${randomTag.replace('<', '</')}`;
+                    } else if (Math.random() < 0.3) { // 30% chance to change color
+                        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                        words[i] = `<span style="color: ${randomColor};">${words[i]}</span>`;
+                    }
                 }
+
+                
             }
+
+            
 
             element.innerHTML = words.join(' ');
         }
@@ -492,6 +510,44 @@
         });
     });
 </script>
+<script>
+    // script.js
+    const headlineText = "Welcome to My Creative Space 🎨";
+    let index = 0;
 
+    function typeHeadline() {
+        if (index < headlineText.length) {
+            document.getElementById('headline').innerHTML += headlineText.charAt(index);
+            index++;
+            setTimeout(typeHeadline, 50); // Adjust the typing speed here
+        } else {
+            // After typing is complete, fade out the splash screen
+            setTimeout(() => {
+                let splash = document.getElementById("splash-screen");
+                splash.classList.add("fade-out");
+                splash.addEventListener("transitionend", function () {
+                    splash.style.display = "none";
+                    let mainContent = document.getElementById("main-content");
+                    let heroSection = document.getElementById("hero-section");
+                    let footerSection = document.getElementById("footer-section");
+
+                    mainContent.style.display = "block";
+                    heroSection.style.opacity = 1;
+
+                    // Delay footer display until hero section is visible
+                    setTimeout(function () {
+                        footerSection.style.opacity = 1;
+                        document.body.style.overflow = "auto"; // Restore scrolling
+                    }, 1000); // Adjust this delay if needed
+                });
+            }, 1000); // Additional delay after typing effect is complete
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        typeHeadline();
+    });
+
+</script>
 </body>
 </html>
