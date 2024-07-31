@@ -479,3 +479,7 @@
          width: 100%;
      }
  }
+
+ .animated-text {
+     transition: color 1s ease, background-color 1s ease, transform 1s ease;
+ }

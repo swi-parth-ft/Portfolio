@@ -29,6 +29,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const heroSection = document.querySelector('.heroSection');
     const heroText = document.querySelector('.textHero');
     const beyondText = document.querySelector('.textBeyond');
+    const xcode = document.getElementById('xcode');
+    const vscode = document.getElementById('vscode');
     const width = window.innerWidth;
     const maxSpeed = 4;
     let isStopped = false;
@@ -171,6 +173,8 @@ document.addEventListener('DOMContentLoaded', function () {
             ladybug.style.height = '25px';
             ladybug.style.width = '25px';
         }
+
+
     }
 
     //Destroy text
@@ -181,18 +185,28 @@ document.addEventListener('DOMContentLoaded', function () {
     function destroyText(element) {
         const text = element.innerText;
         const words = text.split(' ');
+        const numWords = words.length;
 
-        for (let i = 0; i < words.length; i++) {
-            if (Math.random() < 0.3) { // 30% chance to wrap with a fake tag
-                const randomTag = fakeTags[Math.floor(Math.random() * fakeTags.length)];
-                words[i] = `${randomTag}${words[i]}${randomTag.replace('<', '</')}`;
-            } else if (Math.random() < 0.3) { // 30% chance to change color
-                const randomColor = colors[Math.floor(Math.random() * colors.length)];
-                words[i] = `<span style="color: ${randomColor};">${words[i]}</span>`;
+        // Generate 3 unique random indices
+        const indices = new Set();
+        while (indices.size < 3) {
+            indices.add(Math.floor(Math.random() * numWords));
+        }
+
+        for (let i = 0; i < numWords; i++) {
+            if (indices.has(i)) {
+                if (Math.random() < 0.3) { // 30% chance to wrap with a fake tag
+                    const randomTag = fakeTags[Math.floor(Math.random() * fakeTags.length)];
+                    words[i] = `<span class="animated-text">${randomTag}${words[i]}${randomTag.replace('<', '</')}</span>`;
+                } else if (Math.random() < 0.3) { // 30% chance to change color
+                    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                    words[i] = `<span class="animated-text" style="color: ${randomColor};">${words[i]}</span>`;
+                }
             }
         }
         element.innerHTML = words.join(' ');
     }
+
 });
 
 // Tilt Buttons
