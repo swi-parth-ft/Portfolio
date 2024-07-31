@@ -31,7 +31,7 @@
                     <li class="nav-item"><a href="webProjects.html" class="nav-link">Web</a></li>
                     <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
                     <li class="nav-item"><a href="https://medium.com/@theparthantala" class="nav-link">Blogs</a></li>
-                    <li class="nav-item"><a href="resume.pdf" download="resume.pdf" class="nav-link">Resume</a></li>
+                    <li class="nav-item"><a onclick="openFlashcard('resume.pdf')" class="nav-link">Resume</a></li>
                 </ul>
             </header>
 
@@ -224,16 +224,16 @@
                 <h2 style="text-align: center;">Learning Odyssey 📚</h2>
                 <div id="humber">
                     <h5>Post-Graduation in Information Technology Solutions</h5>
-                    <p style="color: gray;">Humber College, <a href=""
-                            style="color: gray; text-decoration: none;">Transcript <i
-                                class="fa-solid fa-download"></i></a></p>
+                    <p style="color: gray;">Humber College, <a 
+                             onclick="openFlashcard('Transcript.pdf')" style="color: gray; text-decoration: none;">Transcript <i
+                                class="fa-regular fa-eye"></i></a></p>
 
                 </div>
                 <div id="gtu">
                     <h5>Bachelor's in Computer Engineering</h5>
-                    <p style="color: gray;">Gujarat Technological University, <a href=""
-                            style="color: gray; text-decoration: none;">Transcript <i
-                                class="fa-solid fa-download"></i></a></p>
+                    <p style="color: gray;">Gujarat Technological University, <a onclick="openFlashcard('TranscriptGTU.pdf')"
+                            style="color: gray; ">Transcript <i
+                                class="fa-regular fa-eye"></i></a></p>
                 </div>
             </div>
     </section>
@@ -252,6 +252,13 @@
             </div>
         </div>
     </section>
+
+    <div id="flashcard" class="flashcard">
+        <div class="flashcard-content">
+            <button class="close-btn" onclick="closeFlashcard()">✖</button>
+            <iframe id="flashcard-frame" src="" width="100%" height="100%"></iframe>
+        </div>
+    </div>
 
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top footer">
         <div class="col-md-4 d-flex align-items-center">

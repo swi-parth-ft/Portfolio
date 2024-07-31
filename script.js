@@ -213,3 +213,13 @@ document.addEventListener('mousemove', (e) => {
         }
     });
 });
+
+function openFlashcard(pdfUrl) {
+    document.getElementById('flashcard').style.display = 'flex';
+    document.getElementById('flashcard-frame').src = pdfUrl;
+}
+
+function closeFlashcard() {
+    document.getElementById('flashcard').style.display = 'none';
+    document.getElementById('flashcard-frame').src = '';
+}
