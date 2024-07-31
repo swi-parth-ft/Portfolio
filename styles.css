@@ -27,6 +27,13 @@
      object-fit: cover;
  }
 
+ .nav {
+     padding-left: 10px;
+     padding-right: 10px;
+     background-color: rgba(182, 182, 182, 0.328);
+     border-radius: 22px;
+ }
+
  .eduSectio>p {
      color: gray;
  }
@@ -325,7 +332,6 @@
          border-color: rgb(200, 170, 0);
          width: 150px;
      }
-
  }
 
  #xcode,

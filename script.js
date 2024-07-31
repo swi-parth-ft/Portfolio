@@ -162,8 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
             destroyText(heroText);
             bugMessage.innerHTML = 'Kill me to fix it!'
             bugMessage.style.opacity = '1';
-            ladybug.style.height = '25px';
-            ladybug.style.width = '25px';
+
 
         }
 
