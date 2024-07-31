@@ -91,8 +91,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (isStopped) {
             return;
         }
-        let x = Math.random() * window.innerWidth;
-        let y = Math.random() * window.innerHeight;
+        let x = window.innerWidth / 2;
+        let y = window.innerHeight / 2;
         let dx = getRandomSpeed();
         let dy = getRandomSpeed();
 
@@ -102,11 +102,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 x += dx;
                 y += dy;
 
-                if (x <= 0 || x >= window.innerWidth - ladybug.offsetWidth) {
-                    dx = getRandomSpeed();
+                if (x <= 0) {
+                    x = window.innerWidth - ladybug.offsetWidth;
+                } else if (x >= window.innerWidth - ladybug.offsetWidth) {
+                    x = 0;
                 }
-                if (y <= 0 || y >= window.innerHeight - ladybug.offsetHeight) {
-                    dy = getRandomSpeed();
+
+                if (y <= 0) {
+                    y = window.innerHeight - ladybug.offsetHeight;
+                } else if (y >= window.innerHeight - ladybug.offsetHeight) {
+                    y = 0;
                 }
 
                 if (Math.random() < 0.02) {
