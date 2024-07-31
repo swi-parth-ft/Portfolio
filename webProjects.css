@@ -5,9 +5,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(270deg, black, rgb(0, 128, 255));
+    background: linear-gradient(270deg, rgb(255, 145, 0), black);
     background-size: 400% 400%;
-    animation: gradientMove 8s ease infinite;
+    animation: gradientMove 3s ease;
     font-family: Arial, sans-serif;
     color: white;
     text-align: center;
@@ -42,7 +42,7 @@ h1 {
 
 .progress-bar {
     width: 40%;
-    background-color: #e4e4e4;
+    background-image: linear-gradient(to right, #b1b1b100, #ffffffd4);
     border-radius: 10px;
     overflow: hidden;
     margin-top: 20px;
@@ -53,13 +53,27 @@ h1 {
 .progress {
     height: 5px;
     width: 0;
-    background-image: linear-gradient(to right, white, orange);
+    background-image: linear-gradient(to right, #b1b1b100, rgba(255, 166, 0, 0.332), rgba(255, 166, 0, 0.63), orange);
     border-radius: 10px 0 0 10px;
+    position: relative;
+    /* Required for positioning the sparkles */
+    overflow: hidden;
+    /* Ensure sparkles stay within the progress bar */
     animation: fillProgress 3s forwards;
 }
+
+
 
 @keyframes fillProgress {
     to {
         width: 75%;
     }
+}
+
+.homeButton {
+    background-color: rgba(255, 255, 255, 0.201);
+    border-color: rgba(255, 255, 255, 0);
+    color: white;
+    border-radius: 22px;
+    box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.127);
 }

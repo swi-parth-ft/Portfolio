@@ -19,7 +19,7 @@ body {
     background: rgba(0, 0, 0, 0.85);
     color: white;
     /* Optional: Add a background color to make the text more readable */
-   
+
     /* Optional: Add a border for separation */
     width: 80%;
     /* Adjust width as needed */
@@ -150,11 +150,11 @@ body {
     gap: 20px;
 }
 
-        
-        #downloadProject {
-            background-color: orange;
-                border-color: orange;
-        }
+
+#downloadProject {
+    background-color: orange;
+    border-color: orange;
+}
 
 @media (max-width: 767px) {
     .modal-content {
@@ -162,14 +162,14 @@ body {
         /* Change to column on mobile screens */
     }
 
-        #githubLink,
-        #downloadProject {
-            font-size: 14px;
-            /* Smaller font size */
-            padding: 6px 12px;
-            /* Reduced padding */
-            white-space: nowrap;/
-        }
+    #githubLink,
+    #downloadProject {
+        font-size: 14px;
+        /* Smaller font size */
+        padding: 6px 12px;
+        /* Reduced padding */
+        white-space: nowrap;/
+    }
 }
 
 
@@ -184,20 +184,20 @@ body {
     flex: 1;
     flex-direction: column;
     margin: 10px;
-        padding: 0;
-        
+    padding: 0;
+
 }
 
 .modal-right {
     flex: 2;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 10px;
-        /* Decrease this value to reduce the space further */
-        /* Optional: Ensure no additional margin or padding is added */
-        margin: 10px;
-        padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    /* Decrease this value to reduce the space further */
+    /* Optional: Ensure no additional margin or padding is added */
+    margin: 10px;
+    padding: 0;
     /* Optional: Adds space between buttons and description */
 }
 
@@ -207,6 +207,7 @@ body {
     text-align: justify;
     font-style: italic;
 }
+
 .close {
     color: #aaa;
     float: right;
@@ -223,9 +224,9 @@ body {
 
 .fade {
     opacity: 0;
-        /* Initially hidden */
-        animation: fadeIn 8s forwards;
-        /* Animation to apply */
+    /* Initially hidden */
+    animation: fadeIn 8s forwards;
+    /* Animation to apply */
 }
 
 @keyframes fadeIn {
@@ -237,4 +238,3 @@ body {
         opacity: 1;
     }
 }
-

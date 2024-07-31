@@ -14,7 +14,7 @@
  }
 
  .nav-link:hover {
-    color: orange;
+     color: orange;
  }
 
  .active {
@@ -26,8 +26,9 @@
      width: 100vw;
      object-fit: cover;
  }
+
  .eduSectio>p {
-    color: gray;
+     color: gray;
  }
 
 
@@ -76,10 +77,10 @@
      align-items: center;
      padding: 30px 0;
  }
-.skills {
- background-image: linear-gradient(to top left, orange, white, white, white, white)
-    
-}
+
+ .skills {
+     background-image: linear-gradient(to top left, orange, white, white, white, white)
+ }
 
 
  .aboutMeSection {
@@ -95,18 +96,19 @@
      color: gray;
      font-style: italic;
      text-align: center;
-   
+
  }
+
  .skillSection {
-    text-align: center;
+     text-align: center;
  }
 
  .projectSection {
-    background-image: linear-gradient(to bottom left, orange, black, black, black, black);
-    color: rgb(255, 255, 255);
- } 
+     background-image: linear-gradient(to bottom left, orange, black, black, black, black);
+     color: rgb(255, 255, 255);
+ }
 
- 
+
 
  .editorial {
      display: block;
@@ -186,8 +188,8 @@
      text-align: center;
      padding-bottom: 40px;
      position: relative;
-    background-image: radial-gradient(orange, black, black);
-    padding: 20px;
+     background-image: radial-gradient(orange, black, black);
+     padding: 20px;
  }
 
  .getInTouchSection {
@@ -206,14 +208,14 @@
      z-index: -1;
  }
 
-.fade {
-    opacity: 0;
-    transition: opacity 2s ease-in-out;
-}
+ .fade {
+     opacity: 0;
+     transition: opacity 2s ease-in-out;
+ }
 
-.fade.visible {
-    opacity: 1;
-}
+ .fade.visible {
+     opacity: 1;
+ }
 
 
  /* Responsive Styles */
@@ -255,11 +257,11 @@
          order: 1;
      }
 
-         .skillSection {
-             padding: 20px;
-             font-size: small;
-             text-align: center;
-         }
+     .skillSection {
+         padding: 20px;
+         font-size: small;
+         text-align: center;
+     }
  }
 
  @media (max-width: 576px) {
@@ -304,50 +306,52 @@
      }
 
      .skillSection {
-        padding: 20px;
-        font-size: small;
-        text-align: center;
-        width: 300px;
-     
+         padding: 20px;
+         font-size: small;
+         text-align: center;
+         width: 300px;
+
      }
 
-         #iosButton {
-             background-color: orange;
-             border-color: orange;
-             width: 150px;
-    
-         }
-    
-         #webButton {
-             background-color: rgb(200, 170, 0);
-             border-color: rgb(200, 170, 0);
-            width: 150px;
-         }
+     #iosButton {
+         background-color: orange;
+         border-color: orange;
+         width: 150px;
+
+     }
+
+     #webButton {
+         background-color: rgb(200, 170, 0);
+         border-color: rgb(200, 170, 0);
+         width: 150px;
+     }
 
  }
 
- #xcode, #vscode {
+ #xcode,
+ #vscode {
      transition: transform 0.3s ease;
      display: block;
  }
 
-#xcode:hover, #vscode:hover {
+ #xcode:hover,
+ #vscode:hover {
      transform: scale(1.2);
      /* Adjust the scale value as needed */
  }
 
  #iosButton {
-    background-color: rgb(255, 77, 0);
-        border-color: rgb(255, 77, 0);
-        
-        
+     background-color: rgb(255, 77, 0);
+     border-color: rgb(255, 77, 0);
+
+
  }
 
 
-  #webButton {
-      background-color: rgb(255, 77, 0);
-      border-color: rgb(255, 77, 0);
-  }
+ #webButton {
+     background-color: rgb(255, 77, 0);
+     border-color: rgb(255, 77, 0);
+ }
 
  .ladybug {
      width: 50px;
@@ -359,156 +363,45 @@
      left: 0;
      transform: translate(-50%, -50%);
  }
-.ladybug-container {
-    position: fixed;
-    top: 20px;
-    /* Adjust as needed */
-    left: 20px;
-    /* Adjust as needed */
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-    /* Ensure it stays on top of other content */
-}
 
-.ladybug {
-    width: 15px;
-    /* Adjust size as needed */
-    height: 15px;
-    /* Adjust size as needed */
-    cursor: url('imgs/hammer.svg') 8 8, auto;
-    background-size: cover;
-    padding: 20px;
-    /* Add padding to increase the clickable area */
-    box-sizing: content-box;
+ .ladybug-container {
+     position: fixed;
+     top: 20px;
+     /* Adjust as needed */
+     left: 20px;
+     /* Adjust as needed */
+     transform: translate(-50%, -50%);
+     z-index: 1000;
+     /* Ensure it stays on top of other content */
+ }
 
-}
+ .ladybug {
+     width: 15px;
+     /* Adjust size as needed */
+     height: 15px;
+     /* Adjust size as needed */
+     cursor: url('imgs/hammer.svg') 8 8, auto;
+     background-size: cover;
+     padding: 20px;
+     /* Add padding to increase the clickable area */
+     box-sizing: content-box;
 
-.bug-message {
-    position: relative;
+ }
 
-    transform: translateX(-50%) translateY(-10px);
+ .bug-message {
+     position: relative;
 
-    padding: 5px;
-    font-size: 10px;
-    /* Responsive font size */
-    color: #fff;
-    background: rgb(199, 103, 52);
-    border-radius: 5px;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    z-index: 10000;
-}
+     transform: translateX(-50%) translateY(-10px);
 
-/* styles.css */
-#splash-screen {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #282c34;
-    color: white;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 9999;
-    transition: opacity 1s ease-in-out;
-    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-    background-size: 200% 200%;
-    animation: gradient 5s ease infinite;
-}
-
-#splash-screen.fade-out {
-    opacity: 0;
-}
-
-@keyframes gradient {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-#hero-section {
-    display: none;
-    animation: fadeIn 0s forwards;
-}
-.footer {
-    display: none;
-    animation: fadeIn 3s 3s forwards;
-    /* delay the animation */
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-#headline {
-   // font-size: 3rem;
-    /* Adjust the font size as needed */
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-.cursor {
-    display: inline-block;
-    font-size: 4rem;
-    color: orange;
-    /* Cursor color */
-    animation: blink 0.7s infinite;
-}
-
-@keyframes blink {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0;
-    }
-}
-
-.welcome-text {
-    font-size: 3rem;
-    /* Responsive font size based on viewport width */
-    text-align: center;
-    padding: 0 10px;
-}
-
-@media (max-width: 768px) {
-    .welcome-text {
-        font-size: 2rem;
-        /* Adjust font size for tablets and smaller screens */
-    }
-        .cursor {
-            font-size: 1.5rem;
-        }
-}
-
-@media (max-width: 480px) {
-    .welcome-text {
-        font-size: 1rem;
-        /* Adjust font size for mobile devices */
-    }
-
-        .cursor {
-            font-size: 2rem;
-        }
-}
+     padding: 5px;
+     font-size: 10px;
+     /* Responsive font size */
+     color: #fff;
+     background: rgb(199, 103, 52);
+     border-radius: 5px;
+     white-space: nowrap;
+     opacity: 0;
+     pointer-events: none;
+     transition: opacity 0.3s ease, transform 0.3s ease;
+     z-index: 10000;
+ }
