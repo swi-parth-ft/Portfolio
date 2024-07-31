@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
         'imgs/splash.png' // New image after clicking
     ];
 
+
     function getRandomSpeed() {
         if (width < 600) {
             return (Math.random() - 0.5) * 1;
@@ -72,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!isStopped) {
             isStopped = true;
             ladybug.src = ladybugImages[1];
-            heroText.innerHTML = 'A developer / <span class="designerWord">Designer!</span><br>with expertise in Swift, SwiftUI, React, and Node.js, building high-performance iOS and web applications tailored to client needs.I focus on delivering seamless user experiences with scalable, maintainable solutions.';
+            heroText.innerHTML = 'with expertise in Swift, SwiftUI, React, and Node.js, building high-performance iOS and web applications tailored to client needs.I focus on delivering seamless user experiences with scalable, maintainable solutions.';
             beyondText.innerHTML = "When I'm not coding, I immerse myself in a variety of creative pursuits.I love sketching, where I can translate my ideas into visual art, adding a unique dimension to my design thinking.Music is another passion; whether I'm playing an instrument or discovering new genres, it fuels my creativity and often inspires my projects.I'm an avid reader, constantly exploring new books that broaden my perspective and deepen my knowledge.Additionally, I enjoy tackling DIY projects, from crafting unique home decor to building small gadgets.These hobbies not only relax me but also inspire my work, allowing me to approach development with a fresh and innovative mindset.";
             bugMessage.style.opacity = '0';
             ladybug.style.height = '15px';
@@ -207,7 +208,7 @@ document.addEventListener('mousemove', (e) => {
 
         if (distance < radius) {
             const angle = Math.atan2(e.clientY - buttonY, e.clientX - buttonX) * (180 / Math.PI) / 10;
-            button.style.transform = `scale(1.1) rotate(${angle}deg)`;
+            button.style.transform = `scale(1.1)`;
         } else {
             button.style.transform = 'scale(1) rotate(0deg)';
         }

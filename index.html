@@ -21,7 +21,12 @@
         <div id="bugMessage" class="bug-message">Hey, Check it out </div>
     </div>
 
+    
+
     <section class="heroSection">
+
+    
+
         <div class="hero">
             <header class="d-flex justify-content-left py-3 px-4">
                 <ul class="nav nav-underline">
@@ -34,14 +39,17 @@
                     <li class="nav-item"><a onclick="openFlashcard('resume.pdf')" class="nav-link">Resume</a></li>
                 </ul>
             </header>
-
-            <div class="heroText">
+            <div class="progress-bar">
+                
+                <div class="progress"></div>
+            </div>
+            <div class="heroText" style="display: none;">
                 <img src="imgs/avatar.png" width="150px" class="avatar">
                 <h1>Hello, I'm Parth 👋</h1>
-                <p class="textHero">A developer / <span class="designerWord">Designer!</span><br>with expertise in
+                <p>A developer / <span class="designerWord">Designer!</span><br><span class="textHero">with expertise in
                     Swift, SwiftUI, React, and Node.js, building high-performance iOS and web applications
                     tailored to client needs. I focus on delivering seamless user experiences with scalable,
-                    maintainable solutions. </p>
+                    maintainable solutions.</span> </p>
             </div>
         </div>
     </section>
@@ -284,6 +292,29 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+            const progressBar = document.querySelector('.progress-bar');
+            const progress = document.querySelector('.progress');
+            const additionalContent = document.querySelector('.heroText');
+
+            // Function to handle changes after progress is complete
+            function handleProgressCompletion() {
+                progressBar.classList.add('completed');
+                additionalContent.style.display = 'block';
+                progressBar.style.display = "none" // Show the additional content
+            }
+
+            // Check if the progress animation is complete
+            progress.addEventListener('animationend', function (event) {
+                if (event.animationName === 'fillProgress') {
+                    handleProgressCompletion();
+                }
+            });
+        });
+
+
+    </script>
 </body>
 
 </html>
