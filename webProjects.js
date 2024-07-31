@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         snippet.style.animationDuration = `${Math.random() * 3 + 2}s`;
         container.appendChild(snippet);
 
-        // Hide the snippet after it falls and waits for 2 seconds
+        // // Hide the snippet after it falls and waits for 2 seconds
         snippet.addEventListener('animationend', () => {
             setTimeout(() => {
 
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Create a new snippet every 500ms
-        setTimeout(createSnippet, 1000);
+        setTimeout(createSnippet, 500);
     }
 
     createSnippet();

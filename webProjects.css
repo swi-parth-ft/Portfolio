@@ -92,7 +92,7 @@ h1 {
     color: #d4d4d4;
     font-family: monospace;
     font-size: 0.8em;
-    border-radius: 5px;
+    border-radius: 22px;
     white-space: nowrap;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     animation: fall linear;
