@@ -217,7 +217,6 @@
      opacity: 1;
  }
 
-
  /* Responsive Styles */
  @media (max-width: 768px) {
      .heroText {
@@ -381,7 +380,7 @@
      /* Adjust size as needed */
      cursor: url('imgs/hammer.svg') 8 8, auto;
      background-size: cover;
-     padding: 20px;
+     padding: 50px;
      /* Add padding to increase the clickable area */
      box-sizing: content-box;
 
@@ -392,7 +391,7 @@
 
      transform: translateX(-50%) translateY(-10px);
 
-     padding: 5px;
+     padding: 10px;
      font-size: 10px;
      /* Responsive font size */
      color: #fff;

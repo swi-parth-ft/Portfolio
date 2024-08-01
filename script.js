@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const vscode = document.getElementById('vscode');
     const width = window.innerWidth;
     const maxSpeed = 4;
+    const alert = true;
     let isStopped = false;
     const ladybugImages = [
         'imgs/ladyBug.png', // Original image
@@ -68,6 +69,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 ladybug.style.height = '15px';
                 ladybug.style.width = '15px';
             }, 2000);
+        }
+    }
+
+    // Stop Bug
+    function stopLadybug2() {
+        if (!isStopped && alert) {
+
+            isStopped = true;
+            bugMessage.innerHTML = "Hey, I'm Poo, a friendly Bug! <br> I might mess things up, <br>you can kill me to fix that. <br>but please don't 🙂‍↔️"
+            bugMessage.style.opacity = '1';
+
+            setTimeout(() => {
+                isStopped = false;
+
+                bugMessage.style.opacity = '0';
+                alert = false;
+            }, 3000);
+
         }
     }
     // Kill Bug
@@ -121,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 const rotation = calculateRotation(dx, dy);
                 ladybug.style.transform = `translate(${x}px, ${y}px) rotate(${rotation + 90}deg)`;
-                bugMessage.style.transform = `translate(${x}px, ${y}px)`;
+                bugMessage.style.transform = `translate(${x + 10}px, ${y + -50}px)`;
                 checkCollision();
             }
 
@@ -138,7 +157,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }, { threshold: 0.1 });
 
+    const observer2 = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                stopLadybug2();
+            }
+        });
+    }, { threshold: 0.1 });
+
     observer.observe(projectSection);
+    observer2.observe(heroText);
     animate();
 
     ladybug.addEventListener('click', function () {
@@ -153,15 +181,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const heroRect = heroText.getBoundingClientRect();
         const beyondRect = beyondText.getBoundingClientRect();
 
-        const counter = 0;
 
         if (
             bugCenterX > heroRect.left && bugCenterX < heroRect.right &&
             bugCenterY > heroRect.top && bugCenterY < heroRect.bottom
         ) {
             destroyText(heroText);
-            bugMessage.innerHTML = 'Kill me to fix it!'
-            bugMessage.style.opacity = '1';
 
 
         }
@@ -174,8 +199,9 @@ document.addEventListener('DOMContentLoaded', function () {
             destroyText(beyondText);
             bugMessage.innerHTML = 'Kill me to fix it!'
             bugMessage.style.opacity = '1';
-            ladybug.style.height = '25px';
-            ladybug.style.width = '25px';
+            setTimeout(() => {
+                bugMessage.style.opacity = '0';
+            }, 2000);
         }
 
 
