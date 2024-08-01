@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const beyondText = document.querySelector('.textBeyond');
     const xcode = document.getElementById('xcode');
     const vscode = document.getElementById('vscode');
+    const progreebar = document.querySelector('.progress');
     const width = window.innerWidth;
     const maxSpeed = 4;
     const alert = true;
@@ -111,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
         let x = window.innerWidth / 2;
-        let y = window.innerHeight / 2;
+        let y = window.innerHeight / 2 - 60;
         let dx = getRandomSpeed();
         let dy = getRandomSpeed();
 
@@ -166,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }, { threshold: 0.1 });
 
     observer.observe(projectSection);
-    observer2.observe(heroText);
+    observer2.observe(progreebar);
     animate();
 
     ladybug.addEventListener('click', function () {
