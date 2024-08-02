@@ -221,6 +221,7 @@
      margin-top: -100px;
  }
 
+
  /* Responsive Styles */
  @media (max-width: 768px) {
      .heroText {
@@ -269,6 +270,7 @@
      .art {
          max-width: 100%;
          width: 100%;
+         margin-top: -60px;
      }
  }
 
@@ -336,9 +338,9 @@
      }
 
      .art {
-         width: 80%;
+         width: 40%;
+         margin-top: -60px;
 
-         background-image: radial-gradient(gray, black, black);
      }
  }
 
