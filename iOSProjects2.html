@@ -32,7 +32,7 @@
 
         .hero-section {
 
-            transform: translateY(-100px);
+            transform: translateY(-200px);
             animation: slideDown 2s forwards;
 
         }
@@ -53,7 +53,7 @@
             width: 100%;
             box-sizing: border-box;
             transform: translateY(200px);
-            animation: slideUp 2s forwards;
+            animation: slideUp 2.5s forwards;
         }
 
         @keyframes slideUp {
@@ -121,7 +121,7 @@
         @media (max-width: 576px) {
             #portfolio {
                 grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-                gap: 25px;
+                gap: 20px;
             }
 
             .heroText {
@@ -129,8 +129,8 @@
             }
 
             .heroImg {
-                width: 150px;
-                height: 150px;
+                width: 100px;
+                height: 100px;
             }
 
             .buttons {
@@ -149,12 +149,51 @@
             }
 
         }
+
+
+        .progress-bar {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10%;
+            background-image: linear-gradient(to right, #b1b1b100, #ffffff10);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+            overflow: hidden;
+            margin: 0 auto;
+            box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .progress {
+            height: 5px;
+            width: 0;
+            background-image: linear-gradient(to right, #99d3ff, rgb(0, 155, 251), rgb(4, 121, 194), rgb(0, 69, 112));
+            border-radius: 10px 0 0 10px;
+            position: relative;
+            /* Required for positioning the sparkles */
+            overflow: hidden;
+            /* Ensure sparkles stay within the progress bar */
+            animation: fillProgress 1s forwards;
+        }
+
+
+
+        @keyframes fillProgress {
+            to {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
+        <div class="progress-bar">
 
+            <div class="progress"></div>
+        </div>
         <div class="hero-section col-xxl-8 px-4 py-5">
             <div class="row flex-lg-row-reverse align-items-center g-5 py-5" style="padding-bottom: 0%;">
                 <div class="col-10 col-sm-8 col-lg-6">
@@ -285,6 +324,27 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const progressBar = document.querySelector('.progress-bar');
+            const progress = document.querySelector('.progress');
+
+            // Function to handle changes after progress is complete
+            function handleProgressCompletion() {
+                progressBar.classList.add('completed');
+                progressBar.style.display = "none" // Show the additional content
+            }
+
+            // Check if the progress animation is complete
+            progress.addEventListener('animationend', function (event) {
+                if (event.animationName === 'fillProgress') {
+                    handleProgressCompletion();
+                }
+            });
+        });
+
+
+    </script>
 </body>
 
 </html>
