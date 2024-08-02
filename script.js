@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
             isStopped = true;
             ladybug.src = ladybugImages[1];
             heroText.innerHTML = 'with expertise in Swift, SwiftUI, React, and Node.js, building high-performance iOS and web applications tailored to client needs.I focus on delivering seamless user experiences with scalable, maintainable solutions.';
-            beyondText.innerHTML = "When I'm not coding, I immerse myself in a variety of creative pursuits.I love sketching, where I can translate my ideas into visual art, adding a unique dimension to my design thinking.Music is another passion; whether I'm playing an instrument or discovering new genres, it fuels my creativity and often inspires my projects.I'm an avid reader, constantly exploring new books that broaden my perspective and deepen my knowledge.Additionally, I enjoy tackling DIY projects, from crafting unique home decor to building small gadgets.These hobbies not only relax me but also inspire my work, allowing me to approach development with a fresh and innovative mindset.";
+            beyondText.innerHTML = "When I'm not coding, I immerse myself in various creative pursuits. I love sketching, translating ideas into visual art, and enhancing my design thinking. Music fuels my creativity, whether playing an instrument or discovering new genres. Reading broadens my perspective and deepens my knowledge. Tackling DIY projects, from crafting unique decor to building gadgets, relaxes and inspires me, allowing for a fresh and innovative approach to development.";
             bugMessage.style.opacity = '0';
             ladybug.style.height = '15px';
             ladybug.style.width = '15px';
