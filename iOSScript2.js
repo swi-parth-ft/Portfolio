@@ -16,6 +16,29 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+// Fade Elements
+document.addEventListener('DOMContentLoaded', function () {
+    const fadeElements = document.querySelectorAll('.fade');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Add 'visible' class to the element when it comes into view
+                entry.target.classList.add('visible');
+                // Optionally, stop observing the element after it has appeared
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        // Set the threshold to determine when the element should be considered in view
+        threshold: 0.1
+    });
+
+    // Observe each element with the 'fade-in' class
+    fadeElements.forEach(element => {
+        observer.observe(element);
+    });
+});
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const iconContainers = document.querySelectorAll(".icon-container");

@@ -467,7 +467,7 @@
      /* Required for positioning the sparkles */
      overflow: hidden;
      /* Ensure sparkles stay within the progress bar */
-     animation: fillProgress 3s forwards;
+     animation: fillProgress 2.5s forwards;
  }
 
 
