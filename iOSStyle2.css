@@ -227,13 +227,22 @@
         }
 
         .screenshot {
-            width: 200px;
-            height: 400px;
+
             margin-right: 10px;
             border-radius: 20px;
             object-fit: cover;
             scroll-snap-align: start;
             box-shadow: 5px 5px 5px rgba(215, 215, 215, 0.5);
+        }
+
+        .portrait {
+            width: 200px;
+            height: 400px;
+        }
+
+        .landscape {
+            width: 400px;
+            height: 200px;
         }
 
         .description {

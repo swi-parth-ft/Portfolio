@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const screenshots = JSON.parse(container.getAttribute("data-screenshots"));
             const desc = container.getAttribute("data-desc");
             const link = container.getAttribute("data-link");
+            const type = container.getAttribute("data-type");
 
             document.getElementById("app-icon").src = image;
             document.getElementById("app-name").textContent = title;
@@ -39,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
             screenshots.forEach(screenshot => {
                 const img = document.createElement("img");
                 img.src = screenshot;
-                img.classList.add("screenshot");
+                img.classList.add("screenshot", type);
                 screenshotsContainer.appendChild(img);
             });
 
