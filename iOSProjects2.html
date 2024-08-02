@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Parth.Portfolio</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #00365c, #236391, #61b8f7, white);
+        margin: 0;
+        padding: 0 20px;
+        box-sizing: border-box;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding-bottom: 30px;
+      }
+
+      .hero-section {
+        position: sticky;
+        margin-top: 20px;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .hero-section img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      #portfolio {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 15px;
+        padding: 30px;
+        background-color: rgba(255, 255, 255, 0.355);
+        border-radius: 22px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.212);
+        max-width: 1200px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .icon-container {
+        position: relative;
+        text-align: center;
+        transition: transform 0.3s ease-in-out;
+      }
+
+      .icon-container:hover {
+        transform: scale(1.1);
+      }
+
+      .icon {
+        width: 100%;
+        height: auto;
+        max-width: 100px;
+        max-height: 100px;
+        object-fit: cover;
+        border-radius: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.316);
+      }
+      .UpcomingIcon {
+        width: 100%;
+        height: auto;
+        max-width: 100px;
+        max-height: 100px;
+        object-fit: cover;
+        border-radius: 15px;
+      }
+
+      .tooltip {
+        position: absolute;
+        top: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
+
+      .icon-container:hover .tooltip {
+        opacity: 1;
+      }
+
+      .heroText {
+        font-style: italic;
+        text-align: center;
+        color: rgb(228, 228, 228);
+      }
+
+      @media (max-width: 576px) {
+        #portfolio {
+          grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+          gap: 25px;
+        }
+        .heroText {
+          font-size: medium;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        #portfolio {
+          grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+          gap: 30px;
+          width: 70%;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="hero-section">
+        <div class="heroBlurable">
+          <img
+            class="d-block mx-auto mb-4"
+            src="imgs/xcode-seeklogo.svg"
+            alt=""
+            width="100"
+            height="100"
+          />
+          <h1 style="color: white">iOS Showroom</h1>
+          <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4 heroText">
+              Explore a diverse collection of my iOS projects, each designed to
+              bring creativity and functionality to life. My work showcases a
+              commitment to quality and user experience.
+            </p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+              <a
+                href="https://github.com/swi-parth-ft"
+                class="btn btn-dark btn-lg px-4 gap-3 btnshadow"
+              >
+                <i class="fab fa-github"></i> GitHub
+              </a>
+              <a
+                href="https://apps.apple.com/us/developer/yourdeveloperid"
+                class="btn btn-primary btn-lg px-4 btnshadow"
+              >
+                <i class="fab fa-app-store-ios"></i> App Store
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="portfolio">
+        <div
+          class="icon-container"
+          data-title="Book Nerd"
+          data-image="imgs/books.png"
+          data-github="https://github.com/swi-parth-ft/Book-Nerd"
+          data-Dec="Track your Books, rate and review them and share with your friends with beautiful Interface"
+        >
+          <img class="icon" src="imgs/books.png" alt="Book Nerd" />
+          <div class="tooltip">Book Nerd</div>
+        </div>
+        <div
+          class="icon-container"
+          data-title="Filter Up"
+          data-image="imgs/filters.png"
+          data-github="https://github.com/swi-parth-ft/Filter-up"
+        >
+          <img class="icon" src="imgs/filters.png" alt="Filter Up" />
+          <div class="tooltip">Filter Up</div>
+        </div>
+        <div
+          class="icon-container"
+          data-title="Flags Everywhere"
+          data-image="imgs/Flags.png"
+          data-github="https://github.com/swi-parth-ft/Flags---everywhere"
+        >
+          <img class="icon" src="imgs/Flags.png" alt="Flags Everywhere" />
+          <div class="tooltip">Flags Everywhere</div>
+        </div>
+        <div
+          class="icon-container"
+          data-title="Flash"
+          data-image="imgs/flash.png"
+          data-github="https://github.com/swi-parth-ft/Flashzilla"
+        >
+          <img class="icon" src="imgs/flash.png" alt="Flash" />
+          <div class="tooltip">Flash</div>
+        </div>
+        <div
+          class="icon-container"
+          data-title="Hot Prospects"
+          data-image="imgs/hotProspects.png"
+          data-github="https://github.com/swi-parth-ft/Hot-Prospects"
+        >
+          <img class="icon" src="imgs/hotProspects.png" alt="Hot Prospects" />
+          <div class="tooltip">Hot Prospects</div>
+        </div>
+        <div
+          class="icon-container"
+          data-title="I Know"
+          data-image="imgs/IKnow.png"
+          data-github="https://github.com/swi-parth-ft/I-Know"
+        >
+          <img class="icon" src="imgs/IKnow.png" alt="I Know" />
+          <div class="tooltip">I Know</div>
+        </div>
+        <div
+          class="icon-container"
+          data-title="Habits"
+          data-image="imgs/habits.png"
+          data-github="https://github.com/swi-parth-ft/Habits"
+        >
+          <img class="icon" src="imgs/habits.png" alt="Habits" />
+          <div class="tooltip">Habits</div>
+        </div>
+        <div
+          class="icon-container"
+          data-title="Randevous"
+          data-image="imgs/Randevous.png"
+          data-github="https://github.com/swi-parth-ft/Rendezvous"
+        >
+          <img class="icon" src="imgs/Randevous.png" alt="Randevous" />
+          <div class="tooltip">Randevous</div>
+        </div>
+        <div
+          class="icon-container"
+          data-title="Rolling Stones"
+          data-image="imgs/rollingStones.png"
+          data-github="https://github.com/swi-parth-ft/Rolling-Stones"
+        >
+          <img class="icon" src="imgs/rollingStones.png" alt="Rolling Stones" />
+          <div class="tooltip">Rolling Stones</div>
+        </div>
+        <div
+          class="icon-container"
+          data-title="RPS"
+          data-image="imgs/RPS.png"
+          data-github="https://github.com/swi-parth-ft/R-P-S"
+        >
+          <img class="icon" src="imgs/RPS.png" alt="RPS" />
+          <div class="tooltip">RPS</div>
+        </div>
+        <div
+          class="icon-container"
+          data-title="Slzzp"
+          data-image="imgs/slzzp.png"
+          data-github="https://github.com/swi-parth-ft/Slzzp"
+        >
+          <img class="icon" src="imgs/slzzp.png" alt="Slzzp" />
+          <div class="tooltip">Slzzp</div>
+        </div>
+        <div
+          class="icon-container"
+          data-title="Spend Much?"
+          data-image="imgs/spendMuch.png"
+          data-github="https://github.com/swi-parth-ft/Spend-Much-"
+        >
+          <img class="icon" src="imgs/spendMuch.png" alt="Spend Much?" />
+          <div class="tooltip">Spend Much?</div>
+        </div>
+        <div
+          class="icon-container"
+          data-title="t'the Moon"
+          data-image="imgs/ttheMoon.png"
+          data-github="https://github.com/swi-parth-ft/t-the-moon"
+        >
+          <img class="icon" src="imgs/ttheMoon.png" alt="t'the Moon" />
+          <div class="tooltip">t'the Moon</div>
+        </div>
+        <div
+          class="icon-container"
+          data-title="Measures"
+          data-image="imgs/measures.png"
+          data-github="https://github.com/swi-parth-ft/Units-onTheGo"
+        >
+          <img class="icon" src="imgs/measures.png" alt="Mission Tracker" />
+          <div class="tooltip">Units onTheGo</div>
+        </div>
+        <div
+          class="icon-container"
+          data-title="splitNTip"
+          data-image="imgs/splitNtip.png"
+          data-github="https://github.com/swi-parth-ft/Split-N-Tip"
+        >
+          <img class="icon" src="imgs/splitNtip.png" alt="splitNtip" />
+          <div class="tooltip">Spli N Tip</div>
+        </div>
+        <div
+          class="icon-container"
+          data-title="Sweet Tooth"
+          data-image="imgs/sweetTooth.png"
+          data-github="https://github.com/swi-parth-ft/Sweet-tooth"
+        >
+          <img class="icon" src="imgs/sweetTooth.png" alt="sweetTooth" />
+          <div class="tooltip">Sweet Tooth</div>
+        </div>
+        <div
+          class="icon-container"
+          data-title="where's Snow"
+          data-image="imgs/where'sSnow.png"
+          data-github="https://github.com/swi-parth-ft/Where-s-Snow-"
+        >
+          <img class="icon" src="imgs/where'sSnow.png" alt="where'sSnow" />
+          <div class="tooltip">where'sSnow</div>
+        </div>
+        <div
+          class="icon-container"
+          data-title="Word Scramble"
+          data-image="imgs/wordScramble.png"
+          data-github="https://github.com/swi-parth-ft/WordScramble"
+        >
+          <img class="icon" src="imgs/wordScramble.png" alt="wordScramble" />
+          <div class="tooltip">Word Scramble</div>
+        </div>
+        <div
+          class="icon-container"
+          data-title="Word Scramble"
+          data-image="imgs/wordScramble.png"
+          data-github="https://github.com/swi-parth-ft/WordScramble"
+        >
+          <img
+            class="UpcomingIcon"
+            src="imgs/placeHolder.png"
+            alt="wordScramble"
+            style="padding: 7%"
+          />
+          <div class="tooltip">Coming Soon</div>
+        </div>
+
+        <div
+          class="icon-container"
+          data-title="Word Scramble"
+          data-image="imgs/wordScramble.png"
+          data-github="https://github.com/swi-parth-ft/WordScramble"
+        >
+          <img
+            class="UpcomingIcon"
+            src="imgs/placeHolder.png"
+            alt="wordScramble"
+            style="padding: 15%"
+          />
+          <div class="tooltip">Coming Soon</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
