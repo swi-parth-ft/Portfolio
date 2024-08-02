@@ -231,7 +231,7 @@
         .screenshot {
 
             margin-right: 10px;
-            border-radius: 20px;
+            border-radius: 10px;
             object-fit: cover;
             scroll-snap-align: start;
             box-shadow: 5px 5px 5px rgba(215, 215, 215, 0.5);
@@ -248,17 +248,17 @@
         }
 
         .iPadscreenshot {
-            width: 300px;
-            height: 400px;
-            border-radius: 22px;
+            width: 200px;
+            height: 325px;
+            border-radius: 12px;
 
             box-shadow: 5px 5px 5px rgba(215, 215, 215, 0.5);
         }
 
 
         .portrait {
-            width: 200px;
-            height: 400px;
+            width: 150px;
+            height: 300px;
         }
 
         .landscape {
