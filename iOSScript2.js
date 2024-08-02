@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const title = container.getAttribute("data-title");
             const image = container.getAttribute("data-image");
             const screenshots = JSON.parse(container.getAttribute("data-screenshots"));
+            const iPadscreenshots = JSON.parse(container.getAttribute("data-iPadscreenshots"));
             const desc = container.getAttribute("data-desc");
             const link = container.getAttribute("data-link");
             const type = container.getAttribute("data-type");
@@ -37,11 +38,21 @@ document.addEventListener("DOMContentLoaded", () => {
             const screenshotsContainer = document.getElementById("screenshots");
             screenshotsContainer.innerHTML = ""; // Clear existing screenshots
 
+            const iPadscreenshotsContainer = document.getElementById("iPadscreenshots");
+            iPadscreenshotsContainer.innerHTML = ""; // Clear existing screenshots
+
             screenshots.forEach(screenshot => {
                 const img = document.createElement("img");
                 img.src = screenshot;
                 img.classList.add("screenshot", type);
                 screenshotsContainer.appendChild(img);
+            });
+
+            iPadscreenshots.forEach(iPadscreenshot => {
+                const img = document.createElement("img");
+                img.src = iPadscreenshot;
+                img.classList.add("iPadscreenshot");
+                iPadscreenshotsContainer.appendChild(img);
             });
 
             // Show the modal
