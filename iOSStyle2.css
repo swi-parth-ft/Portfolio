@@ -21,6 +21,7 @@
             color: white;
             border-radius: 50%;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.212);
+            z-index: 1000;
         }
 
         .backButton:hover {

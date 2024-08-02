@@ -224,7 +224,7 @@
 
 
  /* Responsive Styles */
- @media (max-width: 768px) {
+ @media (max-width: 1250px) {
      .heroText {
          width: 90%;
 
@@ -243,7 +243,6 @@
 
      .projectSection img {
          width: 100%;
-         max-width: 300px;
      }
 
      .editorial {
@@ -269,9 +268,9 @@
      }
 
      .art {
-         max-width: 100%;
-         width: 100%;
-         margin-top: -60px;
+
+         width: 80%;
+         margin-top: -50px;
      }
 
  }
@@ -293,7 +292,7 @@
 
      .projectSection img {
          width: 100%;
-         max-width: 250px;
+
      }
 
      .beyond {
@@ -340,9 +339,9 @@
      }
 
      .art {
-         width: 40%;
-         margin-top: -60px;
+         width: 100%;
 
+         margin-top: -60px;
      }
  }
 
