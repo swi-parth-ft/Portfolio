@@ -4,109 +4,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Fox Head</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>App Store Page</title>
     <style>
-        body, html {
-    height: 100%;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #282c34;
-}
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
 
-.container {
-    perspective: 1000px;
-}
+        .app-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+        }
 
-.fox-head {
-    position: relative;
-    width: 200px;
-    height: 200px;
-    background-color: #ff6347;
-    border-radius: 50%;
-    transform-style: preserve-3d;
-    transition: transform 0.1s;
-}
+        .app-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 20px;
+            margin-right: 20px;
+        }
 
-.ear {
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    background-color: #ff6347;
-    border-radius: 50%;
-    top: -30px;
-    transform: rotate(45deg);
-}
+        .app-details {
+            display: flex;
+            flex-direction: column;
+        }
 
-.left-ear {
-    left: -30px;
-}
+        .app-name {
+            font-size: 24px;
+            font-weight: bold;
+        }
 
-.right-ear {
-    right: -30px;
-}
+        .developer-name {
+            color: #666;
+        }
 
-.face {
-    position: relative;
-    top: 30px;
-}
+        .screenshots {
+            display: flex;
+            overflow-x: auto;
+            padding: 20px;
+            background-color: #fff;
+            white-space: nowrap;
+            scroll-snap-type: x mandatory;
+        }
 
-.eye {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background-color: #000;
-    border-radius: 50%;
-}
+        .screenshot {
+            width: 200px;
+            height: 400px;
+            margin-right: 10px;
+            border-radius: 20px;
+            object-fit: cover;
+            scroll-snap-align: start;
+        }
 
-.left-eye {
-    left: 50px;
-}
+        .description {
+            padding: 20px;
+            background-color: #fff;
+            margin-top: 10px;
+        }
 
-.right-eye {
-    right: 50px;
-}
-
-.nose {
-    position: absolute;
-    top: 80px;
-    left: 90px;
-    width: 20px;
-    height: 20px;
-    background-color: #000;
-    border-radius: 50%;
-}
-
+        .description h2 {
+            margin-top: 0;
+        }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="fox-head">
-            <div class="ear left-ear"></div>
-            <div class="ear right-ear"></div>
-            <div class="face">
-                <div class="eye left-eye"></div>
-                <div class="eye right-eye"></div>
-                <div class="nose"></div>
-            </div>
+
+    <div class="app-header">
+        <img src="/Portfolio/imgs/books.png" alt="App Icon" class="app-icon">
+        <div class="app-details">
+            <div class="app-name">App Name</div>
+            <div class="developer-name">Developer Name</div>
         </div>
     </div>
-    <script>
-        document.addEventListener('mousemove', (event) => {
-                const foxHead = document.querySelector('.fox-head');
-                const { clientX: mouseX, clientY: mouseY } = event;
-                const { innerWidth: width, innerHeight: height } = window;
 
-                const rotateY = ((mouseX / width) * 30) - 15; // -15 to 15 degrees
-                const rotateX = ((mouseY / height) * -30) + 15; // -15 to 15 degrees
+    <div class="screenshots">
+        <img src="/Portfolio/imgs/books/book1.PNG" alt="Screenshot 1" class="screenshot">
+        <img src="/Portfolio/imgs/books/book2.PNG" alt="Screenshot 2" class="screenshot">
+        <img src="/Portfolio/imgs/books/book3.PNG" alt="Screenshot 3" class="screenshot">
+        <img src="/Portfolio/imgs/books/book4.PNG" alt="Screenshot 4" class="screenshot">
+    </div>
 
-                foxHead.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
-            });
+    <div class="description">
+        <h2>Description</h2>
+        <p>This is a detailed description of the app. It explains the key features, how to use the app, and what users
+            can expect from it. The description is designed to give potential users all the information they need to
+            decide whether to download the app.</p>
+    </div>
 
-    </script>
 </body>
 
 </html>

@@ -29,6 +29,7 @@
             padding: 10px;
             color: white;
             border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.212);
 
         }
 
@@ -237,7 +238,99 @@
             }
 
         }
+
+
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #ffffffe9;
+            padding: 20px;
+            border-radius: 22px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+        }
+
+        .app-header {
+            display: flex;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .app-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 20px;
+            margin-right: 20px;
+        }
+
+        .app-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-name {
+            font-size: 24px;
+        }
+
+        .app-link {
+            font-size: 30px;
+            color: black;
+        }
+
+        .developer-name {
+            color: #666;
+        }
+
+        .screenshots {
+            display: flex;
+            overflow-x: auto;
+            padding: 20px 0;
+            white-space: nowrap;
+            scroll-snap-type: x mandatory;
+        }
+
+        .screenshot {
+            width: 200px;
+            height: 400px;
+            margin-right: 10px;
+            border-radius: 20px;
+            object-fit: cover;
+            scroll-snap-align: start;
+            box-shadow: 5px 5px 5px rgba(215, 215, 215, 0.5);
+        }
+
+        .description {
+            padding-top: 20px;
+        }
+
+        .description h2 {
+            margin-top: 0;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+        }
     </style>
+
 </head>
 
 <body>
@@ -275,8 +368,9 @@
     </div>
     <div id="portfolio">
         <div class="icon-container" data-title="Book Nerd" data-image="imgs/books.png"
-            data-github="https://github.com/swi-parth-ft/Book-Nerd"
-            data-Dec="Track your Books, rate and review them and share with your friends with beautiful Interface">
+            data-screenshots='["imgs/books/book1.PNG", "imgs/books/book2.PNG", "imgs/books/book3.PNG", "imgs/books/book4.PNG"]'
+            data-desc="Track your Books, rate and review them and share with your friends with beautiful Interface"
+            data-link="https://github.com/swi-parth-ft/Book-Nerd">
             <img class="icon" src="imgs/books.png" alt="Book Nerd" />
             <div class="tooltip">Book Nerd</div>
         </div>
@@ -377,6 +471,33 @@
             <div class="tooltip">Coming Soon</div>
         </div>
     </div>
+    <div id="app-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">×</span>
+            <div class="app-header">
+                <img id="app-icon" src="app-icon.png" alt="App Icon" class="app-icon">
+                <div class="app-details">
+                    <div id="app-name" class="app-name">App Name</div>
+                    <a href="" id="app-link" class="app-link">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div id="screenshots" class="screenshots">
+                <!-- Screenshots will be dynamically inserted here -->
+            </div>
+
+            <div class="description">
+
+                <p id="app-description">This is a detailed description of the app. It explains the key features, how to
+                    use
+                    the app, and what users can expect from it. The description is designed to give potential users all
+                    the
+                    information they need to decide whether to download the app.</p>
+            </div>
+        </div>
+    </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -398,6 +519,43 @@
         });
 
 
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const iconContainers = document.querySelectorAll(".icon-container");
+
+            iconContainers.forEach(container => {
+                container.addEventListener("click", () => {
+                    const title = container.getAttribute("data-title");
+                    const image = container.getAttribute("data-image");
+                    const screenshots = JSON.parse(container.getAttribute("data-screenshots"));
+                    const desc = container.getAttribute("data-desc");
+                    const link = container.getAttribute("data-link");
+
+                    document.getElementById("app-icon").src = image;
+                    document.getElementById("app-name").textContent = title;
+                    document.getElementById("app-description").textContent = desc;
+                    document.getElementById("app-link").href = link;
+
+                    const screenshotsContainer = document.getElementById("screenshots");
+                    screenshotsContainer.innerHTML = ""; // Clear existing screenshots
+
+                    screenshots.forEach(screenshot => {
+                        const img = document.createElement("img");
+                        img.src = screenshot;
+                        img.classList.add("screenshot");
+                        screenshotsContainer.appendChild(img);
+                    });
+
+                    // Show the modal
+                    document.getElementById("app-modal").style.display = "flex";
+                });
+            });
+        });
+
+        function closeModal() {
+            document.getElementById("app-modal").style.display = "none";
+        }
     </script>
 </body>
 
