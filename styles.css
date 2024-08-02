@@ -221,10 +221,7 @@
      margin-top: -100px;
  }
 
- .liner {
-     height: 20px;
-     background-image: linear-gradient(to top, black, white);
- }
+
 
  /* Responsive Styles */
  @media (max-width: 768px) {
