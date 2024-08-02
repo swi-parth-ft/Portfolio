@@ -21,18 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         snippet.style.left = `${Math.random() * window.innerWidth}px`;
         snippet.style.animationDuration = `${Math.random() * 3 + 2}s`;
         container.appendChild(snippet);
-
-        // // Hide the snippet after it falls and waits for 2 seconds
-        snippet.addEventListener('animationend', () => {
-            setTimeout(() => {
-
-                setTimeout(() => snippet.remove(), 1000);
-                snippet.style.opacity = '0';// Remove after opacity transition
-            }, 5000);
-        });
-
-        // Create a new snippet every 500ms
-        setTimeout(createSnippet, 500);
+        setTimeout(createSnippet, 1500);
     }
 
     createSnippet();
