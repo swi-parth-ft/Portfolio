@@ -16,8 +16,20 @@
             font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #00365c, #236391, #61b8f7, white);
             padding: 10px;
+            padding-top: 20px;
             box-sizing: border-box;
             overflow-x: hidden;
+        }
+
+        .backButton {
+
+            top: 30px;
+            background-color: rgba(255, 255, 255, 0.374);
+            text-decoration: none;
+            padding: 10px;
+            color: white;
+            border-radius: 50%;
+
         }
 
         .container {
@@ -118,39 +130,7 @@
             opacity: 1;
         }
 
-        @media (max-width: 576px) {
-            #portfolio {
-                grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-                gap: 20px;
-            }
 
-            .heroText {
-                font-size: medium;
-            }
-
-            .heroImg {
-                width: 100px;
-                height: 100px;
-                margin: 0px;
-
-            }
-
-            .icon {
-                border-radius: 12px;
-            }
-
-
-
-        }
-
-        @media (min-width: 1200px) {
-            #portfolio {
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-                gap: 30px;
-                width: 70%;
-            }
-
-        }
 
 
         .progress-bar {
@@ -191,11 +171,79 @@
                 width: 100%;
             }
         }
+
+        @media (max-width: 576px) {
+            #portfolio {
+                grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+                gap: 20px;
+            }
+
+            .heroText {
+                font-size: medium;
+            }
+
+            .heroImg {
+                width: 100px;
+                height: 100px;
+                margin: 0px;
+
+            }
+
+            .icon {
+                border-radius: 12px;
+            }
+
+            .progress-bar {
+                top: 70%;
+                width: 40%;
+            }
+
+
+
+        }
+
+        @media (max-width: 1200px) {
+            #portfolio {
+                grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+                gap: 20px;
+            }
+
+            .heroText {
+                font-size: medium;
+            }
+
+            .heroImg {
+                width: 100px;
+                height: 100px;
+                margin: 0px;
+
+            }
+
+            .icon {
+                border-radius: 12px;
+            }
+
+
+
+
+
+        }
+
+        @media (min-width: 1200px) {
+            #portfolio {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 30px;
+                width: 70%;
+            }
+
+        }
     </style>
 </head>
 
 <body>
+    <a href="index.html" class="backButton"><i class="fa-solid fa-house"></i></a>
     <div class="container">
+
         <div class="progress-bar">
 
             <div class="progress"></div>
