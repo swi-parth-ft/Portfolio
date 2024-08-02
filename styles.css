@@ -188,7 +188,6 @@
      text-align: center;
      padding-bottom: 40px;
      position: relative;
-     background-image: radial-gradient(orange, black, black);
      padding: 20px;
  }
 
@@ -215,6 +214,11 @@
 
  .fade.visible {
      opacity: 1;
+ }
+
+ .art {
+     width: 50%;
+     margin-top: -100px;
  }
 
  /* Responsive Styles */
@@ -261,6 +265,11 @@
          font-size: small;
          text-align: center;
      }
+
+     .art {
+         max-width: 100%;
+         width: 100%;
+     }
  }
 
  @media (max-width: 576px) {
@@ -285,6 +294,7 @@
 
      .beyond {
          padding-bottom: 20px;
+
      }
 
      #xcode,
@@ -323,6 +333,12 @@
          background-color: rgb(200, 170, 0);
          border-color: rgb(200, 170, 0);
          width: 150px;
+     }
+
+     .art {
+         width: 80%;
+
+         background-image: radial-gradient(gray, black, black);
      }
  }
 
@@ -467,7 +483,7 @@
      /* Required for positioning the sparkles */
      overflow: hidden;
      /* Ensure sparkles stay within the progress bar */
-     animation: fillProgress 2.5s forwards;
+     animation: fillProgress 2s forwards;
  }
 
 
