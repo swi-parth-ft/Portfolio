@@ -219,6 +219,12 @@
  .art {
      width: 50%;
      margin-top: -100px;
+     transition: transform 0.5s ease;
+     transform-origin: bottom;
+ }
+
+ .art:hover {
+     transform: scale(1.5);
  }
 
 
