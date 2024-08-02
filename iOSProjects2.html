@@ -15,8 +15,7 @@
         body {
             font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #00365c, #236391, #61b8f7, white);
-            margin: 0;
-            padding: 0 20px;
+            padding: 10px;
             box-sizing: border-box;
             overflow-x: hidden;
         }
@@ -25,6 +24,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+
             align-items: center;
             min-height: 100vh;
             padding-bottom: 30px;
@@ -131,13 +131,15 @@
             .heroImg {
                 width: 100px;
                 height: 100px;
-            }
-
-            .buttons {
-                display: flex;
-                flex-direction: row;
+                margin: 0px;
 
             }
+
+            .icon {
+                border-radius: 12px;
+            }
+
+
 
         }
 
@@ -178,6 +180,10 @@
             animation: fillProgress 1s forwards;
         }
 
+        .logoSpace {
+            margin-top: 10px;
+        }
+
 
 
         @keyframes fillProgress {
@@ -195,134 +201,134 @@
             <div class="progress"></div>
         </div>
         <div class="hero-section col-xxl-8 px-4 py-5">
-            <div class="row flex-lg-row-reverse align-items-center g-5 py-5" style="padding-bottom: 0%;">
-                <div class="col-10 col-sm-8 col-lg-6">
-                    <img src="imgs/xcode-seeklogo.svg" class="d-block mx-lg-auto img-fluid heroImg"
-                        alt="Bootstrap Themes" width="300" height="300" loading="lazy">
-                </div>
-                <div class="col-lg-6">
-                    <h1 class="display-5 fw lh-1 mb-3 heroTitle">iOS
-                        Showroom</h1>
-                    <p class="lead heroText" style="color: rgb(203, 203, 203);">Explore a diverse collection of my iOS
-                        projects, each designed to
-                        bring creativity and functionality to life. My work showcases a
-                        commitment to quality and user experience.</p>
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-start buttons">
-                        <a href="https://github.com/swi-parth-ft" class="btn btn-dark btn-lg px-4 gap-3 btnshadow">
-                            <i class="fab fa-github"></i> GitHub
-                        </a>
-                        <a href="https://apps.apple.com/us/developer/yourdeveloperid"
-                            class="btn btn-primary btn-lg px-4 btnshadow">
-                            <i class="fab fa-app-store-ios"></i> App Store
-                        </a>
-                    </div>
+            <div class="row flex-lg-row-reverse align-items-center g-5 py-5" style="padding-bottom: 0px !important;"">
+                <div class=" col-10 col-sm-8 col-lg-6">
+                <img src="imgs/xcode-seeklogo.svg" class="d-block mx-lg-auto img-fluid heroImg" alt="Bootstrap Themes"
+                    width="300" height="300" loading="lazy">
+            </div>
+            <div class="col-lg-6 logoSpace">
+                <h1 class="display-5 fw lh-1 mb-3 heroTitle">iOS
+                    Showroom</h1>
+                <p class="lead heroText" style="color: rgb(203, 203, 203);">Explore a diverse collection of my iOS
+                    projects, each designed to
+                    bring creativity and functionality to life. My work showcases a
+                    commitment to quality and user experience.</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start buttons">
+                    <a href="https://github.com/swi-parth-ft" class="btn btn-dark btn-lg px-4 gap-3 btnshadow">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                    <a href="https://apps.apple.com/us/developer/yourdeveloperid"
+                        class="btn btn-primary btn-lg px-4 btnshadow">
+                        <i class="fab fa-app-store-ios"></i> App Store
+                    </a>
                 </div>
             </div>
         </div>
-        <div id="portfolio">
-            <div class="icon-container" data-title="Book Nerd" data-image="imgs/books.png"
-                data-github="https://github.com/swi-parth-ft/Book-Nerd"
-                data-Dec="Track your Books, rate and review them and share with your friends with beautiful Interface">
-                <img class="icon" src="imgs/books.png" alt="Book Nerd" />
-                <div class="tooltip">Book Nerd</div>
-            </div>
-            <div class="icon-container" data-title="Filter Up" data-image="imgs/filters.png"
-                data-github="https://github.com/swi-parth-ft/Filter-up">
-                <img class="icon" src="imgs/filters.png" alt="Filter Up" />
-                <div class="tooltip">Filter Up</div>
-            </div>
-            <div class="icon-container" data-title="Flags Everywhere" data-image="imgs/Flags.png"
-                data-github="https://github.com/swi-parth-ft/Flags---everywhere">
-                <img class="icon" src="imgs/Flags.png" alt="Flags Everywhere" />
-                <div class="tooltip">Flags Everywhere</div>
-            </div>
-            <div class="icon-container" data-title="Flash" data-image="imgs/flash.png"
-                data-github="https://github.com/swi-parth-ft/Flashzilla">
-                <img class="icon" src="imgs/flash.png" alt="Flash" />
-                <div class="tooltip">Flash</div>
-            </div>
-            <div class="icon-container" data-title="Hot Prospects" data-image="imgs/hotProspects.png"
-                data-github="https://github.com/swi-parth-ft/Hot-Prospects">
-                <img class="icon" src="imgs/hotProspects.png" alt="Hot Prospects" />
-                <div class="tooltip">Hot Prospects</div>
-            </div>
-            <div class="icon-container" data-title="I Know" data-image="imgs/IKnow.png"
-                data-github="https://github.com/swi-parth-ft/I-Know">
-                <img class="icon" src="imgs/IKnow.png" alt="I Know" />
-                <div class="tooltip">I Know</div>
-            </div>
-            <div class="icon-container" data-title="Habits" data-image="imgs/habits.png"
-                data-github="https://github.com/swi-parth-ft/Habits">
-                <img class="icon" src="imgs/habits.png" alt="Habits" />
-                <div class="tooltip">Habits</div>
-            </div>
-            <div class="icon-container" data-title="Randevous" data-image="imgs/Randevous.png"
-                data-github="https://github.com/swi-parth-ft/Rendezvous">
-                <img class="icon" src="imgs/Randevous.png" alt="Randevous" />
-                <div class="tooltip">Randevous</div>
-            </div>
-            <div class="icon-container" data-title="Rolling Stones" data-image="imgs/rollingStones.png"
-                data-github="https://github.com/swi-parth-ft/Rolling-Stones">
-                <img class="icon" src="imgs/rollingStones.png" alt="Rolling Stones" />
-                <div class="tooltip">Rolling Stones</div>
-            </div>
-            <div class="icon-container" data-title="RPS" data-image="imgs/RPS.png"
-                data-github="https://github.com/swi-parth-ft/R-P-S">
-                <img class="icon" src="imgs/RPS.png" alt="RPS" />
-                <div class="tooltip">RPS</div>
-            </div>
-            <div class="icon-container" data-title="Slzzp" data-image="imgs/slzzp.png"
-                data-github="https://github.com/swi-parth-ft/Slzzp">
-                <img class="icon" src="imgs/slzzp.png" alt="Slzzp" />
-                <div class="tooltip">Slzzp</div>
-            </div>
-            <div class="icon-container" data-title="Spend Much?" data-image="imgs/spendMuch.png"
-                data-github="https://github.com/swi-parth-ft/Spend-Much-">
-                <img class="icon" src="imgs/spendMuch.png" alt="Spend Much?" />
-                <div class="tooltip">Spend Much?</div>
-            </div>
-            <div class="icon-container" data-title="t'the Moon" data-image="imgs/ttheMoon.png"
-                data-github="https://github.com/swi-parth-ft/t-the-moon">
-                <img class="icon" src="imgs/ttheMoon.png" alt="t'the Moon" />
-                <div class="tooltip">t'the Moon</div>
-            </div>
-            <div class="icon-container" data-title="Measures" data-image="imgs/measures.png"
-                data-github="https://github.com/swi-parth-ft/Units-onTheGo">
-                <img class="icon" src="imgs/measures.png" alt="Mission Tracker" />
-                <div class="tooltip">Units onTheGo</div>
-            </div>
-            <div class="icon-container" data-title="splitNTip" data-image="imgs/splitNtip.png"
-                data-github="https://github.com/swi-parth-ft/Split-N-Tip">
-                <img class="icon" src="imgs/splitNtip.png" alt="splitNtip" />
-                <div class="tooltip">Spli N Tip</div>
-            </div>
-            <div class="icon-container" data-title="Sweet Tooth" data-image="imgs/sweetTooth.png"
-                data-github="https://github.com/swi-parth-ft/Sweet-tooth">
-                <img class="icon" src="imgs/sweetTooth.png" alt="sweetTooth" />
-                <div class="tooltip">Sweet Tooth</div>
-            </div>
-            <div class="icon-container" data-title="where's Snow" data-image="imgs/where'sSnow.png"
-                data-github="https://github.com/swi-parth-ft/Where-s-Snow-">
-                <img class="icon" src="imgs/where'sSnow.png" alt="where'sSnow" />
-                <div class="tooltip">where'sSnow</div>
-            </div>
-            <div class="icon-container" data-title="Word Scramble" data-image="imgs/wordScramble.png"
-                data-github="https://github.com/swi-parth-ft/WordScramble">
-                <img class="icon" src="imgs/wordScramble.png" alt="wordScramble" />
-                <div class="tooltip">Word Scramble</div>
-            </div>
-            <div class="icon-container" data-title="Word Scramble" data-image="imgs/wordScramble.png"
-                data-github="https://github.com/swi-parth-ft/WordScramble">
-                <img class="UpcomingIcon" src="imgs/placeHolder.png" alt="wordScramble" style="padding: 7%" />
-                <div class="tooltip">Coming Soon</div>
-            </div>
+    </div>
+    <div id="portfolio">
+        <div class="icon-container" data-title="Book Nerd" data-image="imgs/books.png"
+            data-github="https://github.com/swi-parth-ft/Book-Nerd"
+            data-Dec="Track your Books, rate and review them and share with your friends with beautiful Interface">
+            <img class="icon" src="imgs/books.png" alt="Book Nerd" />
+            <div class="tooltip">Book Nerd</div>
+        </div>
+        <div class="icon-container" data-title="Filter Up" data-image="imgs/filters.png"
+            data-github="https://github.com/swi-parth-ft/Filter-up">
+            <img class="icon" src="imgs/filters.png" alt="Filter Up" />
+            <div class="tooltip">Filter Up</div>
+        </div>
+        <div class="icon-container" data-title="Flags Everywhere" data-image="imgs/Flags.png"
+            data-github="https://github.com/swi-parth-ft/Flags---everywhere">
+            <img class="icon" src="imgs/Flags.png" alt="Flags Everywhere" />
+            <div class="tooltip">Flags Everywhere</div>
+        </div>
+        <div class="icon-container" data-title="Flash" data-image="imgs/flash.png"
+            data-github="https://github.com/swi-parth-ft/Flashzilla">
+            <img class="icon" src="imgs/flash.png" alt="Flash" />
+            <div class="tooltip">Flash</div>
+        </div>
+        <div class="icon-container" data-title="Hot Prospects" data-image="imgs/hotProspects.png"
+            data-github="https://github.com/swi-parth-ft/Hot-Prospects">
+            <img class="icon" src="imgs/hotProspects.png" alt="Hot Prospects" />
+            <div class="tooltip">Hot Prospects</div>
+        </div>
+        <div class="icon-container" data-title="I Know" data-image="imgs/IKnow.png"
+            data-github="https://github.com/swi-parth-ft/I-Know">
+            <img class="icon" src="imgs/IKnow.png" alt="I Know" />
+            <div class="tooltip">I Know</div>
+        </div>
+        <div class="icon-container" data-title="Habits" data-image="imgs/habits.png"
+            data-github="https://github.com/swi-parth-ft/Habits">
+            <img class="icon" src="imgs/habits.png" alt="Habits" />
+            <div class="tooltip">Habits</div>
+        </div>
+        <div class="icon-container" data-title="Randevous" data-image="imgs/Randevous.png"
+            data-github="https://github.com/swi-parth-ft/Rendezvous">
+            <img class="icon" src="imgs/Randevous.png" alt="Randevous" />
+            <div class="tooltip">Randevous</div>
+        </div>
+        <div class="icon-container" data-title="Rolling Stones" data-image="imgs/rollingStones.png"
+            data-github="https://github.com/swi-parth-ft/Rolling-Stones">
+            <img class="icon" src="imgs/rollingStones.png" alt="Rolling Stones" />
+            <div class="tooltip">Rolling Stones</div>
+        </div>
+        <div class="icon-container" data-title="RPS" data-image="imgs/RPS.png"
+            data-github="https://github.com/swi-parth-ft/R-P-S">
+            <img class="icon" src="imgs/RPS.png" alt="RPS" />
+            <div class="tooltip">RPS</div>
+        </div>
+        <div class="icon-container" data-title="Slzzp" data-image="imgs/slzzp.png"
+            data-github="https://github.com/swi-parth-ft/Slzzp">
+            <img class="icon" src="imgs/slzzp.png" alt="Slzzp" />
+            <div class="tooltip">Slzzp</div>
+        </div>
+        <div class="icon-container" data-title="Spend Much?" data-image="imgs/spendMuch.png"
+            data-github="https://github.com/swi-parth-ft/Spend-Much-">
+            <img class="icon" src="imgs/spendMuch.png" alt="Spend Much?" />
+            <div class="tooltip">Spend Much?</div>
+        </div>
+        <div class="icon-container" data-title="t'the Moon" data-image="imgs/ttheMoon.png"
+            data-github="https://github.com/swi-parth-ft/t-the-moon">
+            <img class="icon" src="imgs/ttheMoon.png" alt="t'the Moon" />
+            <div class="tooltip">t'the Moon</div>
+        </div>
+        <div class="icon-container" data-title="Measures" data-image="imgs/measures.png"
+            data-github="https://github.com/swi-parth-ft/Units-onTheGo">
+            <img class="icon" src="imgs/measures.png" alt="Mission Tracker" />
+            <div class="tooltip">Units onTheGo</div>
+        </div>
+        <div class="icon-container" data-title="splitNTip" data-image="imgs/splitNtip.png"
+            data-github="https://github.com/swi-parth-ft/Split-N-Tip">
+            <img class="icon" src="imgs/splitNtip.png" alt="splitNtip" />
+            <div class="tooltip">Spli N Tip</div>
+        </div>
+        <div class="icon-container" data-title="Sweet Tooth" data-image="imgs/sweetTooth.png"
+            data-github="https://github.com/swi-parth-ft/Sweet-tooth">
+            <img class="icon" src="imgs/sweetTooth.png" alt="sweetTooth" />
+            <div class="tooltip">Sweet Tooth</div>
+        </div>
+        <div class="icon-container" data-title="where's Snow" data-image="imgs/where'sSnow.png"
+            data-github="https://github.com/swi-parth-ft/Where-s-Snow-">
+            <img class="icon" src="imgs/where'sSnow.png" alt="where'sSnow" />
+            <div class="tooltip">where'sSnow</div>
+        </div>
+        <div class="icon-container" data-title="Word Scramble" data-image="imgs/wordScramble.png"
+            data-github="https://github.com/swi-parth-ft/WordScramble">
+            <img class="icon" src="imgs/wordScramble.png" alt="wordScramble" />
+            <div class="tooltip">Word Scramble</div>
+        </div>
+        <div class="icon-container" data-title="Word Scramble" data-image="imgs/wordScramble.png"
+            data-github="https://github.com/swi-parth-ft/WordScramble">
+            <img class="UpcomingIcon" src="imgs/placeHolder.png" alt="wordScramble" style="padding: 7%" />
+            <div class="tooltip">Coming Soon</div>
+        </div>
 
-            <div class="icon-container" data-title="Word Scramble" data-image="imgs/wordScramble.png"
-                data-github="https://github.com/swi-parth-ft/WordScramble">
-                <img class="UpcomingIcon" src="imgs/placeHolder.png" alt="wordScramble" style="padding: 15%" />
-                <div class="tooltip">Coming Soon</div>
-            </div>
+        <div class="icon-container" data-title="Word Scramble" data-image="imgs/wordScramble.png"
+            data-github="https://github.com/swi-parth-ft/WordScramble">
+            <img class="UpcomingIcon" src="imgs/placeHolder.png" alt="wordScramble" style="padding: 15%" />
+            <div class="tooltip">Coming Soon</div>
         </div>
+    </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
