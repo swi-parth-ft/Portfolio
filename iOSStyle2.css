@@ -126,9 +126,6 @@
             opacity: 1;
         }
 
-
-
-
         .progress-bar {
             position: absolute;
             top: 60%;
@@ -160,16 +157,11 @@
             margin-top: 10px;
         }
 
-
-
         @keyframes fillProgress {
             to {
                 width: 100%;
             }
         }
-
-
-
 
         .modal {
             display: none;
@@ -264,7 +256,6 @@
             box-shadow: 5px 5px 5px rgba(215, 215, 215, 0.5);
         }
 
-
         .portrait {
             width: 150px;
             height: 300px;
@@ -352,10 +343,6 @@
         }
 
         @media (max-width: 1200px) {
-            #portfolio {
-                grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-                gap: 20px;
-            }
 
             .heroText {
                 font-size: medium;
@@ -371,11 +358,6 @@
             .icon {
                 border-radius: 12px;
             }
-
-
-
-
-
         }
 
         @media (min-width: 1200px) {

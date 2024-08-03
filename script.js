@@ -40,7 +40,23 @@ document.addEventListener('DOMContentLoaded', function () {
         'imgs/ladyBug.png', // Original image
         'imgs/splash.png' // New image after clicking
     ];
+    const progressBar = document.querySelector('.progress-bar');
+    const progress = document.querySelector('.progress');
+    const additionalContent = document.querySelector('.heroText');
 
+    // Function to handle changes after progress is complete
+    function handleProgressCompletion() {
+        progressBar.classList.add('completed');
+        additionalContent.style.display = 'block';
+        progressBar.style.display = "none" // Show the additional content
+    }
+
+    // Check if the progress animation is complete
+    progress.addEventListener('animationend', function (event) {
+        if (event.animationName === 'fillProgress') {
+            handleProgressCompletion();
+        }
+    });
 
     function getRandomSpeed() {
         if (width < 600) {
@@ -269,3 +285,5 @@ function closeFlashcard() {
     document.getElementById('flashcard').style.display = 'none';
     document.getElementById('flashcard-frame').src = '';
 }
+
+

@@ -227,132 +227,6 @@
      transform: scale(1.5);
  }
 
-
-
- /* Responsive Styles */
- @media (max-width: 1250px) {
-     .heroText {
-         width: 90%;
-
-         padding: 10px;
-         font-size: smaller;
-         text-align: center;
-     }
-
-     .heroText>p {
-         font-size: small;
-     }
-
-     .projectSection {
-         padding: 15px;
-     }
-
-     .projectSection img {
-         width: 100%;
-     }
-
-     .editorial {
-         height: 40px;
-     }
-
-     .vscodeContainer {
-         flex-direction: column;
-     }
-
-     .vscode1 {
-         order: 2;
-     }
-
-     .vscode2 {
-         order: 1;
-     }
-
-     .skillSection {
-         padding: 20px;
-         font-size: small;
-         text-align: center;
-     }
-
-     .art {
-
-         width: 80%;
-         margin-top: -50px;
-     }
-
- }
-
- @media (max-width: 576px) {
-     .heroText {
-         width: 100%;
-
-         padding: 5px;
-         font-size: smaller;
-         text-align: center;
-     }
-
-     .skillSection,
-     .projectSection,
-     .getInTouchSection {
-         padding: 15px 0;
-     }
-
-     .projectSection img {
-         width: 100%;
-
-     }
-
-     .beyond {
-         padding-bottom: 20px;
-         font-size: small;
-
-     }
-
-     #xcode,
-     #vscode {
-         width: 200px;
-
-     }
-
-
-
-
-
-     .vscode1 {
-         order: 2;
-     }
-
-     .vscode2 {
-         order: 1;
-     }
-
-     .skillSection {
-         padding: 20px;
-         font-size: small;
-         text-align: center;
-         width: 300px;
-
-     }
-
-     #iosButton {
-         background-color: orange;
-         border-color: orange;
-         width: 150px;
-
-     }
-
-     #webButton {
-         background-color: rgb(200, 170, 0);
-         border-color: rgb(200, 170, 0);
-         width: 150px;
-     }
-
-     .art {
-         width: 100%;
-
-         margin-top: -60px;
-     }
- }
-
  #xcode,
  #vscode {
      transition: transform 0.3s ease;
@@ -497,8 +371,6 @@
      animation: fillProgress 2s forwards;
  }
 
-
-
  @keyframes fillProgress {
      to {
          width: 100%;
@@ -507,4 +379,126 @@
 
  .animated-text {
      transition: color 1s ease, background-color 1s ease, transform 1s ease;
+ }
+
+ /* Responsive Styles */
+ @media (max-width: 1250px) {
+     .heroText {
+         width: 90%;
+
+         padding: 10px;
+         font-size: smaller;
+         text-align: center;
+     }
+
+     .heroText>p {
+         font-size: small;
+     }
+
+     .projectSection {
+         padding: 15px;
+     }
+
+     .projectSection img {
+         width: 100%;
+     }
+
+     .editorial {
+         height: 40px;
+     }
+
+     .vscodeContainer {
+         flex-direction: column;
+     }
+
+     .vscode1 {
+         order: 2;
+     }
+
+     .vscode2 {
+         order: 1;
+     }
+
+     .skillSection {
+         padding: 20px;
+         font-size: small;
+         text-align: center;
+     }
+
+     .art {
+
+         width: 80%;
+         margin-top: -50px;
+     }
+
+ }
+
+ @media (max-width: 576px) {
+     .heroText {
+         width: 100%;
+
+         padding: 5px;
+         font-size: smaller;
+         text-align: center;
+     }
+
+     .skillSection,
+     .projectSection,
+     .getInTouchSection {
+         padding: 15px 0;
+     }
+
+     .projectSection img {
+         width: 100%;
+
+     }
+
+     .beyond {
+         padding-bottom: 20px;
+         font-size: small;
+
+     }
+
+     #xcode,
+     #vscode {
+         width: 200px;
+
+     }
+
+
+
+
+
+     .vscode1 {
+         order: 2;
+     }
+
+     .vscode2 {
+         order: 1;
+     }
+
+     .skillSection {
+         padding: 20px;
+         font-size: small;
+         text-align: center;
+         width: 300px;
+
+     }
+
+     #iosButton {
+
+         width: 150px;
+
+     }
+
+     #webButton {
+
+         width: 150px;
+     }
+
+     .art {
+         width: 100%;
+
+         margin-top: -60px;
+     }
  }
