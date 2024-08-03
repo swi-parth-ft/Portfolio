@@ -310,11 +310,12 @@
      #xcode,
      #vscode {
          width: 200px;
+
      }
 
-     .vscodeContainer {
-         flex-direction: column;
-     }
+
+
+
 
      .vscode1 {
          order: 2;
@@ -355,7 +356,7 @@
  #xcode,
  #vscode {
      transition: transform 0.3s ease;
-     display: block;
+
  }
 
  #xcode:hover,
