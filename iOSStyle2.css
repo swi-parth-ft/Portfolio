@@ -183,9 +183,12 @@
             padding: 20px;
             border-radius: 22px;
             max-width: 90%;
-            max-height: 90%;
+            
             overflow: auto;
             position: relative;
+            max-height: 80vh;
+                /* Limit height to view height */
+                overflow-y: auto;
         }
 
         .app-header {
