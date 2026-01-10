@@ -1,234 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="iDrift - Turn your iPhone into a powerful, wireless game controller for macOS.">
-    <title>iDrift – iPhone to Mac Wireless Controller</title>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+  rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Caveat:wght@400;700&display=swap"
-        rel="stylesheet">
-
-    <!-- Styles -->
-    <link rel="stylesheet" href="iDrift.css">
-
-    <!-- Icons (Lucide) - We'll load via CDN script for vanilla usage or SVGs. Using UNPKG for simplicity in vanilla -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy Policy | iDrift</title>
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: #fff;
+      color: #000;
+    }
+    header, footer {
+      text-align: center;
+    }
+    main {
+      max-width: 800px;
+      margin: auto;
+    }
+    a {
+      color: #000;
+      text-decoration: underline;
+    }
+  </style>
 </head>
-
 <body>
-    <canvas id="bg-canvas"></canvas>
-    <nav class="navbar">
-        <div class="logo">
-            <img src="iDrift-logo.png" alt="iDrift Logo" style="height: 40px; width: auto; vertical-align: middle;">
-            <span style="margin-left: 10px;">iDrift</span>
-        </div>
-        <div class="nav-links">
-            <a href="#how-it-works">How it Works</a>
-            <a href="#features">Features</a>
-            <a href="#faq">FAQ</a>
-            <a href="#" class="btn-download-nav">Get App</a>
-        </div>
-    </nav>
+  <div class="container py-5 fade-in-section lead">
+    <h1>Privacy Policy for iDrift</h1>
+    <p>for iDrift (iPhone app) and iDrift Receiver (macOS companion app).</p>
+    <p style="text-align: right; font-size: 0.9rem;">Last updated: January 6, 2026</p>
 
-    <header class="hero">
-        <div class="hero-content">
-            <!-- <span class="badge-new">New Release v2.0</span> -->
-            <h1>Mac Gaming,<br><em>reinvented.</em></h1>
-            <p class="hero-sub">Transform your iPhone into a professional-grade, <strong>wireless game
-                    controller</strong> and <strong>virtual gamepad</strong> for macOS. Experience ultra-low latency
-                gaming without bulky hardware.</p>
+    <h2>1. Introduction</h2>
+    <p>
+      Welcome to <strong>iDrift</strong>. This Privacy Policy explains how iDrift handles information when you use the iPhone app
+      and the macOS companion app (<strong>iDrift Receiver</strong> / <strong>GReceiver</strong>).
+      iDrift is designed to function primarily as a local, device-to-device controller system.
+      We value your privacy and aim to minimize data collection.
+    </p>
 
-            <div class="cta-group">
-                <a href="iDrift-Receiver.dmg" class="btn-primary" download>
-                    <i data-lucide="monitor"></i> Download for Mac
-                </a>
-                <a href="#" class="btn-secondary">
-                    <i data-lucide="smartphone"></i> App Store
-                </a>
-            </div>
+    <h2>2. Information We Collect</h2>
+    <p>
+      <strong>iDrift does not require an account</strong> and does not collect personal information for advertising or data brokerage.
+      The system primarily operates locally between your iPhone and your Mac.
+    </p>
 
-            <div class="trust-badge">
-                <p>Works locally over Wi-Fi • No Bluetooth Lag • 100% Private</p>
-            </div>
-        </div>
+    <p><strong>On-device data (stored locally):</strong></p>
+    <ul>
+      <li>
+        <strong>Paired device entries</strong> (e.g., the paired Mac identifier and a pairing token) to enable private reconnection.
+      </li>
+      <li>
+        <strong>Game profiles</strong> (profile name, controller theme selection, and key mappings) that you create.
+      </li>
+      <li>
+        <strong>App preferences</strong> (e.g., gyro sensitivity, lock settings, and UI preferences).
+      </li>
+    </ul>
 
-        <div class="hero-image-container">
-            <div class="hero-glow"></div>
-            <!-- Placeholder for Hero Image -->
-            <img src="iDrift-hero-placeholder.png" alt="iDrift iPhone Gamepad App Interface" class="hero-img">
-        </div>
-    </header>
+    <p>
+      <strong>Controller input data (transmitted locally):</strong> During gameplay, the iPhone app transmits controller state to your Mac
+      over a local peer-to-peer connection (MultipeerConnectivity), such as stick positions and button press states.
+      This data is used only to provide real-time control and is not used for analytics or advertising.
+    </p>
 
-    <section id="how-it-works" class="steps-section">
-        <h2 class="section-title">Get Started in Seconds</h2>
-        <div class="steps-grid">
-            <div class="step-card">
-                <div class="step-number">01</div>
-                <h3>Get the App</h3>
-                <p>Download the iDrift Receiver for Mac and the companion iOS app from the App Store.</p>
-            </div>
-            <div class="step-card">
-                <div class="step-number">02</div>
-                <h3>Connect</h3>
-                <p>Ensure both devices are on the same Wi-Fi. The app auto-discovers your Mac instantly.</p>
-            </div>
-            <div class="step-card">
-                <div class="step-number">03</div>
-                <h3>Play</h3>
-                <p>Your iPhone is now a fully functional wireless gamepad. Launch any game and enjoy.</p>
-            </div>
-        </div>
-    </section>
+    <p>
+      We do not sell your information. We do not use your iDrift data for targeted advertising.
+    </p>
 
-    <section id="features" class="features-section">
-        <h2 class="section-title">Pro-Level Features</h2>
-        <div class="features-grid">
-            <div class="feature-card">
-                <i data-lucide="gamepad-2" class="feature-icon"></i>
-                <h3>Virtual Controls</h3>
-                <p>Dual analog sticks, D-pad, triggers, and ABXY buttons mapped perfectly to keyboard & mouse inputs.
-                </p>
-            </div>
-            <div class="feature-card">
-                <i data-lucide="move-3d" class="feature-icon"></i>
-                <h3>Gyro Steering</h3>
-                <p>Utilize the iPhone's accelerometer for precise racing wheel control in driving simulators.</p>
-            </div>
-            <div class="feature-card">
-                <i data-lucide="wifi" class="feature-icon"></i>
-                <h3>Ultra-Low Latency</h3>
-                <p>Built on a custom UDP protocol optimized for your local network, delivering near-zero lag
-                    performance.</p>
-            </div>
-            <div class="feature-card">
-                <i data-lucide="lock" class="feature-icon"></i>
-                <h3>Privacy First</h3>
-                <p>Complete privacy. No accounts, no cloud servers, no tracking. Your data stays on your Wi-Fi.</p>
-            </div>
-        </div>
-    </section>
+    <h2>3. Accessibility Permission (macOS)</h2>
+    <p>
+      The macOS companion app requires <strong>Accessibility permission</strong> to inject keyboard and mouse events for games.
+      iDrift Receiver uses this permission only to perform input injection while you are connected and actively using the controller.
+      iDrift Receiver does not read your keystrokes for text entry purposes, and it does not attempt to access sensitive personal data.
+    </p>
 
-    <section id="themes" class="themes-section">
-        <div class="themes-content">
-            <span class="badge-new">Customization</span>
-            <h2 class="section-title" style="text-align: left; margin-bottom: 24px;">Your Controller,<br>Your Style.
-            </h2>
-            <p>From sleek dark modes to retro-inspired skins, iDrift lets you customize your controller's look and feel.
-                Remap buttons, adjust sensitivity, and make it truly yours.</p>
-            <ul class="themes-list">
-                <li><i data-lucide="check"></i> Multiple Controller Skins</li>
-                <li><i data-lucide="check"></i> Fully Remappable Inputs</li>
-                <li><i data-lucide="check"></i> Adjustable Haptic Feedback</li>
-            </ul>
-        </div>
-        <div class="themes-image-container">
-            <div class="themes-glow"></div>
-            <img src="iDrift-themes.png" alt="iDrift Themes and Customization" class="themes-img">
-        </div>
-    </section>
+    <h2>4. Device Motion / Gyroscope (iOS)</h2>
+    <p>
+      If you enable <strong>gyro steering</strong>, iDrift accesses your device motion sensors to compute steering input.
+      Motion data is processed on-device and used only to generate controller input. It is not used for tracking and is not shared
+      with third parties for advertising.
+    </p>
 
-    <section id="faq" class="faq-section">
-        <h2 class="section-title">Common Questions</h2>
-        <div class="faq-container">
-            <!-- FAQ Items will be populated or static -->
-            <div class="faq-item">
-                <button class="faq-question">
-                    Do I need any extra hardware?
-                    <i data-lucide="chevron-down"></i>
-                </button>
-                <div class="faq-answer">
-                    <p>No. Your iPhone and Mac are all you need.</p>
-                </div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question">
-                    Does this work over the internet?
-                    <i data-lucide="chevron-down"></i>
-                </button>
-                <div class="faq-answer">
-                    <p>No. iDrift uses your local network only for speed and privacy.</p>
-                </div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question">
-                    Why does the Mac app need system permissions?
-                    <i data-lucide="chevron-down"></i>
-                </button>
-                <div class="faq-answer">
-                    <p>Some games require keyboard or mouse input simulation. macOS protects this behind permissions to
-                        keep users safe. They are enabled manually and fully under your control.</p>
-                </div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question">
-                    Where do I download the Mac app?
-                    <i data-lucide="chevron-down"></i>
-                </button>
-                <div class="faq-answer">
-                    <p>The Mac companion app is available directly from this website as a notarized installer.</p>
-                </div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question">
-                    Enabling Accessibility (Required for Gameplay)
-                    <i data-lucide="chevron-down"></i>
-                </button>
-                <div class="faq-answer">
-                    <p>To control games, macOS requires explicit permission. This is a system requirement, not specific
-                        to iDrift.</p>
-                    <br>
-                    <strong>Why it’s needed</strong>
-                    <p>Some Mac games only accept keyboard and mouse input. Accessibility allows iDrift to translate
-                        controller actions into those inputs.</p>
-                    <br>
-                    <strong>How to enable it</strong>
-                    <ol style="padding-left: 20px; color: var(--text-secondary); margin-bottom: 16px;">
-                        <li>Open System Settings</li>
-                        <li>Go to Privacy & Security</li>
-                        <li>Select Accessibility</li>
-                        <li>Enable iDrift Receiver</li>
-                        <li>Relaunch the Mac app if prompted</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </section>
+    <h2>5. Cookies and Tracking Technologies</h2>
+    <p>
+      iDrift does not use cookies. iDrift does not include third-party tracking SDKs for advertising.
+    </p>
 
-    <section class="dev-note-section">
-        <div class="dev-note-container">
-            <h2>A Note from the Developer</h2>
-            <p>"I built iDrift because I wanted to play games on my Mac from the couch, but didn't want to carry around
-                a bulky controller. The goal was simple: create a virtual controller that feels indistinguishable from a
-                physical one.</p>
-            <p>We spent months optimizing the network stack to shave off every millisecond of latency. The result is a
-                seamless connection that feels like magic. Whether you're drifting in a racing sim or exploring an open
-                world, I hope iDrift enhances your gaming experience."</p>
-            <p class="signature">— Parth.ant</p>
+    <h2>6. Third-Party Services</h2>
+    <p>
+      iDrift primarily operates without backend services. However, Apple’s platform services may process limited information
+      to provide core App Store functionality (such as downloading the app, processing purchases, and enforcing platform security).
+    </p>
+    <p>
+      If you use any in-app purchases (if offered), transactions are processed through Apple’s App Store. We do not receive your full
+      payment details.
+    </p>
 
-            <div style="margin-top: 40px; font-family: var(--font-heading); font-size: 1rem; opacity: 0.8;">
-                <p style="margin-bottom: 8px;">Got more questions or need help?</p>
-                <a href="mailto:support@parthant.com"
-                    style="color: var(--accent-color); font-weight: 500;">support@parthant.com</a>
-            </div>
-        </div>
-    </section>
+    <h2>7. Data Sharing</h2>
+    <p>
+      iDrift shares data only in the following limited ways:
+    </p>
+    <ul>
+      <li>
+        <strong>Between your devices:</strong> Controller input and pairing-related data are shared between your iPhone and Mac to enable
+        connection, authentication, and controller functionality.
+      </li>
+      <li>
+        <strong>Legal requirements:</strong> We may disclose information if required to comply with applicable laws or lawful requests.
+      </li>
+    </ul>
 
-    <footer class="footer">
-        <p>&copy; 2026 iDrift. All rights reserved. <span style="margin: 0 10px; opacity: 0.3;">|</span> <a
-                href="mailto:support@parthant.com"
-                style="color: var(--text-secondary); text-decoration: none;">support@parthant.com</a></p>
-    </footer>
+    <h2>8. Data Retention and Deletion</h2>
+    <p>
+      iDrift stores paired device entries and game profiles locally on your device until you delete them.
+      You can remove paired devices using the <strong>Forget</strong> action on either device. You can also delete profiles in the iPhone app.
+    </p>
+    <p>
+      Uninstalling iDrift from your iPhone removes local app data from that device. Uninstalling iDrift Receiver from your Mac removes
+      its local app data from that Mac.
+    </p>
 
-    <script src="iDrift.js"></script>
-    <script>
-        lucide.createIcons();
-    </script>
+    <h2>9. Security</h2>
+    <p>
+      iDrift uses encrypted peer-to-peer sessions via Apple’s <strong>MultipeerConnectivity</strong> framework (with encryption required).
+      Pairing tokens are used to help prevent unauthorized devices from connecting.
+      No system is perfectly secure, but we take reasonable measures to protect your information and your sessions.
+    </p>
+
+    <h2>10. Children’s Privacy</h2>
+    <p>
+      iDrift is not directed to children under 13. We do not knowingly collect personal information from children.
+      If you believe a child has provided personal information to us, please contact us so we can address it.
+    </p>
+
+    <h2>11. Compliance</h2>
+    <p>
+      We aim to follow applicable privacy principles and regulations (such as GDPR and CCPA) to the extent they apply.
+      Because iDrift primarily operates locally and does not require an account, data processing is limited to providing the
+      controller and pairing functionality you request.
+    </p>
+
+    <h2>12. Changes to This Privacy Policy</h2>
+    <p>
+      We may update this Privacy Policy from time to time. When we do, we will revise the "Last updated" date at the top of this page.
+      We encourage you to review this policy periodically.
+    </p>
+
+    <h2>13. Contact Us</h2>
+    <p>
+      If you have any questions or concerns about this Privacy Policy, please contact us at:
+    </p>
+    <p>
+      <a href="mailto:hello@itshere.space">hello@itshere.space</a>
+    </p>
+  </div>
+
+  <footer>
+    <p>© Parth Antala</p>
+  </footer>
 </body>
-
 </html>
