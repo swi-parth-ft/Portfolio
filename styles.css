@@ -55,7 +55,7 @@
      background-repeat: no-repeat;
      height: 100vh;
      width: 100vw;
-     overflow: visible;
+     overflow: hidden;
  }
 
  .heroText {
@@ -714,4 +714,11 @@
      border-radius: 18px;
      border: 1px solid rgba(255, 255, 255, 0.05);
      z-index: 1;
+ }
+
+ @media (max-width: 768px) {
+     .heroText .avatar {
+         width: 125px !important;
+         /* Half of 250px for mobile */
+     }
  }

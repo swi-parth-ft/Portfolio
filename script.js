@@ -300,6 +300,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let bounds = { width: 0, height: 0 };
     let isInitialized = false;
 
+    // Global Physics Configuration
+    let physicsConfig = {
+        scale: 1.5,
+        size: 97.5,
+        offset: 16.25
+    };
+
     // Physics Configuration
     const PHYSICS = {
         damping: 1.0,           // No friction for perpetual motion
@@ -328,6 +335,20 @@ document.addEventListener('DOMContentLoaded', () => {
         logos = Array.from(document.querySelectorAll('.app-logo'));
 
         // -----------------------------------------------------
+        // RESPONSIVE CONFIGURATION
+        // -----------------------------------------------------
+        const isMobile = window.innerWidth < 768;
+        const BASE_SIZE = 65;
+        // User Request: "make it more smaller in mobile version"
+        // Previous was 0.9 (60% of 1.5). Let's go to 0.7.
+        const targetScale = isMobile ? 0.7 : 1.5;
+
+        physicsConfig.scale = targetScale;
+        physicsConfig.size = BASE_SIZE * targetScale;
+        // Offset = (PhysicsSize - VisualBaseSize) / 2
+        physicsConfig.offset = (physicsConfig.size - BASE_SIZE) / 2;
+
+        // -----------------------------------------------------
         // 3D STACK BUILDER
         // Inject layers to create solid rounded body
         // -----------------------------------------------------
@@ -351,20 +372,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Linear Start Configuration
-        const BASE_SIZE = 65;
-        const SCALE_FACTOR = 1.5;
-        const logoSize = BASE_SIZE * SCALE_FACTOR; // 97.5
-        const gap = 20 * SCALE_FACTOR;
         const totalLogos = logos.length;
+        const gap = 20 * physicsConfig.scale;
 
-        const totalWidth = totalLogos * logoSize + (totalLogos - 1) * gap;
+        const totalWidth = totalLogos * physicsConfig.size + (totalLogos - 1) * gap;
 
         // Strictly center based on CURRENT REAL WIDTH
         let startX = (w - totalWidth) / 2;
-        const startY = (h - logoSize) / 2;
+        const startY = (h - physicsConfig.size) / 2;
 
         bodies = logos.map((el, index) => {
-            const x = startX + index * (logoSize + gap);
+            const x = startX + index * (physicsConfig.size + gap);
             const y = startY;
 
             el.classList.add('active');
@@ -375,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 y: y,
                 vx: 0,
                 vy: 0,
-                radius: logoSize / 2,
+                radius: physicsConfig.size / 2,
                 mass: 1,
                 isHovered: false,
                 // 3D Rotations
@@ -453,7 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
             body.rotationY += body.rotSpeedY;
             body.rotationZ += body.rotSpeedZ;
 
-            // Constrain All Axes Rotation to [-60, 60]
+            // Constrain All Axes Rotation to [-40, 40] (User Preference)
             const limit = 40;
 
             // X-Axis
@@ -469,12 +487,21 @@ document.addEventListener('DOMContentLoaded', () => {
             if (body.rotationZ < -limit) { body.rotationZ = -limit; body.rotSpeedZ = Math.abs(body.rotSpeedZ); }
 
             // 2. Wall Collisions
-            // Calculate boundaries relative to the container's current position
+            // Constrain to HERO SECTION explicitly
+            const hero = document.querySelector('.hero');
+            const heroRect = hero.getBoundingClientRect();
             const rect = container.getBoundingClientRect();
-            const minX = -rect.left;
-            const maxX = window.innerWidth - rect.left - 65;
-            const minY = -rect.top;
-            const maxY = window.innerHeight - rect.top - 65;
+
+            // Use Dynamic Configuration
+            const physicsSize = physicsConfig.size;
+
+            // Calculate bounds relative to the container's local coordinate system
+            // minX is how far left the container is from the hero's left edge (negative value)
+            const minX = -(rect.left - heroRect.left);
+            const maxX = heroRect.width - (rect.left - heroRect.left) - physicsSize;
+
+            const minY = -(rect.top - heroRect.top);
+            const maxY = heroRect.height - (rect.top - heroRect.top) - physicsSize;
 
             // Fail-safe (relaxed for full screen)
             if (isNaN(body.x)) {
@@ -493,13 +520,20 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // 4. Update DOM with 3D Transforms
-            const scale = body.isHovered ? 1.15 : 1;
+            // Scale logic: Base from config
+            const baseScale = physicsConfig.scale;
+            const currentScale = body.isHovered ? baseScale * 1.15 : baseScale;
+
+            // Offset logic: Align visual center (65px element) with physics center
+            const displayX = body.x + physicsConfig.offset;
+            const displayY = body.y + physicsConfig.offset;
+
             body.element.style.transform = `
-                translate3d(${body.x}px, ${body.y}px, 0) 
+                translate3d(${displayX}px, ${displayY}px, 0) 
                 rotateX(${body.rotationX}deg) 
                 rotateY(${body.rotationY}deg) 
                 rotateZ(${body.rotationZ}deg) 
-                scale(${scale})
+                scale(${currentScale})
             `;
         });
 
