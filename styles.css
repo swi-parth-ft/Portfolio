@@ -54,6 +54,7 @@
      background-position: center;
      background-repeat: no-repeat;
      height: 100vh;
+     height: 100svh;
      width: 100vw;
      overflow: hidden;
  }
@@ -72,6 +73,12 @@
      /* Force width */
      max-width: 900px;
  }
+
+.heroText .avatar {
+    display: block;
+    margin: 0 auto;
+    transform: translateY(60px);
+}
 
  /* Water-like Floating Animation Styles */
  .app-logos-container {
@@ -486,10 +493,24 @@
  @media (max-width: 1250px) {
      .heroText {
          width: 90%;
-
          padding: 10px;
          font-size: smaller;
          text-align: center;
+         position: absolute;
+         top: 50%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: center;
+     }
+
+     .heroText .avatar {
+         display: block;
+         margin-left: auto;
+         margin-right: auto;
+         transform: translateY(0) !important;
      }
 
      .heroText>p {
@@ -540,11 +561,30 @@
      }
 
      .heroText {
-         width: 100%;
-
+         width: 90%;
          padding: 5px;
          font-size: smaller;
          text-align: center;
+         /* Center in middle of screen */
+         position: absolute;
+         top: 70%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: center;
+     }
+
+     .heroText .avatar {
+         transform: translateY(0) !important;
+         margin-left: auto;
+         margin-right: auto;
+     }
+
+     /* Hide logos container on mobile so content stays centered */
+     .app-logos-container {
+         display: none;
      }
 
      .skillSection,
@@ -717,8 +757,24 @@
  }
 
  @media (max-width: 768px) {
+     .heroText {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         text-align: center;
+     }
+
      .heroText .avatar {
          width: 125px !important;
          /* Half of 250px for mobile */
+         margin-left: auto;
+         margin-right: auto;
+         display: block;
+     }
+
+     .heroText h1,
+     .heroText p {
+         text-align: center;
+         width: 100%;
      }
  }

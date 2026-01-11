@@ -123,6 +123,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
     //Animate and Move
+    let isTargetingLogos = true; // Start by targeting logos
+
     function animate() {
         if (isStopped) {
             return;
@@ -135,8 +137,85 @@ document.addEventListener('DOMContentLoaded', function () {
         //Move
         function move() {
             if (!isStopped) {
+                // Check if we should target logos
+                if (isTargetingLogos) {
+                    const appLogos = document.querySelectorAll('.app-logo');
+                    // Only target logos that are visible (have non-zero dimensions)
+                    const visibleLogos = Array.from(appLogos).filter(logo => {
+                        const r = logo.getBoundingClientRect();
+                        return r.width > 0 && r.height > 0;
+                    });
+
+                    if (visibleLogos.length > 0) {
+                        // Just move diagonally down - no tracking specific logos
+                        const speed = 2.5;
+                        dx = speed;  // Move right
+                        dy = speed;  // Move down
+
+                        // Check if we hit ANY logo
+                        const bugRect = ladybug.getBoundingClientRect();
+                        const bugX = bugRect.left + bugRect.width / 2;
+                        const bugY = bugRect.top + bugRect.height / 2;
+
+                        for (const logo of visibleLogos) {
+                            const logoRect = logo.getBoundingClientRect();
+                            const logoX = logoRect.left + logoRect.width / 2;
+                            const logoY = logoRect.top + logoRect.height / 2;
+                            const dist = Math.sqrt((logoX - bugX) ** 2 + (logoY - bugY) ** 2);
+
+                            if (dist < 80) {
+                                isTargetingLogos = false;
+                                dx = getRandomSpeed();
+                                dy = getRandomSpeed();
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    // Random movement
+                    if (Math.random() < 0.02) {
+                        dx = getRandomSpeed();
+                        dy = getRandomSpeed();
+                    }
+                }
+
                 x += dx;
                 y += dy;
+
+                // LOGO AVOIDANCE - Only when NOT targeting (random mode)
+                // When targeting, we want to approach the logo
+                if (!isTargetingLogos) {
+                    const appLogos = document.querySelectorAll('.app-logo');
+                    const bugRect = ladybug.getBoundingClientRect();
+                    const bugCenterX = bugRect.left + bugRect.width / 2;
+                    const bugCenterY = bugRect.top + bugRect.height / 2;
+
+                    appLogos.forEach(logo => {
+                        const logoRect = logo.getBoundingClientRect();
+                        if (logoRect.width === 0) return; // Skip invisible logos
+
+                        const logoCenterX = logoRect.left + logoRect.width / 2;
+                        const logoCenterY = logoRect.top + logoRect.height / 2;
+
+                        const distX = bugCenterX - logoCenterX;
+                        const distY = bugCenterY - logoCenterY;
+                        const distance = Math.sqrt(distX * distX + distY * distY);
+
+                        const minDistance = 60; // Bug should stay 60px away from logo center
+
+                        if (distance < minDistance && distance > 0) {
+                            // Push bug away from logo
+                            const pushX = (distX / distance) * (minDistance - distance + 5);
+                            const pushY = (distY / distance) * (minDistance - distance + 5);
+                            x += pushX;
+                            y += pushY;
+
+                            // Reverse direction away from logo
+                            dx = (distX / distance) * Math.abs(dx) * 1.5;
+                            dy = (distY / distance) * Math.abs(dy) * 1.5;
+                        }
+                    });
+                }
 
                 if (x <= 0) {
                     x = window.innerWidth - ladybug.offsetWidth;
@@ -148,11 +227,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     y = window.innerHeight - ladybug.offsetHeight;
                 } else if (y >= window.innerHeight - ladybug.offsetHeight) {
                     y = 0;
-                }
-
-                if (Math.random() < 0.02) {
-                    dx = getRandomSpeed();
-                    dy = getRandomSpeed();
                 }
 
                 const rotation = calculateRotation(dx, dy);
@@ -517,6 +591,42 @@ document.addEventListener('DOMContentLoaded', () => {
             // 3. Object Collisions
             for (let j = i + 1; j < bodies.length; j++) {
                 resolveCollision(body, bodies[j]);
+            }
+
+            // 4. Ladybug Collision - Check if the ladybug is touching this logo
+            const ladybug = document.querySelector('.ladybug');
+            if (ladybug) {
+                const bugRect = ladybug.getBoundingClientRect();
+                const logoRect = body.element.getBoundingClientRect();
+
+                // Calculate centers
+                const bugCenterX = bugRect.left + bugRect.width / 2;
+                const bugCenterY = bugRect.top + bugRect.height / 2;
+                const logoCenterX = logoRect.left + logoRect.width / 2;
+                const logoCenterY = logoRect.top + logoRect.height / 2;
+
+                // Distance between centers
+                const dx = logoCenterX - bugCenterX;
+                const dy = logoCenterY - bugCenterY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                // Collision threshold - increased to 80px for better detection
+                const collisionDist = 80;
+
+                if (distance < collisionDist && !body.bugCooldown) {
+                    // Apply push force
+                    const pushStrength = 0.3;
+                    body.vx += (dx / distance) * pushStrength;
+                    body.vy += (dy / distance) * pushStrength;
+
+                    // Add rotation wobble
+                    body.rotSpeedX += (Math.random() - 0.5) * 0.4;
+                    body.rotSpeedY += (Math.random() - 0.5) * 0.4;
+
+                    // Cooldown to prevent rapid collisions
+                    body.bugCooldown = true;
+                    setTimeout(() => { body.bugCooldown = false; }, 500);
+                }
             }
 
             // 4. Update DOM with 3D Transforms
