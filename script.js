@@ -32,10 +32,62 @@ document.addEventListener('DOMContentLoaded', function () {
     const xcode = document.getElementById('xcode');
     const vscode = document.getElementById('vscode');
     const progreebar = document.querySelector('.progress');
-    const width = window.innerWidth;
+        const width = window.innerWidth;
     const maxSpeed = 4;
-    const alert = true;
+    let alert = true;
     let isStopped = false;
+
+    // Centralized stop-state so multiple features can pause the bug without fighting each other.
+    const stopReasons = new Set();
+    function setStopped(reason, stopped) {
+        if (stopped) stopReasons.add(reason);
+        else stopReasons.delete(reason);
+        isStopped = stopReasons.size > 0;
+    }
+
+    // Random messages when the bug bumps into app logos.
+    const logoCollisionMessages = [
+        "Ouch!",
+        "Oh — these apps are bug free.",
+        "This app is tight.",
+        "No bugs here.",
+        "Rock solid.",
+        "Clean code.",
+        "Okay… that one’s polished.",
+        "I can’t break this one."
+    ];
+
+    let logoCollisionTimer = null;
+    let logoCollisionCooldown = false;
+
+    // Called by the physics engine when the ladybug hits any logo.
+    window.__ladybugLogoCollision = function () {
+        if (logoCollisionCooldown) return;
+        logoCollisionCooldown = true;
+// After first logo hit, switch bug movement to fully random
+hasLogoCollision = true;
+isTargetingLogos = false;
+        const msg = logoCollisionMessages[Math.floor(Math.random() * logoCollisionMessages.length)];
+
+        // Pause briefly on impact
+        setStopped("logo", true);
+        bugMessage.innerHTML = msg;
+        bugMessage.style.opacity = "1";
+
+        // Small impact emphasis
+        ladybug.style.height = "25px";
+        ladybug.style.width = "25px";
+
+        if (logoCollisionTimer) clearTimeout(logoCollisionTimer);
+        logoCollisionTimer = setTimeout(() => {
+            bugMessage.style.opacity = "0";
+            ladybug.style.height = "15px";
+            ladybug.style.width = "15px";
+            setStopped("logo", false);
+            logoCollisionCooldown = false;
+        }, 1400);
+    };
+
     const ladybugImages = [
         'imgs/ladyBug.png', // Original image
         'imgs/splash.png' // New image after clicking
@@ -75,13 +127,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // Stop Bug
     function stopLadybug() {
         if (!isStopped) {
-            isStopped = true;
+setStopped("section", true);
             bugMessage.innerHTML = 'Hey, Check it out'
             bugMessage.style.opacity = '1';
             ladybug.style.height = '25px';
             ladybug.style.width = '25px';
             setTimeout(() => {
-                isStopped = false;
+setStopped("section", false);
                 bugMessage.style.opacity = '0';
                 ladybug.style.height = '15px';
                 ladybug.style.width = '15px';
@@ -93,12 +145,13 @@ document.addEventListener('DOMContentLoaded', function () {
     function stopLadybug2() {
         if (!isStopped && alert) {
 
-            isStopped = true;
+setStopped("intro", true);
             bugMessage.innerHTML = "Hey, I'm Poo, a friendly Bug! <br> I might mess things up, <br>you can kill me to fix that. <br>but please don't 🙂‍↔️"
             bugMessage.style.opacity = '1';
 
             setTimeout(() => {
-                isStopped = false;
+                setStopped("intro", false);
+                
 
                 bugMessage.style.opacity = '0';
                 alert = false;
@@ -109,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Kill Bug
     function killbug() {
         if (!isStopped) {
-            isStopped = true;
+setStopped("kill", true);
             ladybug.src = ladybugImages[1];
             heroText.innerHTML = 'with expertise in Swift, SwiftUI, React, and Node.js, building high-performance iOS and web applications tailored to client needs.I focus on delivering seamless user experiences with scalable, maintainable solutions.';
             beyondText.innerHTML = "When I'm not coding, I immerse myself in various creative pursuits. I love sketching, translating ideas into visual art, and enhancing my design thinking. Music fuels my creativity, whether playing an instrument or discovering new genres. Reading broadens my perspective and deepens my knowledge. Tackling DIY projects, from crafting unique decor to building gadgets, relaxes and inspires me, allowing for a fresh and innovative approach to development.";
@@ -117,13 +170,14 @@ document.addEventListener('DOMContentLoaded', function () {
             ladybug.style.height = '15px';
             ladybug.style.width = '15px';
             setTimeout(() => {
-                isStopped = false;
+setStopped("kill", false);
                 ladybug.src = ladybugImages[0];
             }, 10000);
         }
     }
     //Animate and Move
     let isTargetingLogos = true; // Start by targeting logos
+let hasLogoCollision = false; // After first logo hit, always use random movement/speed
 
     function animate() {
         if (isStopped) {
@@ -138,8 +192,8 @@ document.addEventListener('DOMContentLoaded', function () {
         function move() {
             if (!isStopped) {
                 // Check if we should target logos
-                if (isTargetingLogos) {
-                    const appLogos = document.querySelectorAll('.app-logo');
+if (isTargetingLogos && !hasLogoCollision) {
+                        const appLogos = document.querySelectorAll('.app-logo');
                     // Only target logos that are visible (have non-zero dimensions)
                     const visibleLogos = Array.from(appLogos).filter(logo => {
                         const r = logo.getBoundingClientRect();
@@ -148,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     if (visibleLogos.length > 0) {
                         // Just move diagonally down - no tracking specific logos
-                        const speed = 2.5;
+                        const speed = 1.5;
                         dx = speed;  // Move right
                         dy = speed;  // Move down
 
@@ -172,12 +226,17 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     }
                 } else {
-                    // Random movement
-                    if (Math.random() < 0.02) {
-                        dx = getRandomSpeed();
-                        dy = getRandomSpeed();
-                    }
-                }
+    // Random movement
+    // After the first logo collision, re-roll direction/speed much more often.
+    const rerollChance = hasLogoCollision ? 0.10 : 0.02;
+
+    if (Math.random() < rerollChance) {
+        // randomize both direction and magnitude
+        dx = getRandomSpeed() * (0.6 + Math.random() * 1.6);
+        dy = getRandomSpeed() * (0.6 + Math.random() * 1.6);
+    }
+}
+
 
                 x += dx;
                 y += dy;
@@ -622,6 +681,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Add rotation wobble
                     body.rotSpeedX += (Math.random() - 0.5) * 0.4;
                     body.rotSpeedY += (Math.random() - 0.5) * 0.4;
+
+                    // Pause bug + show message on impact
+if (typeof window.__ladybugLogoCollision === "function") {
+    window.__ladybugLogoCollision();
+}
 
                     // Cooldown to prevent rapid collisions
                     body.bugCooldown = true;
