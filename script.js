@@ -287,3 +287,252 @@ function closeFlashcard() {
 }
 
 
+
+// ---------------------------------------------------------
+// Robust Physics Engine with Collision Detection
+// ---------------------------------------------------------
+document.addEventListener('DOMContentLoaded', () => {
+    const container = document.querySelector('.app-logos-container');
+    if (!container) return;
+
+    let logos = [];
+    let bodies = [];
+    let bounds = { width: 0, height: 0 };
+    let isInitialized = false;
+
+    // Physics Configuration
+    const PHYSICS = {
+        damping: 1.0,           // No friction for perpetual motion
+        speedLimit: 0.1,        // SUPER SLOW (was 0.25)
+        separationForce: 0.5,
+        hoverScale: 1.15
+    };
+
+    function initPhysics() {
+        // Fallback if dimensions are 0 (hidden)
+        let w = container.clientWidth;
+        let h = container.clientHeight;
+
+        // If 0, use smart fallback so we don't freeze in corner
+        if (w === 0) {
+            // Match CSS: width 80%, max-width 900px
+            w = Math.min(window.innerWidth * 0.8, 900);
+        }
+        if (h === 0) h = 300;
+
+        bounds.width = w;
+        bounds.height = h;
+
+        console.log(`[Physics] Init. Width: ${w}, Height: ${h}`);
+
+        logos = Array.from(document.querySelectorAll('.app-logo'));
+
+        // -----------------------------------------------------
+        // 3D STACK BUILDER
+        // Inject layers to create solid rounded body
+        // -----------------------------------------------------
+        logos.forEach(logo => {
+            const cube = logo.querySelector('.cube');
+            if (!cube) return;
+
+            // Remove any existing layers (if re-running) to be safe
+            const oldLayers = cube.querySelectorAll('.layer');
+            oldLayers.forEach(l => l.remove());
+
+            // We need high density to simulate a solid block.
+            // Spacing 0.5px from -9.5 to 9.5 (just inside the 10/-10 caps)
+            for (let z = -9.5; z <= 9.5; z += 0.5) {
+                const layer = document.createElement('div');
+                layer.className = 'face layer';
+                layer.style.transform = `translateZ(${z}px)`;
+                // Insert before the Front face (last child usually) so Front stays on top
+                cube.insertBefore(layer, cube.querySelector('.face.front'));
+            }
+        });
+
+        // Linear Start Configuration
+        const BASE_SIZE = 65;
+        const SCALE_FACTOR = 1.5;
+        const logoSize = BASE_SIZE * SCALE_FACTOR; // 97.5
+        const gap = 20 * SCALE_FACTOR;
+        const totalLogos = logos.length;
+
+        const totalWidth = totalLogos * logoSize + (totalLogos - 1) * gap;
+
+        // Strictly center based on CURRENT REAL WIDTH
+        let startX = (w - totalWidth) / 2;
+        const startY = (h - logoSize) / 2;
+
+        bodies = logos.map((el, index) => {
+            const x = startX + index * (logoSize + gap);
+            const y = startY;
+
+            el.classList.add('active');
+
+            return {
+                element: el,
+                x: x,
+                y: y,
+                vx: 0,
+                vy: 0,
+                radius: logoSize / 2,
+                mass: 1,
+                isHovered: false,
+                // 3D Rotations
+                rotationX: 0,
+                rotationY: 0,
+                rotationZ: 0,
+
+                rotSpeedX: 0,
+                rotSpeedY: 0,
+                rotSpeedZ: 0
+            };
+        });
+
+        isInitialized = true;
+        update();
+
+        // 2s Delay sequence
+        setTimeout(() => {
+            bodies.forEach(body => {
+                // Slower Drift Start
+                body.vx = (Math.random() - 0.5) * 0.05;
+                body.vy = (Math.random() - 0.5) * 0.05;
+
+                // Random 3D Tumble speeds
+                body.rotSpeedX = (Math.random() - 0.5) * 0.4;
+                body.rotSpeedY = (Math.random() - 0.5) * 0.4;
+                body.rotSpeedZ = (Math.random() - 0.5) * 0.2;
+            });
+        }, 2000);
+    }
+
+    // Elastic Collision
+    function resolveCollision(b1, b2) {
+        const dx = b2.x - b1.x;
+        const dy = b2.y - b1.y;
+        const d2 = dx * dx + dy * dy;
+        const d = Math.sqrt(d2);
+        const minDist = b1.radius + b2.radius;
+
+        if (d < minDist && d > 0) {
+            const overlap = (minDist - d) / 2;
+            const offsetX = (dx / d) * overlap;
+            const offsetY = (dy / d) * overlap;
+
+            b1.x -= offsetX; b1.y -= offsetY;
+            b2.x += offsetX; b2.y += offsetY;
+
+            const nx = dx / d;
+            const ny = dy / d;
+
+            const v1n = b1.vx * nx + b1.vy * ny;
+            const v2n = b2.vx * nx + b2.vy * ny;
+
+            const m1 = 1, m2 = 1;
+            const v1nFinal = (v1n * (m1 - m2) + 2 * m2 * v2n) / (m1 + m2);
+            const v2nFinal = (v2n * (m2 - m1) + 2 * m1 * v1n) / (m1 + m2);
+
+            b1.vx += nx * (v1nFinal - v1n);
+            b1.vy += ny * (v1nFinal - v1n);
+            b2.vx += nx * (v2nFinal - v2n);
+            b2.vy += ny * (v2nFinal - v2n);
+        }
+    }
+
+    function update() {
+        if (!isInitialized) return;
+
+        bodies.forEach((body, i) => {
+            // 1. Update Position
+            body.x += body.vx;
+            body.y += body.vy;
+
+            // 3D Rotation Updates
+            body.rotationX += body.rotSpeedX;
+            body.rotationY += body.rotSpeedY;
+            body.rotationZ += body.rotSpeedZ;
+
+            // Constrain All Axes Rotation to [-60, 60]
+            const limit = 40;
+
+            // X-Axis
+            if (body.rotationX > limit) { body.rotationX = limit; body.rotSpeedX = -Math.abs(body.rotSpeedX); }
+            if (body.rotationX < -limit) { body.rotationX = -limit; body.rotSpeedX = Math.abs(body.rotSpeedX); }
+
+            // Y-Axis
+            if (body.rotationY > limit) { body.rotationY = limit; body.rotSpeedY = -Math.abs(body.rotSpeedY); }
+            if (body.rotationY < -limit) { body.rotationY = -limit; body.rotSpeedY = Math.abs(body.rotSpeedY); }
+
+            // Z-Axis
+            if (body.rotationZ > limit) { body.rotationZ = limit; body.rotSpeedZ = -Math.abs(body.rotSpeedZ); }
+            if (body.rotationZ < -limit) { body.rotationZ = -limit; body.rotSpeedZ = Math.abs(body.rotSpeedZ); }
+
+            // 2. Wall Collisions
+            // Calculate boundaries relative to the container's current position
+            const rect = container.getBoundingClientRect();
+            const minX = -rect.left;
+            const maxX = window.innerWidth - rect.left - 65;
+            const minY = -rect.top;
+            const maxY = window.innerHeight - rect.top - 65;
+
+            // Fail-safe (relaxed for full screen)
+            if (isNaN(body.x)) {
+                body.x = 0;
+                body.vx = 0;
+            }
+
+            if (body.x < minX) { body.x = minX; body.vx = Math.abs(body.vx); }
+            if (body.x > maxX) { body.x = maxX; body.vx = -Math.abs(body.vx); }
+            if (body.y < minY) { body.y = minY; body.vy = Math.abs(body.vy); }
+            if (body.y > maxY) { body.y = maxY; body.vy = -Math.abs(body.vy); }
+
+            // 3. Object Collisions
+            for (let j = i + 1; j < bodies.length; j++) {
+                resolveCollision(body, bodies[j]);
+            }
+
+            // 4. Update DOM with 3D Transforms
+            const scale = body.isHovered ? 1.15 : 1;
+            body.element.style.transform = `
+                translate3d(${body.x}px, ${body.y}px, 0) 
+                rotateX(${body.rotationX}deg) 
+                rotateY(${body.rotationY}deg) 
+                rotateZ(${body.rotationZ}deg) 
+                scale(${scale})
+            `;
+        });
+
+        requestAnimationFrame(update);
+    }
+
+    // Initial dimensions check
+    if (container.clientWidth > 0) {
+        initPhysics();
+    }
+
+    // ResizeObserver catches when hidden -> visible
+    const observer = new ResizeObserver(entries => {
+        for (let entry of entries) {
+            const w = entry.contentRect.width;
+            const h = entry.contentRect.height;
+            if (w > 0 && h > 0) {
+                bounds.width = w;
+                bounds.height = h;
+
+                // If not initialized yet, we can now because we exist!
+                if (!isInitialized) {
+                    initPhysics();
+                }
+            }
+        }
+    });
+
+    if (container) observer.observe(container);
+
+    // Hover
+    logos.forEach((el, i) => {
+        el.addEventListener('mouseenter', () => { if (bodies[i]) bodies[i].isHovered = true; });
+        el.addEventListener('mouseleave', () => { if (bodies[i]) bodies[i].isHovered = false; });
+    });
+});

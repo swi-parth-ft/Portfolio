@@ -55,7 +55,7 @@
      background-repeat: no-repeat;
      height: 100vh;
      width: 100vw;
-     overflow: hidden;
+     overflow: visible;
  }
 
  .heroText {
@@ -68,31 +68,49 @@
      border-radius: 10px;
      text-align: center;
      z-index: 2;
+     width: 80%;
+     /* Force width */
+     max-width: 900px;
  }
 
-.spotlight-layer {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    background:
-        radial-gradient(ellipse at 50% 0%, rgba(255, 245, 205, 0.9) 0%, rgba(255, 245, 205, 0.45) 24%, rgba(0, 0, 0, 0.7) 55%, rgba(0, 0, 0, 0.95) 80%),
-        conic-gradient(from 180deg at 50% 0%, rgba(255, 235, 170, 0.4), rgba(0, 0, 0, 0) 28%, rgba(0, 0, 0, 0) 72%, rgba(255, 235, 170, 0.4)),
-        linear-gradient(to bottom, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.95));
-    mix-blend-mode: screen;
-    animation: spotlightPulse 6s ease-in-out infinite;
-}
+ /* Water-like Floating Animation Styles */
+ .app-logos-container {
+     display: block;
+     position: relative;
+     width: 100%;
+     /* max-width: 800px; Removed to follow parent */
+     height: 300px;
+     margin: 40px auto;
+     /* overflow: hidden; */
+     /* Let them be seen even if they clip slightly, but JS keeps them in. */
+     background: rgba(255, 255, 255, 0.05);
+     /* Subtle debug background */
+     border-radius: 20px;
+ }
 
-.spotlight-layer::before {
-    content: "";
-    position: absolute;
-    inset: -20%;
-    background:
-        radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.2) 22%, rgba(255, 255, 255, 0) 52%);
-    opacity: 0.8;
-    filter: blur(4px);
-    animation: beamFlicker 4.5s ease-in-out infinite;
-}
+ .spotlight-layer {
+     position: absolute;
+     inset: 0;
+     pointer-events: none;
+     z-index: 1;
+     background:
+         radial-gradient(ellipse at 50% 0%, rgba(255, 245, 205, 0.9) 0%, rgba(255, 245, 205, 0.45) 24%, rgba(0, 0, 0, 0.7) 55%, rgba(0, 0, 0, 0.95) 80%),
+         conic-gradient(from 180deg at 50% 0%, rgba(255, 235, 170, 0.4), rgba(0, 0, 0, 0) 28%, rgba(0, 0, 0, 0) 72%, rgba(255, 235, 170, 0.4)),
+         linear-gradient(to bottom, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.95));
+     mix-blend-mode: screen;
+     animation: spotlightPulse 6s ease-in-out infinite;
+ }
+
+ .spotlight-layer::before {
+     content: "";
+     position: absolute;
+     inset: -20%;
+     background:
+         radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.2) 22%, rgba(255, 255, 255, 0) 52%);
+     opacity: 0.8;
+     filter: blur(4px);
+     animation: beamFlicker 4.5s ease-in-out infinite;
+ }
 
  .spotlight-layer::after {
      content: "";
@@ -109,25 +127,30 @@
  }
 
  @keyframes spotlightPulse {
+
      0%,
      100% {
          opacity: 0.85;
      }
+
      50% {
          opacity: 1;
      }
  }
 
  @keyframes beamFlicker {
+
      0%,
      100% {
          opacity: 0.7;
          transform: translateY(0) scale(1);
      }
+
      40% {
          opacity: 1;
          transform: translateY(1%) scale(1.02);
      }
+
      70% {
          opacity: 0.6;
          transform: translateY(-1%) scale(0.98);
@@ -138,6 +161,7 @@
      0% {
          transform: translateY(0);
      }
+
      100% {
          transform: translateY(12%);
      }
@@ -197,6 +221,8 @@
      left: 0;
      float: left;
  }
+
+
 
  .parallax1>use {
      animation: move-forever1 10s linear infinite;
@@ -508,13 +534,13 @@
 
  }
 
-@media (max-width: 576px) {
-    .editorial {
-        display: none;
-    }
+ @media (max-width: 576px) {
+     .editorial {
+         display: none;
+     }
 
-    .heroText {
-        width: 100%;
+     .heroText {
+         width: 100%;
 
          padding: 5px;
          font-size: smaller;
@@ -580,4 +606,112 @@
 
          margin-top: -60px;
      }
+ }
+
+ /* App Logos Container (Physics Arena) */
+ .app-logos-container {
+     display: block;
+     position: relative;
+     width: 100%;
+     max-width: 800px;
+     height: 300px;
+     /* Ample space */
+     margin: 40px auto;
+     overflow: visible;
+     background: transparent;
+     perspective: 1000px;
+ }
+
+ .app-logo {
+     width: 65px;
+     height: 65px;
+     position: absolute;
+     /* Physics positioning */
+     top: 0;
+     left: 0;
+     margin: 0;
+     /* Simulate "Brick" Depth - REMOVED for True 3D */
+     background-color: transparent;
+     box-shadow: none;
+     cursor: pointer;
+     will-change: transform;
+     transform-style: preserve-3d;
+     z-index: 10;
+ }
+
+ /* The Cube Container */
+ .cube {
+     width: 100%;
+     height: 100%;
+     position: relative;
+     transform-style: preserve-3d;
+     /* The cube itself doesn't move, the parent .app-logo moves. 
+       We use this for structure. */
+ }
+
+ /* Common Face Styles */
+ .face {
+     position: absolute;
+     width: 65px;
+     height: 65px;
+     border-radius: 12px;
+     background: #e0e0e0;
+     /* Fallback grey body */
+     border: 1px solid rgba(0, 0, 0, 0.1);
+     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+ }
+
+ /* Face Transforms directly constructing a 20px thick brick */
+ .face.front {
+     transform: translateZ(10px);
+     background: transparent;
+     border: none;
+     box-shadow: none;
+     /* Radius handled by img, but let's match just in case */
+     border-radius: 18px;
+ }
+
+ .face.front img {
+     width: 65px;
+     height: 65px;
+     border-radius: 18px;
+     object-fit: cover;
+     display: block;
+     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+     /* Fix for 3D jagged edges in some browsers */
+     backface-visibility: hidden;
+ }
+
+ /* Stacked Layer Styles for smooth rounded extrusion */
+ .face.layer {
+     width: 65px;
+     height: 65px;
+     border-radius: 18px;
+     /* Match the icon radius */
+     background: #444;
+     /* Dark grey body color */
+     /* border: 1px solid rgba(0,0,0,0.1); REMOVED to create solid fusion */
+     top: 0;
+     left: 0;
+     will-change: transform;
+     /* Transform set by JS */
+ }
+
+ /* Ensure Front/Back stay on top/bottom of stack */
+ .face.front {
+     transform: translateZ(10px);
+     background: transparent;
+     border: none;
+     box-shadow: none;
+     border-radius: 18px;
+     z-index: 2;
+ }
+
+ .face.back {
+     transform: translateZ(-9.5px) rotateY(180deg);
+     /* Slight inset to mesh with stack */
+     background: #333;
+     border-radius: 18px;
+     border: 1px solid rgba(255, 255, 255, 0.05);
+     z-index: 1;
  }
