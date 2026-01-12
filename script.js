@@ -121,6 +121,11 @@ isTargetingLogos = false;
 
     }
 
+    function getRandomVelocity(scaleMin, scaleMax) {
+        const scale = scaleMin + Math.random() * (scaleMax - scaleMin);
+        return getRandomSpeed() * scale;
+    }
+
     function calculateRotation(dx, dy) {
         return Math.atan2(dy, dx) * (180 / Math.PI);
     }
@@ -178,6 +183,7 @@ setStopped("kill", false);
     //Animate and Move
     let isTargetingLogos = true; // Start by targeting logos
 let hasLogoCollision = false; // After first logo hit, always use random movement/speed
+    let nextDirectionChangeAt = performance.now();
 
     function animate() {
         if (isStopped) {
@@ -226,16 +232,17 @@ if (isTargetingLogos && !hasLogoCollision) {
                         }
                     }
                 } else {
-    // Random movement
-    // After the first logo collision, re-roll direction/speed much more often.
-    const rerollChance = hasLogoCollision ? 0.10 : 0.02;
+                    // Random movement
+                    const now = performance.now();
+                    const minInterval = hasLogoCollision ? 1400 : 900;
+                    const maxInterval = hasLogoCollision ? 3800 : 2000;
 
-    if (Math.random() < rerollChance) {
-        // randomize both direction and magnitude
-        dx = getRandomSpeed() * (0.6 + Math.random() * 1.6);
-        dy = getRandomSpeed() * (0.6 + Math.random() * 1.6);
-    }
-}
+                    if (now >= nextDirectionChangeAt) {
+                        dx = getRandomVelocity(0.5, hasLogoCollision ? 2.8 : 2.1);
+                        dy = getRandomVelocity(0.5, hasLogoCollision ? 2.8 : 2.1);
+                        nextDirectionChangeAt = now + (minInterval + Math.random() * (maxInterval - minInterval));
+                    }
+                }
 
 
                 x += dx;
