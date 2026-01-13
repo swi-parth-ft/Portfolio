@@ -524,12 +524,29 @@ document.addEventListener('DOMContentLoaded', () => {
     function createFocusImage() {
         const wrapper = document.createElement('div');
         wrapper.className = 'logo-focus-image';
+        const title = document.createElement('div');
+        title.className = 'logo-focus-title';
+        const frame = document.createElement('div');
+        frame.className = 'logo-focus-frame';
         const img = document.createElement('img');
         img.alt = '';
-        wrapper.appendChild(img);
+        const action = document.createElement('a');
+        action.className = 'logo-focus-action';
+        action.setAttribute('role', 'button');
+        action.setAttribute('href', '#');
+        action.textContent = 'View App';
+        action.addEventListener('click', event => {
+            if (action.getAttribute('href') === '#') {
+                event.preventDefault();
+            }
+        });
+        wrapper.appendChild(title);
+        frame.appendChild(img);
+        wrapper.appendChild(frame);
+        wrapper.appendChild(action);
         document.body.appendChild(wrapper);
 
-        return { wrapper, img };
+        return { wrapper, frame, img, title, action };
     }
 
     function createFocusBackdrop() {
@@ -539,7 +556,108 @@ document.addEventListener('DOMContentLoaded', () => {
         return backdrop;
     }
 
+    function createFocusSpotlight() {
+        const spotlight = document.createElement('div');
+        spotlight.className = 'logo-focus-spotlight';
+        document.body.appendChild(spotlight);
+        return spotlight;
+    }
+
+    function createFocusDust() {
+        const canvas = document.createElement('canvas');
+        canvas.className = 'logo-focus-dust';
+        const ctx = canvas.getContext('2d');
+        document.body.appendChild(canvas);
+
+        const state = {
+            canvas,
+            ctx,
+            particles: [],
+            width: 0,
+            height: 0,
+            centerX: 0,
+            centerY: 0,
+            radius: 0,
+            visible: false
+        };
+
+        function resize() {
+            const dpr = window.devicePixelRatio || 1;
+            state.width = window.innerWidth;
+            state.height = window.innerHeight;
+            canvas.width = state.width * dpr;
+            canvas.height = state.height * dpr;
+            canvas.style.width = `${state.width}px`;
+            canvas.style.height = `${state.height}px`;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            state.centerX = state.width / 2;
+            state.centerY = state.height / 2;
+            state.radius = Math.min(state.width, state.height) * 0.28 + 90;
+        }
+
+        function spawnParticle(initial) {
+            const angle = Math.random() * Math.PI * 2;
+            const radius = Math.random() * state.radius;
+            const ellipseY = 0.7;
+            const spread = initial ? 1 : 0.9 + Math.random() * 0.2;
+            const speed = 0.08 + Math.random() * 0.28;
+            const driftAngle = Math.random() * Math.PI * 2;
+
+            return {
+                x: state.centerX + Math.cos(angle) * radius,
+                y: state.centerY + Math.sin(angle) * radius * ellipseY * spread,
+                size: 0.8 + Math.random() * 2.0,
+                alpha: 0.18 + Math.random() * 0.4,
+                vx: Math.cos(driftAngle) * speed,
+                vy: Math.sin(driftAngle) * speed,
+                twinkle: Math.random() * Math.PI * 2
+            };
+        }
+
+        resize();
+        window.addEventListener('resize', resize);
+
+        const count = 360;
+        for (let i = 0; i < count; i++) {
+            state.particles.push(spawnParticle(true));
+        }
+
+        function updateDust() {
+            ctx.clearRect(0, 0, state.width, state.height);
+            if (state.visible) {
+                state.particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.twinkle += 0.02;
+                    const pulse = 0.7 + Math.sin(p.twinkle) * 0.4;
+
+                    const ellipseY = 0.7;
+                    const dx = p.x - state.centerX;
+                    const dy = (p.y - state.centerY) / ellipseY;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist > state.radius * 1.05) {
+                        Object.assign(p, spawnParticle(false));
+                    }
+
+                    ctx.beginPath();
+                    ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha * pulse})`;
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+            }
+
+            requestAnimationFrame(updateDust);
+        }
+
+        updateDust();
+
+        return state;
+    }
+
     const focusBackdrop = createFocusBackdrop();
+    const focusSpotlight = createFocusSpotlight();
+    const focusDust = createFocusDust();
     const focusImage = createFocusImage();
 
     function showFocusImage(body) {
@@ -547,8 +665,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!imgEl) return;
         focusImage.img.src = imgEl.getAttribute('src');
         focusImage.img.alt = body.element.dataset.title || 'App logo';
+        focusImage.title.textContent = body.element.dataset.title || 'App Title';
+        focusImage.action.textContent = body.element.dataset.button || 'View App';
+        focusImage.action.setAttribute('href', body.element.dataset.link || '#');
         focusImage.wrapper.style.opacity = '';
-        focusImage.wrapper.style.transform = '';
+        focusImage.frame.style.transform = '';
         focusImage.wrapper.classList.add('is-visible');
         focusBackdrop.classList.add('is-visible');
     }
@@ -556,8 +677,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function hideFocusImage() {
         focusImage.wrapper.classList.remove('is-visible');
         focusImage.wrapper.style.opacity = '';
-        focusImage.wrapper.style.transform = '';
+        focusImage.frame.style.transform = '';
         focusBackdrop.classList.remove('is-visible');
+        focusSpotlight.classList.remove('is-visible');
+        focusDust.canvas.classList.remove('is-visible');
+        focusDust.visible = false;
     }
 
     function focusLogo(body) {
@@ -973,8 +1097,12 @@ if (typeof window.__ladybugLogoCollision === "function") {
 
             if (focusedBody) {
                 const focusScaleValue = 1 + focusedBody.focusProgress * 0.35;
-                focusImage.wrapper.style.transform = `translate(-50%, -50%) scale(${focusScaleValue}) rotateY(${focusedBody.focusProgress * FOCUS.flipDeg}deg)`;
+                focusImage.frame.style.transform = `scale(${focusScaleValue}) rotateY(${focusedBody.focusProgress * FOCUS.flipDeg}deg)`;
                 focusImage.wrapper.style.opacity = focusedBody.focusProgress;
+                const spotlightOn = focusedBody.focusProgress > 0.97;
+                focusSpotlight.classList.toggle('is-visible', spotlightOn);
+                focusDust.visible = spotlightOn;
+                focusDust.canvas.classList.toggle('is-visible', spotlightOn);
             }
         });
 
@@ -1078,6 +1206,7 @@ if (typeof window.__ladybugLogoCollision === "function") {
         if (!focusedBody) return;
         if (event.target.closest('.app-logo')) return;
         if (event.target.closest('.logo-focus-image')) return;
+        if (event.target.closest('.logo-focus-action')) return;
         clearFocus();
     });
 
