@@ -1,0 +1,10 @@
+Add any extra context for the AI chat here.
+
+Examples:
+- Current availability, rates, or booking details
+- Project highlights or case studies
+- Preferred tech stack or tools
+- Location/timezone
+- Short bio or elevator pitch
+
+Keep it concise. This file is read by the chat widget on every request.

@@ -1740,7 +1740,18 @@ document.addEventListener('DOMContentLoaded', () => {
         return (text || "").replace(/\s+/g, " ").trim();
     }
 
-    function buildSiteContext() {
+    async function loadExtraContext() {
+        try {
+            const response = await fetch('ai-context.txt', { cache: 'no-store' });
+            if (!response.ok) return '';
+            const text = await response.text();
+            return normalizeText(text);
+        } catch (error) {
+            return '';
+        }
+    }
+
+    async function buildSiteContext() {
         const sections = [
             document.querySelector('.heroText'),
             document.querySelector('.ai-skill-section'),
@@ -1753,19 +1764,23 @@ document.addEventListener('DOMContentLoaded', () => {
             .map(item => item.dataset.title)
             .filter(Boolean);
         const appsLine = appTitles.length ? `Featured apps: ${appTitles.join(", ")}.` : "";
-        const base = `${sectionText} ${appsLine} Email: me@parthant.com.`;
-        return base.slice(0, 1400);
+        const extraContext = await loadExtraContext();
+        const base = `${sectionText} ${appsLine} ${extraContext} Email: me@parthant.com.`;
+        return base.replace(/\s+/g, " ").trim().slice(0, 2000);
     }
 
-    const siteContext = buildSiteContext();
-    const systemMessage = {
-        role: "system",
-        content:
-            "You are Parth's AI assistant on his portfolio site. " +
-            "Answer as Parth, keep replies concise and helpful, and use the site context. " +
-            "If the answer is unknown, ask a short follow-up question. " +
-            `Context: ${siteContext}`
-    };
+    async function buildSystemMessage() {
+        const siteContext = await buildSiteContext();
+        return {
+            role: "system",
+            content:
+                "You are AI Parth, the digital twin of Parth on his portfolio site. " +
+                "Speak in first person as Parth, avoid referring to yourself as an assistant, and answer as if you are Parth. " +
+                "Keep replies concise and confident, grounded in the site context. " +
+                "If something is unknown, ask one short follow-up question. " +
+                `Context: ${siteContext}`
+        };
+    }
 
     function appendMessage(role, text, className) {
         const bubble = document.createElement('div');
@@ -1812,6 +1827,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const recentMessages = state.messages.slice(-10);
+            const systemMessage = await buildSystemMessage();
             const payload = {
                 messages: [systemMessage, ...recentMessages],
                 temperature: 0.6,
