@@ -14,6 +14,7 @@
     <link rel="icon" type="svg" href="imgs/logo.svg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playball&display=swap" rel="stylesheet">
+    <meta name="ai-chat-endpoint" content="https://parth-portfolio-ai.parth-portfolio.workers.dev">
     <title>Parth.Portfolio</title>
 </head>
 
@@ -44,6 +45,10 @@
                         <img src="imgs/social-email-placeholder.svg" alt="" aria-hidden="true">
                         <span>Email me</span>
                     </a>
+                    <button class="hero-social-link hero-ai-trigger" type="button" aria-label="Chat with AI">
+                        <img src="imgs/social-ai-placeholder.svg" alt="" aria-hidden="true">
+                        <span>Ask AI</span>
+                    </button>
                 </div>
                 <div class="progress-bar">
 
@@ -386,6 +391,23 @@
             <div class="flashcard-content">
                 <button class="close-btn" onclick="closeFlashcard()">✖</button>
                 <iframe id="flashcard-frame" src="" width="100%" height="100%"></iframe>
+            </div>
+        </div>
+
+        <div class="ai-chat-overlay" id="aiChatOverlay" aria-hidden="true">
+            <div class="ai-chat-panel" role="dialog" aria-modal="true" aria-label="AI chat">
+                <div class="ai-chat-header">
+                    <div>
+                        <p class="ai-chat-title">Ask Parth AI</p>
+                        <p class="ai-chat-subtitle">Portfolio-aware assistant</p>
+                    </div>
+                    <button class="ai-chat-close" type="button" aria-label="Close chat">✕</button>
+                </div>
+                <div class="ai-chat-messages" aria-live="polite"></div>
+                <form class="ai-chat-form">
+                    <textarea class="ai-chat-input" rows="2" placeholder="Ask about projects, skills, or availability..."></textarea>
+                    <button class="ai-chat-send" type="submit">Send</button>
+                </form>
             </div>
         </div>
     </section>

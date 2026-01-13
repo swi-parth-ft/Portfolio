@@ -483,7 +483,7 @@ if (!foodTarget && isTargetingLogos && !hasLogoCollision) {
     document.addEventListener('pointerdown', event => {
         if (event.button !== 0) return;
         const target = event.target;
-        if (target.closest('a, button, input, textarea, select, .app-logo, .logo-focus-image, .logo-focus-action, .logo-focus-title, .logo-focus-frame, .ladybug, .ladybug-hammer-cursor')) {
+        if (target.closest('a, button, input, textarea, select, .app-logo, .logo-focus-image, .logo-focus-action, .logo-focus-title, .logo-focus-frame, .ladybug, .ladybug-hammer-cursor, .hero-social-bar, .ai-chat-overlay, .ai-chat-panel')) {
             return;
         }
         if (document.querySelector('.logo-focus-image.is-visible')) return;
@@ -1715,6 +1715,168 @@ document.addEventListener('DOMContentLoaded', () => {
     resize();
     window.addEventListener('resize', resize);
     update();
+});
+
+// ---------------------------------------------------------
+// AI Chat Overlay
+// ---------------------------------------------------------
+document.addEventListener('DOMContentLoaded', () => {
+    const trigger = document.querySelector('.hero-ai-trigger');
+    const overlay = document.getElementById('aiChatOverlay');
+    if (!trigger || !overlay) return;
+
+    const panel = overlay.querySelector('.ai-chat-panel');
+    const closeBtn = overlay.querySelector('.ai-chat-close');
+    const form = overlay.querySelector('.ai-chat-form');
+    const input = overlay.querySelector('.ai-chat-input');
+    const sendBtn = overlay.querySelector('.ai-chat-send');
+    const messagesEl = overlay.querySelector('.ai-chat-messages');
+
+    const state = {
+        messages: []
+    };
+
+    function normalizeText(text) {
+        return (text || "").replace(/\s+/g, " ").trim();
+    }
+
+    function buildSiteContext() {
+        const sections = [
+            document.querySelector('.heroText'),
+            document.querySelector('.ai-skill-section'),
+            document.querySelector('.skills'),
+            document.querySelector('.projectSection'),
+            document.querySelector('.getInTouchSection')
+        ].filter(Boolean);
+        const sectionText = sections.map(section => normalizeText(section.textContent)).join(" ");
+        const appTitles = Array.from(document.querySelectorAll('.app-logo'))
+            .map(item => item.dataset.title)
+            .filter(Boolean);
+        const appsLine = appTitles.length ? `Featured apps: ${appTitles.join(", ")}.` : "";
+        const base = `${sectionText} ${appsLine} Email: me@parthant.com.`;
+        return base.slice(0, 1400);
+    }
+
+    const siteContext = buildSiteContext();
+    const systemMessage = {
+        role: "system",
+        content:
+            "You are Parth's AI assistant on his portfolio site. " +
+            "Answer as Parth, keep replies concise and helpful, and use the site context. " +
+            "If the answer is unknown, ask a short follow-up question. " +
+            `Context: ${siteContext}`
+    };
+
+    function appendMessage(role, text, className) {
+        const bubble = document.createElement('div');
+        bubble.className = `ai-chat-message ${className || ''}`.trim();
+        bubble.textContent = text;
+        messagesEl.appendChild(bubble);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+        return bubble;
+    }
+
+    function openChat() {
+        overlay.classList.add('is-visible');
+        overlay.setAttribute('aria-hidden', 'false');
+        input.focus();
+        if (!messagesEl.children.length) {
+            appendMessage('assistant', "Hey! I can answer questions about Parth's work, AI stack, or projects.", 'is-system');
+        }
+    }
+
+    function closeChat() {
+        overlay.classList.remove('is-visible');
+        overlay.setAttribute('aria-hidden', 'true');
+    }
+
+    function getApiEndpoint() {
+        const meta = document.querySelector('meta[name="ai-chat-endpoint"]');
+        return (window.AI_CHAT_ENDPOINT || meta?.content || '').trim();
+    }
+
+    function isPlaceholderEndpoint(endpoint) {
+        return !endpoint || endpoint.includes('YOUR_SUBDOMAIN');
+    }
+
+    async function sendMessage(userText) {
+        const endpoint = getApiEndpoint();
+        if (isPlaceholderEndpoint(endpoint)) {
+            appendMessage('assistant', "AI chat is offline. Connect the Cloudflare Worker endpoint in the page meta tag.", 'is-system');
+            return;
+        }
+
+        state.messages.push({ role: 'user', content: userText });
+        const typingBubble = appendMessage('assistant', 'Thinking', 'is-typing');
+        sendBtn.disabled = true;
+
+        try {
+            const recentMessages = state.messages.slice(-10);
+            const payload = {
+                messages: [systemMessage, ...recentMessages],
+                temperature: 0.6,
+                max_tokens: 220
+            };
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Request failed (${response.status})`);
+            }
+
+            const data = await response.json();
+            const reply = data.choices?.[0]?.message?.content?.trim();
+            typingBubble.remove();
+
+            if (!reply) {
+                appendMessage('assistant', "I couldn't generate a reply. Try again?", '');
+                return;
+            }
+
+            state.messages.push({ role: 'assistant', content: reply });
+            appendMessage('assistant', reply, '');
+        } catch (error) {
+            typingBubble.remove();
+            appendMessage('assistant', "Something went wrong connecting to the AI API.", 'is-system');
+        } finally {
+            sendBtn.disabled = false;
+        }
+    }
+
+    trigger.addEventListener('click', openChat);
+    closeBtn.addEventListener('click', closeChat);
+    overlay.addEventListener('click', event => {
+        if (event.target === overlay) {
+            closeChat();
+        }
+    });
+
+    form.addEventListener('submit', event => {
+        event.preventDefault();
+        const text = normalizeText(input.value);
+        if (!text) return;
+        appendMessage('user', text, 'is-user');
+        input.value = '';
+        sendMessage(text);
+    });
+
+    input.addEventListener('keydown', event => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            form.requestSubmit();
+        }
+    });
+
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && overlay.classList.contains('is-visible')) {
+            closeChat();
+        }
+    });
 });
 
 // ---------------------------------------------------------
