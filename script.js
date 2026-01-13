@@ -714,13 +714,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 event.preventDefault();
             }
         });
+        const askButton = document.createElement('button');
+        askButton.className = 'logo-focus-ask hero-ai-trigger';
+        askButton.type = 'button';
+        askButton.textContent = 'Ask AIParth';
         wrapper.appendChild(title);
         frame.appendChild(img);
         wrapper.appendChild(frame);
         wrapper.appendChild(action);
+        wrapper.appendChild(askButton);
         document.body.appendChild(wrapper);
 
-        return { wrapper, frame, img, title, action };
+        return { wrapper, frame, img, title, action, askButton };
     }
 
     function createFocusBackdrop() {
@@ -844,6 +849,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const labelEl = focusImage.action.querySelector('span');
         if (labelEl) labelEl.textContent = label;
         focusImage.action.setAttribute('href', body.element.dataset.link || '#');
+        focusImage.askButton.dataset.askTitle = body.element.dataset.title || 'this app';
         focusImage.wrapper.style.opacity = '';
         focusImage.frame.style.transform = '';
         focusImage.wrapper.classList.add('is-visible');
@@ -899,6 +905,8 @@ document.addEventListener('DOMContentLoaded', () => {
         focusedBody = null;
         hideFocusImage();
     }
+
+    window.__clearLogoFocus = clearFocus;
 
     function resetLogosToInitialPositions() {
         if (!isInitialized) return;
@@ -1721,9 +1729,9 @@ document.addEventListener('DOMContentLoaded', () => {
 // AI Chat Overlay
 // ---------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
-    const trigger = document.querySelector('.hero-ai-trigger');
+    const triggers = document.querySelectorAll('.hero-ai-trigger');
     const overlay = document.getElementById('aiChatOverlay');
-    if (!trigger || !overlay) return;
+    if (!triggers.length || !overlay) return;
 
     const panel = overlay.querySelector('.ai-chat-panel');
     const closeBtn = overlay.querySelector('.ai-chat-close');
@@ -1731,6 +1739,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const input = overlay.querySelector('.ai-chat-input');
     const sendBtn = overlay.querySelector('.ai-chat-send');
     const messagesEl = overlay.querySelector('.ai-chat-messages');
+    const thoughtText = document.querySelector('.hero-thought-text');
+    if (thoughtText) {
+        const phrases = [
+            "Chat with AI me",
+            "Ask about my work",
+            "See my AI stack",
+            "Let's talk projects"
+        ];
+        let phraseIndex = 0;
+        setInterval(() => {
+            phraseIndex = (phraseIndex + 1) % phrases.length;
+            thoughtText.textContent = phrases[phraseIndex];
+            thoughtText.classList.remove('is-animating');
+            void thoughtText.offsetWidth;
+            thoughtText.classList.add('is-animating');
+        }, 1500);
+    }
 
     const state = {
         messages: []
@@ -1796,7 +1821,7 @@ document.addEventListener('DOMContentLoaded', () => {
         overlay.setAttribute('aria-hidden', 'false');
         input.focus();
         if (!messagesEl.children.length) {
-            appendMessage('assistant', "Hey! I can answer questions about Parth's work, AI stack, or projects.", 'is-system');
+            appendMessage('assistant', "Hey, I'm AI Parth. Ask me anything about my work, projects, or AI stack.", 'is-system');
         }
     }
 
@@ -1864,7 +1889,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    trigger.addEventListener('click', openChat);
+    triggers.forEach(trigger => {
+        trigger.addEventListener('click', () => openChat());
+    });
+
+    document.addEventListener('click', event => {
+        const askBtn = event.target.closest('.logo-focus-ask');
+        if (!askBtn) return;
+        const title = askBtn.dataset.askTitle || 'this app';
+        openChat();
+        if (typeof window.__clearLogoFocus === 'function') {
+            window.__clearLogoFocus();
+        }
+        const text = `Tell me more about ${title}`;
+        appendMessage('user', text, 'is-user');
+        sendMessage(text);
+    });
     closeBtn.addEventListener('click', closeChat);
     overlay.addEventListener('click', event => {
         if (event.target === overlay) {

@@ -59,25 +59,97 @@
      overflow: hidden;
  }
 
- .heroText {
-     position: absolute;
-     top: 50%;
-     left: 50%;
-     transform: translate(-50%, -50%);
-     color: gray;
+.heroText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: gray;
      padding: 20px;
      border-radius: 10px;
      text-align: center;
      z-index: 2;
      width: 80%;
      /* Force width */
-     max-width: 900px;
- }
+    max-width: 900px;
+}
+
+.hero-avatar-wrap {
+    position: relative;
+    display: inline-block;
+}
 
 .heroText .avatar {
     display: block;
     margin: 0 auto;
     transform: translateY(60px);
+}
+
+.hero-thought-bubble {
+    position: absolute;
+    --bubble-x: -70px;
+    --bubble-y: 80px;
+    top: 6px;
+    left: -6px;
+    transform: translate(var(--bubble-x), var(--bubble-y));
+    width: 170px;
+    min-height: 38px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: none;
+    background: rgba(255, 255, 255, 0.92);
+    color: #222;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    z-index: 3;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.hero-thought-bubble::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    right: 12px;
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.88);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.hero-thought-bubble:hover {
+    transform: translate(var(--bubble-x), calc(var(--bubble-y) - 2px));
+}
+
+.hero-thought-text {
+    white-space: nowrap;
+    display: inline-block;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.hero-thought-text.is-animating {
+    animation: thoughtTextSwap 0.6s ease;
+}
+
+@keyframes thoughtTextSwap {
+    0% {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
  /* Water-like Floating Animation Styles */
@@ -252,7 +324,7 @@
     flex-wrap: wrap;
     gap: 0;
     z-index: 1200;
-    padding: 6px 8px;
+    padding: 4px 6px;
     border-radius: 999px;
     border: 1px solid transparent;
     background:
@@ -269,12 +341,12 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    padding: 8px 16px;
+    padding: 6px 12px;
     border-radius: 0;
     border: none;
     background: transparent;
     color: #ffffff;
-    font-size: 0.85rem;
+    font-size: 0.78rem;
     text-decoration: none;
     letter-spacing: 0.01em;
     transition: color 0.2s ease, background 0.2s ease;
@@ -284,8 +356,8 @@
 }
 
 .hero-social-link img {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
     display: block;
     flex-shrink: 0;
 }
@@ -1181,6 +1253,27 @@ body.ladybug-hover {
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
     pointer-events: auto;
     margin-top: 36px;
+}
+
+.logo-focus-ask {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 159, 64, 0.18);
+    color: #ffb25a;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    pointer-events: auto;
+}
+
+.logo-focus-ask:hover {
+    background: rgba(255, 159, 64, 0.28);
 }
 
 .logo-focus-action i {
