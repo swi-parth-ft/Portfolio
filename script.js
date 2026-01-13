@@ -534,7 +534,7 @@ document.addEventListener('DOMContentLoaded', () => {
         action.className = 'logo-focus-action';
         action.setAttribute('role', 'button');
         action.setAttribute('href', '#');
-        action.textContent = 'View App';
+        action.innerHTML = '<i class="fa-brands fa-apple" aria-hidden="true"></i><span>View on App Store</span>';
         action.addEventListener('click', event => {
             if (action.getAttribute('href') === '#') {
                 event.preventDefault();
@@ -617,7 +617,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resize();
         window.addEventListener('resize', resize);
 
-        const count = 360;
+        const count = 180;
         for (let i = 0; i < count; i++) {
             state.particles.push(spawnParticle(true));
         }
@@ -666,7 +666,9 @@ document.addEventListener('DOMContentLoaded', () => {
         focusImage.img.src = imgEl.getAttribute('src');
         focusImage.img.alt = body.element.dataset.title || 'App logo';
         focusImage.title.textContent = body.element.dataset.title || 'App Title';
-        focusImage.action.textContent = body.element.dataset.button || 'View App';
+        const label = body.element.dataset.button || 'View on App Store';
+        const labelEl = focusImage.action.querySelector('span');
+        if (labelEl) labelEl.textContent = label;
         focusImage.action.setAttribute('href', body.element.dataset.link || '#');
         focusImage.wrapper.style.opacity = '';
         focusImage.frame.style.transform = '';
