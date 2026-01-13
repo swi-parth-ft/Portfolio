@@ -360,7 +360,7 @@
      border-color: rgb(255, 77, 0);
  }
 
- .ladybug {
+.ladybug {
      width: 50px;
      /* Adjust size as needed */
      height: 50px;
@@ -387,7 +387,7 @@
      /* Adjust size as needed */
      height: 15px;
      /* Adjust size as needed */
-     cursor: url('imgs/hammer.svg') 8 8, auto;
+     cursor: none;
      background-size: cover;
      padding: 50px;
      /* Add padding to increase the clickable area */
@@ -660,6 +660,43 @@
     overflow: visible;
     background: transparent;
     perspective: 1000px;
+}
+
+body.ladybug-hover {
+    cursor: none;
+}
+
+.ladybug-hammer-cursor {
+    position: fixed;
+    width: 32px;
+    height: 32px;
+    background: url('imgs/hammer.svg') no-repeat center;
+    background-size: contain;
+    transform: translate(-50%, -50%) rotate(0deg);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 120ms ease;
+    z-index: 22000;
+}
+
+.ladybug-hammer-cursor.is-visible {
+    opacity: 1;
+}
+
+.ladybug-hammer-cursor.is-swinging {
+    animation: hammer-swing 220ms ease;
+}
+
+@keyframes hammer-swing {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    50% {
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
 }
 
 .app-logo {

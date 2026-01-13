@@ -329,8 +329,41 @@ if (isTargetingLogos && !hasLogoCollision) {
     observer2.observe(progreebar);
     animate();
 
+    let hammerActive = false;
+    const hammerCursor = document.createElement('div');
+    hammerCursor.className = 'ladybug-hammer-cursor';
+    document.body.appendChild(hammerCursor);
+
+    function updateHammerCursor(x, y) {
+        hammerCursor.style.left = `${x}px`;
+        hammerCursor.style.top = `${y}px`;
+    }
+
+    function triggerHammerSwing() {
+        hammerCursor.classList.remove('is-swinging');
+        void hammerCursor.offsetWidth;
+        hammerCursor.classList.add('is-swinging');
+    }
+
     ladybug.addEventListener('click', function () {
         killbug();
+    });
+    document.addEventListener('mousemove', event => {
+        const rect = ladybug.getBoundingClientRect();
+        const bugX = rect.left + rect.width / 2;
+        const bugY = rect.top + rect.height / 2;
+        const dist = Math.hypot(event.clientX - bugX, event.clientY - bugY);
+        hammerActive = dist < 80;
+        document.body.classList.toggle('ladybug-hover', hammerActive);
+        hammerCursor.classList.toggle('is-visible', hammerActive);
+        if (hammerActive) {
+            updateHammerCursor(event.clientX, event.clientY);
+        }
+    });
+    document.addEventListener('mousedown', event => {
+        if (!hammerActive) return;
+        triggerHammerSwing();
+        updateHammerCursor(event.clientX, event.clientY);
     });
     //check Collision
     function checkCollision() {
