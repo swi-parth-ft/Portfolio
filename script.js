@@ -1766,14 +1766,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let contextCache = null;
+    let contextCacheFetchedAt = 0;
+    let contextCacheFailedAt = 0;
 
     async function loadContextFile() {
-        if (contextCache) return contextCache;
+        const debug = window.AI_CHAT_DEBUG === true;
+        const now = Date.now();
+        if (contextCache && now - contextCacheFetchedAt < 5 * 60 * 1000) {
+            if (debug) {
+                appendMessage('assistant', 'AI context loaded from cache.', 'is-system');
+            }
+            return contextCache;
+        }
+        if (!contextCache && contextCacheFailedAt && now - contextCacheFailedAt < 3000) {
+            if (debug) {
+                appendMessage('assistant', 'AI context fetch recently failed; retrying shortly.', 'is-system');
+            }
+            return { global: '', chunks: [], byId: {}, appChunks: [] };
+        }
         try {
             const response = await fetch('ai-context.txt', { cache: 'no-store' });
             if (!response.ok) {
-                contextCache = { global: '', chunks: [], byId: {}, appChunks: [] };
-                return contextCache;
+                contextCacheFailedAt = now;
+                if (debug) {
+                    appendMessage('assistant', `AI context fetch failed (${response.status}).`, 'is-system');
+                }
+                return { global: '', chunks: [], byId: {}, appChunks: [] };
             }
             const raw = await response.text();
             const firstChunkIndex = raw.indexOf('### CHUNK:');
@@ -1813,10 +1831,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             contextCache = { global, chunks, byId, appChunks };
+            contextCacheFetchedAt = now;
+            if (debug) {
+                appendMessage('assistant', `AI context loaded (${chunks.length} chunks).`, 'is-system');
+            }
             return contextCache;
         } catch (error) {
-            contextCache = { global: '', chunks: [], byId: {}, appChunks: [] };
-            return contextCache;
+            contextCacheFailedAt = now;
+            if (debug) {
+                appendMessage('assistant', 'AI context fetch error.', 'is-system');
+            }
+            return { global: '', chunks: [], byId: {}, appChunks: [] };
         }
     }
 
