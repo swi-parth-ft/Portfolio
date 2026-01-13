@@ -174,6 +174,9 @@ setStopped("kill", true);
             bugMessage.style.opacity = '0';
             ladybug.style.height = '15px';
             ladybug.style.width = '15px';
+            if (typeof window.__resetAppLogos === "function") {
+                window.__resetAppLogos();
+            }
             setTimeout(() => {
 setStopped("kill", false);
                 ladybug.src = ladybugImages[0];
@@ -439,6 +442,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let bodies = [];
     let bounds = { width: 0, height: 0 };
     let isInitialized = false;
+    let initialPositions = [];
+    let driftTimer = null;
+    let resetAnimationFrame = null;
+    let isResetting = false;
+    let activeDrag = null;
+    let interactionsAttached = false;
+    let focusedBody = null;
 
     // Global Physics Configuration
     let physicsConfig = {
@@ -454,15 +464,24 @@ document.addEventListener('DOMContentLoaded', () => {
         separationForce: 0.5,
         hoverScale: 1.15
     };
+    const COLLISION_SPEED_MULTIPLIER = 0.5;
+    const FOCUS = {
+        scaleBoost: 1.4,
+        flipDeg: 360,
+        centerPull: 0.14,
+        progressLerp: 0.12
+    };
 
-    function initPhysics() {
-        // Fallback if dimensions are 0 (hidden)
+    function dampenSpeed(body) {
+        body.vx *= COLLISION_SPEED_MULTIPLIER;
+        body.vy *= COLLISION_SPEED_MULTIPLIER;
+    }
+
+    function getContainerBounds() {
         let w = container.clientWidth;
         let h = container.clientHeight;
 
-        // If 0, use smart fallback so we don't freeze in corner
         if (w === 0) {
-            // Match CSS: width 80%, max-width 900px
             w = Math.min(window.innerWidth * 0.8, 900);
         }
         if (h === 0) h = 300;
@@ -470,6 +489,186 @@ document.addEventListener('DOMContentLoaded', () => {
         bounds.width = w;
         bounds.height = h;
 
+        return { width: w, height: h };
+    }
+
+    function computeInitialPositions() {
+        const { width: w, height: h } = getContainerBounds();
+        const totalLogos = logos.length;
+        const gap = 60 * physicsConfig.scale;
+        const totalWidth = totalLogos * physicsConfig.size + (totalLogos - 1) * gap;
+
+        const startX = (w - totalWidth) / 2;
+        const startY = (h - physicsConfig.size) / 2;
+
+        return logos.map((_, index) => ({
+            x: startX + index * (physicsConfig.size + gap),
+            y: startY
+        }));
+    }
+
+    function applyDrift() {
+        bodies.forEach(body => {
+            applyDriftToBody(body);
+        });
+    }
+
+    function applyDriftToBody(body) {
+        body.vx = (Math.random() - 0.5) * 0.05;
+        body.vy = (Math.random() - 0.5) * 0.05;
+        body.rotSpeedX = (Math.random() - 0.5) * 0.2;
+        body.rotSpeedY = (Math.random() - 0.5) * 0.2;
+        body.rotSpeedZ = (Math.random() - 0.5) * 0.1;
+    }
+
+    function createFocusImage() {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'logo-focus-image';
+        const img = document.createElement('img');
+        img.alt = '';
+        wrapper.appendChild(img);
+        document.body.appendChild(wrapper);
+
+        return { wrapper, img };
+    }
+
+    function createFocusBackdrop() {
+        const backdrop = document.createElement('div');
+        backdrop.className = 'logo-focus-backdrop';
+        document.body.appendChild(backdrop);
+        return backdrop;
+    }
+
+    const focusBackdrop = createFocusBackdrop();
+    const focusImage = createFocusImage();
+
+    function showFocusImage(body) {
+        const imgEl = body.element.querySelector('.face.front img');
+        if (!imgEl) return;
+        focusImage.img.src = imgEl.getAttribute('src');
+        focusImage.img.alt = body.element.dataset.title || 'App logo';
+        focusImage.wrapper.style.opacity = '';
+        focusImage.wrapper.style.transform = '';
+        focusImage.wrapper.classList.add('is-visible');
+        focusBackdrop.classList.add('is-visible');
+    }
+
+    function hideFocusImage() {
+        focusImage.wrapper.classList.remove('is-visible');
+        focusImage.wrapper.style.opacity = '';
+        focusImage.wrapper.style.transform = '';
+        focusBackdrop.classList.remove('is-visible');
+    }
+
+    function focusLogo(body) {
+        if (!body) return;
+        if (focusedBody === body) {
+            clearFocus();
+            return;
+        }
+        if (focusedBody) {
+            focusedBody.isFocused = false;
+            focusedBody.element.classList.remove('is-focused');
+            applyDriftToBody(focusedBody);
+        }
+
+        focusedBody = body;
+        body.isFocused = true;
+        body.isReturning = false;
+        body.returnX = body.x;
+        body.returnY = body.y;
+        body.isDragging = false;
+        body.vx = 0;
+        body.vy = 0;
+        body.rotationX = 0;
+        body.rotationY = 0;
+        body.rotationZ = 0;
+        body.rotSpeedX = 0;
+        body.rotSpeedY = 0;
+        body.rotSpeedZ = 0;
+        body.element.classList.add('is-focused');
+        showFocusImage(body);
+    }
+
+    function clearFocus() {
+        if (!focusedBody) return;
+        const body = focusedBody;
+        body.isFocused = false;
+        body.isReturning = true;
+        body.element.classList.remove('is-focused');
+        focusedBody = null;
+        hideFocusImage();
+    }
+
+    function resetLogosToInitialPositions() {
+        if (!isInitialized) return;
+        if (focusedBody) {
+            clearFocus();
+        }
+        initialPositions = computeInitialPositions();
+        if (initialPositions.length === 0) return;
+
+        if (driftTimer) clearTimeout(driftTimer);
+        if (resetAnimationFrame) cancelAnimationFrame(resetAnimationFrame);
+        if (activeDrag) {
+            activeDrag.body.isDragging = false;
+            activeDrag = null;
+        }
+
+        const starts = bodies.map(body => ({
+            x: body.x,
+            y: body.y,
+            rotationX: body.rotationX,
+            rotationY: body.rotationY,
+            rotationZ: body.rotationZ
+        }));
+        const startTime = performance.now();
+        const duration = 650;
+        const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+
+        isResetting = true;
+        const step = now => {
+            const t = Math.min(1, (now - startTime) / duration);
+            const eased = easeOutCubic(t);
+
+            bodies.forEach((body, index) => {
+                const pos = initialPositions[index];
+                const start = starts[index];
+                if (!pos || !start) return;
+                body.x = start.x + (pos.x - start.x) * eased;
+                body.y = start.y + (pos.y - start.y) * eased;
+                body.vx = 0;
+                body.vy = 0;
+                body.rotationX = start.rotationX * (1 - eased);
+                body.rotationY = start.rotationY * (1 - eased);
+                body.rotationZ = start.rotationZ * (1 - eased);
+                body.rotSpeedX = 0;
+                body.rotSpeedY = 0;
+                body.rotSpeedZ = 0;
+                body.isHovered = false;
+                body.bugCooldown = false;
+                body.isFocused = false;
+                body.isReturning = false;
+                body.focusProgress = 0;
+            });
+
+            if (t < 1) {
+                resetAnimationFrame = requestAnimationFrame(step);
+            } else {
+                resetAnimationFrame = null;
+                isResetting = false;
+                applyDrift();
+            }
+        };
+
+        resetAnimationFrame = requestAnimationFrame(step);
+    }
+
+    window.__resetAppLogos = resetLogosToInitialPositions;
+
+    function initPhysics() {
+        // Fallback if dimensions are 0 (hidden)
+        const { width: w, height: h } = getContainerBounds();
         console.log(`[Physics] Init. Width: ${w}, Height: ${h}`);
 
         logos = Array.from(document.querySelectorAll('.app-logo'));
@@ -478,10 +677,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // RESPONSIVE CONFIGURATION
         // -----------------------------------------------------
         const isMobile = window.innerWidth < 768;
-        const BASE_SIZE = 65;
-        // User Request: "make it more smaller in mobile version"
-        // Previous was 0.9 (60% of 1.5). Let's go to 0.7.
-        const targetScale = isMobile ? 0.7 : 1.5;
+        const BASE_SIZE = 195;
+        // Keep the same visual size after increasing the render base size.
+        const targetScale = isMobile ? 0.25 : 0.5;
 
         physicsConfig.scale = targetScale;
         physicsConfig.size = BASE_SIZE * targetScale;
@@ -502,7 +700,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // We need high density to simulate a solid block.
             // Spacing 0.5px from -9.5 to 9.5 (just inside the 10/-10 caps)
-            for (let z = -9.5; z <= 9.5; z += 0.5) {
+            for (let z = -10; z <= 10; z += 1) {
                 const layer = document.createElement('div');
                 layer.className = 'face layer';
                 layer.style.transform = `translateZ(${z}px)`;
@@ -512,18 +710,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Linear Start Configuration
-        const totalLogos = logos.length;
-        const gap = 20 * physicsConfig.scale;
-
-        const totalWidth = totalLogos * physicsConfig.size + (totalLogos - 1) * gap;
-
-        // Strictly center based on CURRENT REAL WIDTH
-        let startX = (w - totalWidth) / 2;
-        const startY = (h - physicsConfig.size) / 2;
+        const positions = computeInitialPositions();
+        initialPositions = positions;
 
         bodies = logos.map((el, index) => {
-            const x = startX + index * (physicsConfig.size + gap);
-            const y = startY;
+            const position = positions[index] || { x: 0, y: 0 };
+            const x = position.x;
+            const y = position.y;
 
             el.classList.add('active');
 
@@ -536,6 +729,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 radius: physicsConfig.size / 2,
                 mass: 1,
                 isHovered: false,
+                isDragging: false,
+                isFocused: false,
+                isReturning: false,
+                focusProgress: 0,
+                returnX: 0,
+                returnY: 0,
                 // 3D Rotations
                 rotationX: 0,
                 rotationY: 0,
@@ -548,20 +747,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         isInitialized = true;
+        if (!interactionsAttached) {
+            setupDragHandlers();
+            interactionsAttached = true;
+        }
         update();
 
         // 2s Delay sequence
-        setTimeout(() => {
-            bodies.forEach(body => {
-                // Slower Drift Start
-                body.vx = (Math.random() - 0.5) * 0.05;
-                body.vy = (Math.random() - 0.5) * 0.05;
-
-                // Random 3D Tumble speeds
-                body.rotSpeedX = (Math.random() - 0.5) * 0.4;
-                body.rotSpeedY = (Math.random() - 0.5) * 0.4;
-                body.rotSpeedZ = (Math.random() - 0.5) * 0.2;
-            });
+        driftTimer = setTimeout(() => {
+            applyDrift();
         }, 2000);
     }
 
@@ -595,6 +789,9 @@ document.addEventListener('DOMContentLoaded', () => {
             b1.vy += ny * (v1nFinal - v1n);
             b2.vx += nx * (v2nFinal - v2n);
             b2.vy += ny * (v2nFinal - v2n);
+
+            dampenSpeed(b1);
+            dampenSpeed(b2);
         }
     }
 
@@ -602,14 +799,58 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isInitialized) return;
 
         bodies.forEach((body, i) => {
-            // 1. Update Position
-            body.x += body.vx;
-            body.y += body.vy;
+            const focusTarget = body.isFocused ? 1 : 0;
+            body.focusProgress += (focusTarget - body.focusProgress) * FOCUS.progressLerp;
 
-            // 3D Rotation Updates
-            body.rotationX += body.rotSpeedX;
-            body.rotationY += body.rotSpeedY;
-            body.rotationZ += body.rotSpeedZ;
+            // 1. Update Position
+            if (body.isFocused) {
+                const { width: w, height: h } = getContainerBounds();
+                const targetX = (w - physicsConfig.size) / 2;
+                const targetY = (h - physicsConfig.size) / 2;
+                body.x += (targetX - body.x) * FOCUS.centerPull;
+                body.y += (targetY - body.y) * FOCUS.centerPull;
+                body.vx = 0;
+                body.vy = 0;
+                body.rotSpeedX = 0;
+                body.rotSpeedY = 0;
+                body.rotSpeedZ = 0;
+            } else if (body.isReturning) {
+                body.x += (body.returnX - body.x) * 0.2;
+                body.y += (body.returnY - body.y) * 0.2;
+                body.vx = 0;
+                body.vy = 0;
+                body.rotSpeedX = 0;
+                body.rotSpeedY = 0;
+                body.rotSpeedZ = 0;
+                body.rotationX += (0 - body.rotationX) * 0.2;
+                body.rotationY += (0 - body.rotationY) * 0.2;
+                body.rotationZ += (0 - body.rotationZ) * 0.2;
+
+                const dist = Math.hypot(body.returnX - body.x, body.returnY - body.y);
+                if (dist < 0.6) {
+                    body.x = body.returnX;
+                    body.y = body.returnY;
+                    body.rotationX = 0;
+                    body.rotationY = 0;
+                    body.rotationZ = 0;
+                    body.isReturning = false;
+                    applyDriftToBody(body);
+                }
+            } else if (!body.isDragging) {
+                body.x += body.vx;
+                body.y += body.vy;
+
+                // 3D Rotation Updates
+                body.rotationX += body.rotSpeedX;
+                body.rotationY += body.rotSpeedY;
+                body.rotationZ += body.rotSpeedZ;
+            } else {
+                body.vx = 0;
+                body.vy = 0;
+                body.rotSpeedX = 0;
+                body.rotSpeedY = 0;
+                body.rotSpeedZ = 0;
+            }
 
             // Constrain All Axes Rotation to [-40, 40] (User Preference)
             const limit = 40;
@@ -626,84 +867,97 @@ document.addEventListener('DOMContentLoaded', () => {
             if (body.rotationZ > limit) { body.rotationZ = limit; body.rotSpeedZ = -Math.abs(body.rotSpeedZ); }
             if (body.rotationZ < -limit) { body.rotationZ = -limit; body.rotSpeedZ = Math.abs(body.rotSpeedZ); }
 
-            // 2. Wall Collisions
-            // Constrain to HERO SECTION explicitly
-            const hero = document.querySelector('.hero');
-            const heroRect = hero.getBoundingClientRect();
-            const rect = container.getBoundingClientRect();
+            if (!body.isFocused && !body.isDragging && !body.isReturning) {
+                // 2. Wall Collisions
+                // Constrain to HERO SECTION explicitly
+                const hero = document.querySelector('.hero');
+                const heroRect = hero.getBoundingClientRect();
+                const rect = container.getBoundingClientRect();
 
-            // Use Dynamic Configuration
-            const physicsSize = physicsConfig.size;
+                // Use Dynamic Configuration
+                const physicsSize = physicsConfig.size;
 
-            // Calculate bounds relative to the container's local coordinate system
-            // minX is how far left the container is from the hero's left edge (negative value)
-            const minX = -(rect.left - heroRect.left);
-            const maxX = heroRect.width - (rect.left - heroRect.left) - physicsSize;
+                // Calculate bounds relative to the container's local coordinate system
+                // minX is how far left the container is from the hero's left edge (negative value)
+                const minX = -(rect.left - heroRect.left);
+                const maxX = heroRect.width - (rect.left - heroRect.left) - physicsSize;
 
-            const minY = -(rect.top - heroRect.top);
-            const maxY = heroRect.height - (rect.top - heroRect.top) - physicsSize;
+                const minY = -(rect.top - heroRect.top);
+                const maxY = heroRect.height - (rect.top - heroRect.top) - physicsSize;
 
-            // Fail-safe (relaxed for full screen)
-            if (isNaN(body.x)) {
-                body.x = 0;
-                body.vx = 0;
+                // Fail-safe (relaxed for full screen)
+                if (isNaN(body.x)) {
+                    body.x = 0;
+                    body.vx = 0;
+                }
+
+                let hitWall = false;
+                if (body.x < minX) { body.x = minX; body.vx = Math.abs(body.vx); hitWall = true; }
+                if (body.x > maxX) { body.x = maxX; body.vx = -Math.abs(body.vx); hitWall = true; }
+                if (body.y < minY) { body.y = minY; body.vy = Math.abs(body.vy); hitWall = true; }
+                if (body.y > maxY) { body.y = maxY; body.vy = -Math.abs(body.vy); hitWall = true; }
+                if (hitWall) {
+                    dampenSpeed(body);
+                }
             }
 
-            if (body.x < minX) { body.x = minX; body.vx = Math.abs(body.vx); }
-            if (body.x > maxX) { body.x = maxX; body.vx = -Math.abs(body.vx); }
-            if (body.y < minY) { body.y = minY; body.vy = Math.abs(body.vy); }
-            if (body.y > maxY) { body.y = maxY; body.vy = -Math.abs(body.vy); }
+            if (!isResetting && !body.isDragging && !body.isFocused && !body.isReturning) {
+                // 3. Object Collisions
+                for (let j = i + 1; j < bodies.length; j++) {
+                    if (bodies[j].isDragging || bodies[j].isFocused || bodies[j].isReturning) continue;
+                    resolveCollision(body, bodies[j]);
+                }
 
-            // 3. Object Collisions
-            for (let j = i + 1; j < bodies.length; j++) {
-                resolveCollision(body, bodies[j]);
-            }
+                // 4. Ladybug Collision - Check if the ladybug is touching this logo
+                const ladybug = document.querySelector('.ladybug');
+                if (ladybug) {
+                    const bugRect = ladybug.getBoundingClientRect();
+                    const logoRect = body.element.getBoundingClientRect();
 
-            // 4. Ladybug Collision - Check if the ladybug is touching this logo
-            const ladybug = document.querySelector('.ladybug');
-            if (ladybug) {
-                const bugRect = ladybug.getBoundingClientRect();
-                const logoRect = body.element.getBoundingClientRect();
+                    // Calculate centers
+                    const bugCenterX = bugRect.left + bugRect.width / 2;
+                    const bugCenterY = bugRect.top + bugRect.height / 2;
+                    const logoCenterX = logoRect.left + logoRect.width / 2;
+                    const logoCenterY = logoRect.top + logoRect.height / 2;
 
-                // Calculate centers
-                const bugCenterX = bugRect.left + bugRect.width / 2;
-                const bugCenterY = bugRect.top + bugRect.height / 2;
-                const logoCenterX = logoRect.left + logoRect.width / 2;
-                const logoCenterY = logoRect.top + logoRect.height / 2;
+                    // Distance between centers
+                    const dx = logoCenterX - bugCenterX;
+                    const dy = logoCenterY - bugCenterY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
 
-                // Distance between centers
-                const dx = logoCenterX - bugCenterX;
-                const dy = logoCenterY - bugCenterY;
-                const distance = Math.sqrt(dx * dx + dy * dy);
+                    // Collision threshold - increased to 80px for better detection
+                    const collisionDist = 80;
 
-                // Collision threshold - increased to 80px for better detection
-                const collisionDist = 80;
+                    if (distance < collisionDist && !body.bugCooldown) {
+                        // Apply push force
+                        const pushStrength = 0.3;
+                        body.vx += (dx / distance) * pushStrength;
+                        body.vy += (dy / distance) * pushStrength;
 
-                if (distance < collisionDist && !body.bugCooldown) {
-                    // Apply push force
-                    const pushStrength = 0.3;
-                    body.vx += (dx / distance) * pushStrength;
-                    body.vy += (dy / distance) * pushStrength;
+                        // Add rotation wobble
+                        body.rotSpeedX += (Math.random() - 0.5) * 0.2;
+                        body.rotSpeedY += (Math.random() - 0.5) * 0.2;
 
-                    // Add rotation wobble
-                    body.rotSpeedX += (Math.random() - 0.5) * 0.4;
-                    body.rotSpeedY += (Math.random() - 0.5) * 0.4;
-
-                    // Pause bug + show message on impact
+                        // Pause bug + show message on impact
 if (typeof window.__ladybugLogoCollision === "function") {
     window.__ladybugLogoCollision();
 }
+                        dampenSpeed(body);
 
-                    // Cooldown to prevent rapid collisions
-                    body.bugCooldown = true;
-                    setTimeout(() => { body.bugCooldown = false; }, 500);
+                        // Cooldown to prevent rapid collisions
+                        body.bugCooldown = true;
+                        setTimeout(() => { body.bugCooldown = false; }, 500);
+                    }
                 }
             }
 
             // 4. Update DOM with 3D Transforms
             // Scale logic: Base from config
             const baseScale = physicsConfig.scale;
-            const currentScale = body.isHovered ? baseScale * 1.15 : baseScale;
+            const hoverScale = body.isHovered && !body.isFocused ? 1.15 : 1;
+            const focusScale = 1 + body.focusProgress * FOCUS.scaleBoost;
+            const currentScale = baseScale * hoverScale * focusScale;
+            const displayRotationY = body.rotationY + body.focusProgress * FOCUS.flipDeg;
 
             // Offset logic: Align visual center (65px element) with physics center
             const displayX = body.x + physicsConfig.offset;
@@ -712,10 +966,16 @@ if (typeof window.__ladybugLogoCollision === "function") {
             body.element.style.transform = `
                 translate3d(${displayX}px, ${displayY}px, 0) 
                 rotateX(${body.rotationX}deg) 
-                rotateY(${body.rotationY}deg) 
+                rotateY(${displayRotationY}deg) 
                 rotateZ(${body.rotationZ}deg) 
                 scale(${currentScale})
             `;
+
+            if (focusedBody) {
+                const focusScaleValue = 1 + focusedBody.focusProgress * 0.35;
+                focusImage.wrapper.style.transform = `translate(-50%, -50%) scale(${focusScaleValue}) rotateY(${focusedBody.focusProgress * FOCUS.flipDeg}deg)`;
+                focusImage.wrapper.style.opacity = focusedBody.focusProgress;
+            }
         });
 
         requestAnimationFrame(update);
@@ -750,4 +1010,75 @@ if (typeof window.__ladybugLogoCollision === "function") {
         el.addEventListener('mouseenter', () => { if (bodies[i]) bodies[i].isHovered = true; });
         el.addEventListener('mouseleave', () => { if (bodies[i]) bodies[i].isHovered = false; });
     });
+
+    function setupDragHandlers() {
+        const dragThreshold = 6;
+        logos.forEach((el, index) => {
+            const body = bodies[index];
+            if (!body) return;
+
+            el.style.touchAction = 'none';
+
+            el.addEventListener('pointerdown', event => {
+                if (isResetting) return;
+                activeDrag = {
+                    body,
+                    startX: event.clientX,
+                    startY: event.clientY,
+                    lastX: event.clientX,
+                    lastY: event.clientY
+                };
+                el.setPointerCapture(event.pointerId);
+                event.preventDefault();
+            });
+
+            el.addEventListener('pointermove', event => {
+                if (!activeDrag || activeDrag.body !== body) return;
+                const totalDx = event.clientX - activeDrag.startX;
+                const totalDy = event.clientY - activeDrag.startY;
+                if (!body.isDragging && Math.hypot(totalDx, totalDy) > dragThreshold) {
+                    body.isDragging = true;
+                    if (body.isFocused) {
+                        clearFocus();
+                    }
+                    body.vx = 0;
+                    body.vy = 0;
+                    body.rotSpeedX = 0;
+                    body.rotSpeedY = 0;
+                    body.rotSpeedZ = 0;
+                }
+                if (!body.isDragging) return;
+                const dx = event.clientX - activeDrag.lastX;
+                const dy = event.clientY - activeDrag.lastY;
+                body.x += dx;
+                body.y += dy;
+                activeDrag.lastX = event.clientX;
+                activeDrag.lastY = event.clientY;
+            });
+
+            const endDrag = event => {
+                if (!activeDrag || activeDrag.body !== body) return;
+                const wasDragging = body.isDragging;
+                body.isDragging = false;
+                if (wasDragging) {
+                    applyDriftToBody(body);
+                } else if (event && event.type === 'pointerup') {
+                    focusLogo(body);
+                }
+                activeDrag = null;
+            };
+
+            el.addEventListener('pointerup', endDrag);
+            el.addEventListener('pointercancel', endDrag);
+            el.addEventListener('lostpointercapture', endDrag);
+        });
+    }
+
+    document.addEventListener('pointerdown', event => {
+        if (!focusedBody) return;
+        if (event.target.closest('.app-logo')) return;
+        if (event.target.closest('.logo-focus-image')) return;
+        clearFocus();
+    });
+
 });

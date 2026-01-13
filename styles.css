@@ -649,24 +649,24 @@
  }
 
  /* App Logos Container (Physics Arena) */
- .app-logos-container {
-     display: block;
-     position: relative;
-     width: 100%;
-     max-width: 800px;
-     height: 300px;
-     /* Ample space */
-     margin: 40px auto;
-     overflow: visible;
-     background: transparent;
-     perspective: 1000px;
- }
+.app-logos-container {
+    display: block;
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    height: 300px;
+    /* Ample space */
+    margin: 40px auto;
+    overflow: visible;
+    background: transparent;
+    perspective: 1000px;
+}
 
- .app-logo {
-     width: 65px;
-     height: 65px;
-     position: absolute;
-     /* Physics positioning */
+.app-logo {
+    width: 195px;
+    height: 195px;
+    position: absolute;
+    /* Physics positioning */
      top: 0;
      left: 0;
      margin: 0;
@@ -674,10 +674,91 @@
      background-color: transparent;
      box-shadow: none;
      cursor: pointer;
-     will-change: transform;
-     transform-style: preserve-3d;
-     z-index: 10;
- }
+    will-change: transform;
+    transform-style: preserve-3d;
+    z-index: 10;
+}
+
+.app-logo.is-focused {
+    z-index: 30;
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+
+.logo-focus-image {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: min(210px, 35vw);
+    aspect-ratio: 1 / 1;
+    transform: translate(-50%, -50%) scale(0.92);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms ease, transform 240ms ease;
+    z-index: 20000;
+    background: transparent;
+    isolation: isolate;
+}
+
+.logo-focus-image::before {
+    content: "";
+    position: absolute;
+    inset: -12% -8% 8%;
+    background: radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 60%);
+    opacity: 0;
+    mix-blend-mode: screen;
+    transition: opacity 240ms ease;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.logo-focus-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(12, 12, 12, 0.55);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 220ms ease;
+    z-index: 19990;
+}
+
+.logo-focus-backdrop.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.logo-focus-image img {
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+}
+
+.logo-focus-image.is-visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.logo-focus-image.is-visible::before {
+    opacity: 0.9;
+}
+
+.logo-focus-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+    display: block;
+    position: relative;
+    z-index: 1;
+    -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMDAgMTAwJz48cmVjdCB4PScwJyB5PScwJyB3aWR0aD0nMTAwJyBoZWlnaHQ9JzEwMCcgcng9JzIyJyByeT0nMjInIGZpbGw9J3doaXRlJy8+PC9zdmc+");
+    mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMDAgMTAwJz48cmVjdCB4PScwJyB5PScwJyB3aWR0aD0nMTAwJyBoZWlnaHQ9JzEwMCcgcng9JzIyJyByeT0nMjInIGZpbGw9J3doaXRlJy8+PC9zdmc+");
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+}
 
  /* The Cube Container */
  .cube {
@@ -690,11 +771,11 @@
  }
 
  /* Common Face Styles */
- .face {
-     position: absolute;
-     width: 65px;
-     height: 65px;
-     border-radius: 12px;
+.face {
+    position: absolute;
+    width: 195px;
+    height: 195px;
+    border-radius: 36px;
      background: #e0e0e0;
      /* Fallback grey body */
      border: 1px solid rgba(0, 0, 0, 0.1);
@@ -702,19 +783,19 @@
  }
 
  /* Face Transforms directly constructing a 20px thick brick */
- .face.front {
-     transform: translateZ(10px);
-     background: transparent;
-     border: none;
-     box-shadow: none;
-     /* Radius handled by img, but let's match just in case */
-     border-radius: 18px;
- }
+.face.front {
+    transform: translateZ(10px);
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    /* Radius handled by img, but let's match just in case */
+    border-radius: 54px;
+}
 
- .face.front img {
-     width: 65px;
-     height: 65px;
-     border-radius: 18px;
+.face.front img {
+    width: 195px;
+    height: 195px;
+    border-radius: 54px;
      object-fit: cover;
      display: block;
      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
@@ -723,10 +804,10 @@
  }
 
  /* Stacked Layer Styles for smooth rounded extrusion */
- .face.layer {
-     width: 65px;
-     height: 65px;
-     border-radius: 18px;
+.face.layer {
+    width: 195px;
+    height: 195px;
+    border-radius: 54px;
      /* Match the icon radius */
      background: #444;
      /* Dark grey body color */
@@ -738,20 +819,20 @@
  }
 
  /* Ensure Front/Back stay on top/bottom of stack */
- .face.front {
-     transform: translateZ(10px);
-     background: transparent;
-     border: none;
-     box-shadow: none;
-     border-radius: 18px;
+.face.front {
+    transform: translateZ(10px);
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 54px;
      z-index: 2;
  }
 
- .face.back {
-     transform: translateZ(-9.5px) rotateY(180deg);
-     /* Slight inset to mesh with stack */
-     background: #333;
-     border-radius: 18px;
+.face.back {
+    transform: translateZ(-10px) rotateY(180deg);
+    /* Slight inset to mesh with stack */
+    background: #333;
+    border-radius: 54px;
      border: 1px solid rgba(255, 255, 255, 0.05);
      z-index: 1;
  }
