@@ -38,6 +38,8 @@ document.addEventListener('DOMContentLoaded', function () {
     let isStopped = false;
     let foodTarget = null;
     let foodEl = null;
+    let bugAlive = true;
+    let trapLevel = 0;
 
     // Centralized stop-state so multiple features can pause the bug without fighting each other.
     const stopReasons = new Set();
@@ -245,8 +247,11 @@ setStopped("intro", true);
         }
     }
     // Kill Bug
-    function killbug() {
-        if (!isStopped) {
+    function killbug(force) {
+        if (!isStopped || force) {
+            if (!bugAlive && !force) return;
+            bugAlive = false;
+            trapLevel = 0;
 setStopped("kill", true);
             ladybug.src = ladybugImages[1];
             heroText.innerHTML = 'with expertise in Swift, SwiftUI, React, and Node.js, building high-performance iOS and web applications tailored to client needs.I focus on delivering seamless user experiences with scalable, maintainable solutions.';
@@ -260,9 +265,20 @@ setStopped("kill", true);
             setTimeout(() => {
 setStopped("kill", false);
                 ladybug.src = ladybugImages[0];
+                bugAlive = true;
             }, 10000);
         }
     }
+
+    window.__killLadybug = function () {
+        killbug(true);
+    };
+    window.__isLadybugAlive = function () {
+        return bugAlive;
+    };
+    window.__setLadybugTrap = function (level) {
+        trapLevel = Math.max(0, Math.min(1, Number(level) || 0));
+    };
     //Animate and Move
     let isTargetingLogos = true; // Start by targeting logos
 let hasLogoCollision = false; // After first logo hit, always use random movement/speed
@@ -349,8 +365,21 @@ if (!foodTarget && isTargetingLogos && !hasLogoCollision) {
                 }
 
 
-                x += dx;
-                y += dy;
+                const trapSlowdown = 1 - trapLevel * 0.75;
+                if (trapLevel > 0.35) {
+                    const time = performance.now();
+                    const struggle = trapLevel * 0.35;
+                    dx += Math.sin(time / 65) * struggle;
+                    dy += Math.cos(time / 58) * struggle;
+                    dx += (Math.random() - 0.5) * trapLevel * 0.25;
+                    dy += (Math.random() - 0.5) * trapLevel * 0.25;
+                }
+                if (trapLevel > 0.7) {
+                    dx += (Math.random() - 0.5) * trapLevel * 0.45;
+                    dy += (Math.random() - 0.5) * trapLevel * 0.45;
+                }
+                x += dx * trapSlowdown;
+                y += dy * trapSlowdown;
 
                 // LOGO AVOIDANCE - Only when NOT targeting (random mode)
                 // When targeting, we want to approach the logo
@@ -396,8 +425,13 @@ if (!foodTarget && isTargetingLogos && !hasLogoCollision) {
                     y = 0;
                 }
 
+                const now = performance.now();
                 const rotation = calculateRotation(dx, dy);
-                ladybug.style.transform = `translate(${x}px, ${y}px) rotate(${rotation + 90}deg)`;
+                const shakeStrength = trapLevel > 0.6 ? (trapLevel - 0.6) * 16 : 0;
+                const jitterX = shakeStrength ? (Math.random() - 0.5) * shakeStrength : 0;
+                const jitterY = shakeStrength ? (Math.random() - 0.5) * shakeStrength : 0;
+                const wobble = trapLevel > 0.4 ? Math.sin(now / 55) * trapLevel * 14 : 0;
+                ladybug.style.transform = `translate(${x + jitterX}px, ${y + jitterY}px) rotate(${rotation + 90 + wobble}deg)`;
                 bugMessage.style.transform = `translate(${x + 10}px, ${y + -50}px)`;
                 checkCollision();
             }
@@ -1366,18 +1400,32 @@ document.addEventListener('DOMContentLoaded', () => {
     let width = 0;
     let height = 0;
     let nodes = [];
+    const baseNodeDensity = 20;
+    let baseNodeCount = 0;
+    let maxNodes = 0;
+    let spawnCooldown = 0;
+    const targetConvergeCount = 8;
+    let trapStartAt = null;
+    let roamUntil = 0;
+    let wasBugInSection = false;
+    let lastBugAlive = true;
 
     const pointer = {
         x: 0,
         y: 0,
         active: false
     };
+    let squeeze = 0;
+    let trapProgress = 0;
+    let lastKillAt = 0;
 
     function resize() {
         const dpr = window.devicePixelRatio || 1;
         const target = section || canvas.parentElement || canvas;
         width = target.clientWidth || 520;
         height = target.clientHeight || 420;
+        baseNodeCount = Math.max(18, Math.round(width / baseNodeDensity));
+        maxNodes = Math.min(120, baseNodeCount + 30);
         canvas.width = width * dpr;
         canvas.height = height * dpr;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -1392,18 +1440,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function createNodes() {
-        const count = Math.max(18, Math.round(width / 28));
+        const count = baseNodeCount || Math.max(18, Math.round(width / baseNodeDensity));
         nodes = Array.from({ length: count }, () => ({
             x: Math.random() * width,
             y: Math.random() * height,
-            vx: (Math.random() - 0.5) * 0.5,
-            vy: (Math.random() - 0.5) * 0.5,
+            vx: (Math.random() - 0.5) * 0.3,
+            vy: (Math.random() - 0.5) * 0.3,
             pulse: 0
         }));
     }
 
     function update() {
         ctx.clearRect(0, 0, width, height);
+        const now = performance.now();
+        let bugInSection = false;
+        let bugX = 0;
+        let bugY = 0;
+        let closeCount = 0;
+        let convergeCount = 0;
+        let minDist = Infinity;
+        const ladybug = document.querySelector('.ladybug');
+        const bugAlive = typeof window.__isLadybugAlive === "function" ? window.__isLadybugAlive() : true;
+        if (ladybug && section && bugAlive) {
+            const bugRect = ladybug.getBoundingClientRect();
+            const sectionRect = section.getBoundingClientRect();
+            const bugCenterX = bugRect.left + bugRect.width / 2;
+            const bugCenterY = bugRect.top + bugRect.height / 2;
+            bugInSection = bugCenterX >= sectionRect.left && bugCenterX <= sectionRect.right &&
+                bugCenterY >= sectionRect.top && bugCenterY <= sectionRect.bottom;
+            if (bugInSection) {
+                const canvasRect = canvas.getBoundingClientRect();
+                bugX = bugCenterX - canvasRect.left;
+                bugY = bugCenterY - canvasRect.top;
+            }
+        }
+        if (bugInSection && (!wasBugInSection || (!lastBugAlive && bugAlive))) {
+            roamUntil = now + 2000;
+        }
+        if (!bugInSection || !bugAlive) {
+            roamUntil = 0;
+        }
+        const trapActive = bugInSection && bugAlive && now >= roamUntil;
+
+        if (spawnCooldown > 0) spawnCooldown -= 1;
 
         nodes.forEach(node => {
             node.x += node.vx;
@@ -1422,8 +1501,99 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
+            if (trapActive) {
+                const dx = bugX - node.x;
+                const dy = bugY - node.y;
+                const dist = Math.hypot(dx, dy);
+                minDist = Math.min(minDist, dist);
+                if (dist < 220 && dist > 0) {
+                    const pull = 0.02 + squeeze * 0.06;
+                    node.vx += (dx / dist) * pull;
+                    node.vy += (dy / dist) * pull;
+                    closeCount += 1;
+                }
+                if (dist < 130) {
+                    convergeCount += 1;
+                }
+            }
+
             node.pulse = Math.max(0, node.pulse - 0.02);
         });
+
+        const proximityScore = trapActive && minDist < Infinity ? Math.max(0, 1 - minDist / 240) : 0;
+        const densityScore = trapActive ? Math.min(1, closeCount / 6) : 0;
+
+        if (trapActive) {
+            const build = 0.003 + proximityScore * 0.02 + densityScore * 0.03;
+            trapProgress = Math.min(1, trapProgress + build);
+        } else {
+            trapProgress = Math.max(0, trapProgress - 0.035);
+            trapStartAt = null;
+        }
+
+        const squeezeTarget = trapActive
+            ? Math.max(trapProgress, proximityScore * 0.6 + densityScore * 0.4)
+            : 0;
+        squeeze += (squeezeTarget - squeeze) * 0.1;
+
+        if (typeof window.__setLadybugTrap === "function") {
+            window.__setLadybugTrap(trapActive ? squeeze : 0);
+        }
+
+        if (trapActive && squeeze > 0.2 && trapStartAt === null) {
+            trapStartAt = now;
+        }
+        if (!trapActive || squeeze <= 0.2) {
+            trapStartAt = null;
+        }
+
+        const needsReinforce = trapStartAt !== null && now - trapStartAt > 2000 &&
+            convergeCount < targetConvergeCount;
+
+        if (needsReinforce && spawnCooldown <= 0 && nodes.length < maxNodes) {
+            const spawnCount = Math.min(1, maxNodes - nodes.length);
+            for (let i = 0; i < spawnCount; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const radius = 70 + Math.random() * 90;
+                const nx = Math.min(width - 10, Math.max(10, bugX + Math.cos(angle) * radius));
+                const ny = Math.min(height - 10, Math.max(10, bugY + Math.sin(angle) * radius));
+                nodes.push({
+                    x: nx,
+                    y: ny,
+                    vx: (Math.random() - 0.5) * 0.35,
+                    vy: (Math.random() - 0.5) * 0.35,
+                    pulse: 0
+                });
+            }
+            spawnCooldown = 10;
+        }
+
+        if (needsReinforce && nodes.length >= maxNodes) {
+            const ranked = nodes
+                .map(node => ({
+                    node,
+                    dist: Math.hypot(bugX - node.x, bugY - node.y)
+                }))
+                .sort((a, b) => b.dist - a.dist);
+            let moved = 0;
+            for (const entry of ranked) {
+                if (entry.dist < 220) break;
+                const angle = Math.random() * Math.PI * 2;
+                const radius = 60 + Math.random() * 80;
+                entry.node.x = Math.min(width - 10, Math.max(10, bugX + Math.cos(angle) * radius));
+                entry.node.y = Math.min(height - 10, Math.max(10, bugY + Math.sin(angle) * radius));
+                entry.node.vx = (Math.random() - 0.5) * 0.35;
+                entry.node.vy = (Math.random() - 0.5) * 0.35;
+                entry.node.pulse = 0;
+                moved += 1;
+                if (moved >= 1) break;
+            }
+        }
+
+        const baseCount = baseNodeCount || Math.max(18, Math.round(width / baseNodeDensity));
+        if (!bugInSection && nodes.length > baseCount) {
+            nodes.splice(baseCount, nodes.length - baseCount);
+        }
 
         for (let i = 0; i < nodes.length; i++) {
             for (let j = i + 1; j < nodes.length; j++) {
@@ -1442,6 +1612,41 @@ document.addEventListener('DOMContentLoaded', () => {
                     ctx.stroke();
                 }
             }
+        }
+
+        if (trapActive) {
+            nodes.forEach(node => {
+                const dx = bugX - node.x;
+                const dy = bugY - node.y;
+                const dist = Math.hypot(dx, dy);
+                if (dist < 180) {
+                    const alpha = 0.12 + (1 - dist / 180) * 0.6 * squeeze;
+                    ctx.strokeStyle = `rgba(180, 230, 255, ${alpha})`;
+                    ctx.lineWidth = 1.3 + squeeze * 0.9;
+                    ctx.beginPath();
+                    ctx.moveTo(node.x, node.y);
+                    ctx.lineTo(bugX, bugY);
+                    ctx.stroke();
+                }
+            });
+
+            const ringRadius = 50 - squeeze * 20;
+            ctx.fillStyle = `rgba(120, 200, 255, ${0.1 * squeeze})`;
+            ctx.beginPath();
+            ctx.arc(bugX, bugY, ringRadius * 1.25, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = `rgba(200, 240, 255, ${0.4 + squeeze * 0.55})`;
+            ctx.lineWidth = 1.8 + squeeze * 1.1;
+            ctx.beginPath();
+            ctx.arc(bugX, bugY, ringRadius, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.strokeStyle = `rgba(170, 220, 255, ${0.25 + squeeze * 0.4})`;
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.arc(bugX, bugY, ringRadius + 10, 0, Math.PI * 2);
+            ctx.stroke();
         }
 
         nodes.forEach(node => {
@@ -1463,6 +1668,18 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.fill();
         });
 
+        const shouldKill = trapActive &&
+            convergeCount >= targetConvergeCount - 1 &&
+            (squeeze > 0.9 || (minDist < 22 && squeeze > 0.75));
+        if (shouldKill && now - lastKillAt > 2500) {
+            if (typeof window.__killLadybug === "function") {
+                window.__killLadybug();
+            }
+            lastKillAt = now;
+        }
+
+        wasBugInSection = bugInSection;
+        lastBugAlive = bugAlive;
         requestAnimationFrame(update);
     }
 
