@@ -36,6 +36,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const maxSpeed = 4;
     let alert = true;
     let isStopped = false;
+    let foodTarget = null;
+    let foodEl = null;
 
     // Centralized stop-state so multiple features can pause the bug without fighting each other.
     const stopReasons = new Set();
@@ -56,9 +58,17 @@ document.addEventListener('DOMContentLoaded', function () {
         "Okay… that one’s polished.",
         "I can’t break this one."
     ];
+    const foodMessages = [
+        "Yummm!",
+        "Nom nom!",
+        "Snack time!",
+        "Tasty!",
+        "Mmm... delicious."
+    ];
 
     let logoCollisionTimer = null;
     let logoCollisionCooldown = false;
+    let foodMessageTimer = null;
 
     // Called by the physics engine when the ladybug hits any logo.
     window.__ladybugLogoCollision = function () {
@@ -128,6 +138,76 @@ isTargetingLogos = false;
 
     function calculateRotation(dx, dy) {
         return Math.atan2(dy, dx) * (180 / Math.PI);
+    }
+
+    function dropFood(x, y) {
+        if (foodEl) foodEl.remove();
+        foodEl = document.createElement('div');
+        foodEl.className = 'ladybug-food';
+        foodEl.style.left = `${x}px`;
+        foodEl.style.top = `${y}px`;
+        const foodTypes = ["crumb", "seed", "candy", "grain"];
+        const foodType = foodTypes[Math.floor(Math.random() * foodTypes.length)];
+        foodEl.dataset.type = foodType;
+
+        if (foodType === "crumb") {
+            const size = 6 + Math.random() * 8;
+            const hue = 20 + Math.random() * 20;
+            const sat = 45 + Math.random() * 25;
+            const light = 35 + Math.random() * 20;
+            const highlight = `hsl(${hue + 8} ${sat}% ${Math.min(light + 30, 80)}%)`;
+            const base = `hsl(${hue} ${sat}% ${light}%)`;
+            const dark = `hsl(${Math.max(hue - 8, 0)} ${sat}% ${Math.max(light - 18, 12)}%)`;
+            foodEl.style.width = `${size}px`;
+            foodEl.style.height = `${size}px`;
+            foodEl.style.borderRadius = `${30 + Math.random() * 50}%`;
+            foodEl.style.background = `radial-gradient(circle at 30% 30%, ${highlight} 0%, ${base} 55%, ${dark} 100%)`;
+        } else if (foodType === "seed") {
+            const w = 10 + Math.random() * 8;
+            const h = 5 + Math.random() * 4;
+            const hue = 30 + Math.random() * 10;
+            const sat = 30 + Math.random() * 20;
+            const light = 45 + Math.random() * 15;
+            foodEl.style.width = `${w}px`;
+            foodEl.style.height = `${h}px`;
+            foodEl.style.borderRadius = `999px`;
+            foodEl.style.background = `linear-gradient(120deg, hsl(${hue} ${sat}% ${Math.min(light + 18, 80)}%) 0%, hsl(${hue} ${sat}% ${light}%) 55%, hsl(${hue} ${sat}% ${Math.max(light - 16, 20)}%) 100%)`;
+        } else if (foodType === "candy") {
+            const size = 10 + Math.random() * 8;
+            const hue = Math.floor(Math.random() * 360);
+            foodEl.style.width = `${size}px`;
+            foodEl.style.height = `${size}px`;
+            foodEl.style.borderRadius = `50%`;
+            foodEl.style.background = `
+                linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.2) 40%, rgba(255,255,255,0.6) 70%, rgba(255,255,255,0.2) 100%),
+                radial-gradient(circle at 35% 30%, hsla(${hue}, 85%, 75%, 0.95) 0%, hsla(${hue}, 80%, 55%, 0.95) 60%, hsla(${hue}, 70%, 40%, 0.95) 100%)
+            `;
+        } else {
+            const w = 7 + Math.random() * 6;
+            const h = 7 + Math.random() * 6;
+            const hue = 42 + Math.random() * 12;
+            const sat = 35 + Math.random() * 20;
+            const light = 35 + Math.random() * 15;
+            foodEl.style.width = `${w}px`;
+            foodEl.style.height = `${h}px`;
+            foodEl.style.borderRadius = `${20 + Math.random() * 60}%`;
+            foodEl.style.background = `radial-gradient(circle at 35% 35%, hsl(${hue} ${sat}% ${Math.min(light + 25, 75)}%) 0%, hsl(${hue} ${sat}% ${light}%) 50%, hsl(${hue} ${sat}% ${Math.max(light - 18, 15)}%) 100%)`;
+        }
+        document.body.appendChild(foodEl);
+        foodTarget = { x, y };
+        isTargetingLogos = false;
+    }
+
+    function showFoodMessage() {
+        const msg = foodMessages[Math.floor(Math.random() * foodMessages.length)];
+        bugMessage.innerHTML = msg;
+        bugMessage.style.opacity = "1";
+        setStopped("food", true);
+        if (foodMessageTimer) clearTimeout(foodMessageTimer);
+        foodMessageTimer = setTimeout(() => {
+            bugMessage.style.opacity = "0";
+            setStopped("food", false);
+        }, 1200);
     }
     // Stop Bug
     function stopLadybug() {
@@ -200,8 +280,12 @@ let hasLogoCollision = false; // After first logo hit, always use random movemen
         //Move
         function move() {
             if (!isStopped) {
+                const bugRect = ladybug.getBoundingClientRect();
+                const bugCenterX = bugRect.left + bugRect.width / 2;
+                const bugCenterY = bugRect.top + bugRect.height / 2;
+
                 // Check if we should target logos
-if (isTargetingLogos && !hasLogoCollision) {
+if (!foodTarget && isTargetingLogos && !hasLogoCollision) {
                         const appLogos = document.querySelectorAll('.app-logo');
                     // Only target logos that are visible (have non-zero dimensions)
                     const visibleLogos = Array.from(appLogos).filter(logo => {
@@ -234,7 +318,7 @@ if (isTargetingLogos && !hasLogoCollision) {
                             }
                         }
                     }
-                } else {
+                } else if (!foodTarget) {
                     // Random movement
                     const now = performance.now();
                     const minInterval = hasLogoCollision ? 1400 : 900;
@@ -244,6 +328,23 @@ if (isTargetingLogos && !hasLogoCollision) {
                         dx = getRandomVelocity(0.5, hasLogoCollision ? 2.8 : 2.1);
                         dy = getRandomVelocity(0.5, hasLogoCollision ? 2.8 : 2.1);
                         nextDirectionChangeAt = now + (minInterval + Math.random() * (maxInterval - minInterval));
+                    }
+                } else {
+                    const toX = foodTarget.x - bugCenterX;
+                    const toY = foodTarget.y - bugCenterY;
+                    const dist = Math.hypot(toX, toY);
+                    if (dist < 14) {
+                        foodTarget = null;
+                        if (foodEl) {
+                            foodEl.remove();
+                            foodEl = null;
+                        }
+                        showFoodMessage();
+                        nextDirectionChangeAt = performance.now();
+                    } else {
+                        const foodSpeed = 2.2;
+                        dx = (toX / dist) * foodSpeed;
+                        dy = (toY / dist) * foodSpeed;
                     }
                 }
 
@@ -255,9 +356,6 @@ if (isTargetingLogos && !hasLogoCollision) {
                 // When targeting, we want to approach the logo
                 if (!isTargetingLogos) {
                     const appLogos = document.querySelectorAll('.app-logo');
-                    const bugRect = ladybug.getBoundingClientRect();
-                    const bugCenterX = bugRect.left + bugRect.width / 2;
-                    const bugCenterY = bugRect.top + bugRect.height / 2;
 
                     appLogos.forEach(logo => {
                         const logoRect = logo.getBoundingClientRect();
@@ -347,6 +445,15 @@ if (isTargetingLogos && !hasLogoCollision) {
 
     ladybug.addEventListener('click', function () {
         killbug();
+    });
+    document.addEventListener('pointerdown', event => {
+        if (event.button !== 0) return;
+        const target = event.target;
+        if (target.closest('a, button, input, textarea, select, .app-logo, .logo-focus-image, .logo-focus-action, .logo-focus-title, .logo-focus-frame, .ladybug, .ladybug-hammer-cursor')) {
+            return;
+        }
+        if (document.querySelector('.logo-focus-image.is-visible')) return;
+        dropFood(event.clientX, event.clientY);
     });
     document.addEventListener('mousemove', event => {
         const rect = ladybug.getBoundingClientRect();
@@ -1245,4 +1352,220 @@ if (typeof window.__ladybugLogoCollision === "function") {
         clearFocus();
     });
 
+});
+
+// ---------------------------------------------------------
+// AI Neural Network Canvas
+// ---------------------------------------------------------
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('aiNetwork');
+    if (!canvas) return;
+
+    const section = canvas.closest('.ai-skill-section');
+    const ctx = canvas.getContext('2d');
+    let width = 0;
+    let height = 0;
+    let nodes = [];
+
+    const pointer = {
+        x: 0,
+        y: 0,
+        active: false
+    };
+
+    function resize() {
+        const dpr = window.devicePixelRatio || 1;
+        const target = section || canvas.parentElement || canvas;
+        width = target.clientWidth || 520;
+        height = target.clientHeight || 420;
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        if (!nodes.length) {
+            createNodes();
+        } else {
+            nodes.forEach(node => {
+                node.x = Math.min(Math.max(node.x, 10), width - 10);
+                node.y = Math.min(Math.max(node.y, 10), height - 10);
+            });
+        }
+    }
+
+    function createNodes() {
+        const count = Math.max(18, Math.round(width / 28));
+        nodes = Array.from({ length: count }, () => ({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5,
+            pulse: 0
+        }));
+    }
+
+    function update() {
+        ctx.clearRect(0, 0, width, height);
+
+        nodes.forEach(node => {
+            node.x += node.vx;
+            node.y += node.vy;
+
+            if (node.x < 8 || node.x > width - 8) node.vx *= -1;
+            if (node.y < 8 || node.y > height - 8) node.vy *= -1;
+
+            if (pointer.active) {
+                const dx = pointer.x - node.x;
+                const dy = pointer.y - node.y;
+                const dist = Math.hypot(dx, dy);
+                if (dist < 120 && dist > 0) {
+                    node.vx += (dx / dist) * 0.015;
+                    node.vy += (dy / dist) * 0.015;
+                }
+            }
+
+            node.pulse = Math.max(0, node.pulse - 0.02);
+        });
+
+        for (let i = 0; i < nodes.length; i++) {
+            for (let j = i + 1; j < nodes.length; j++) {
+                const a = nodes[i];
+                const b = nodes[j];
+                const dx = a.x - b.x;
+                const dy = a.y - b.y;
+                const dist = Math.hypot(dx, dy);
+                if (dist < 140) {
+                    const alpha = 0.12 + (1 - dist / 140) * 0.35;
+                    ctx.strokeStyle = `rgba(120, 200, 255, ${alpha})`;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(a.x, a.y);
+                    ctx.lineTo(b.x, b.y);
+                    ctx.stroke();
+                }
+            }
+        }
+
+        nodes.forEach(node => {
+            const dist = pointer.active ? Math.hypot(pointer.x - node.x, pointer.y - node.y) : 999;
+            const glow = Math.max(0, 1 - dist / 100);
+            const radius = 2.2 + glow * 2.2;
+
+            if (node.pulse > 0) {
+                ctx.strokeStyle = `rgba(255, 255, 255, ${node.pulse})`;
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, 10 * node.pulse + 4, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            ctx.fillStyle = `rgba(200, 230, 255, ${0.45 + glow * 0.4})`;
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
+            ctx.fill();
+        });
+
+        requestAnimationFrame(update);
+    }
+
+    (section || canvas).addEventListener('pointermove', event => {
+        const rect = canvas.getBoundingClientRect();
+        pointer.x = event.clientX - rect.left;
+        pointer.y = event.clientY - rect.top;
+        pointer.active = true;
+    });
+
+    (section || canvas).addEventListener('pointerleave', () => {
+        pointer.active = false;
+    });
+
+    (section || canvas).addEventListener('pointerdown', event => {
+        const rect = canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        let nearest = null;
+        let nearestDist = Infinity;
+        nodes.forEach(node => {
+            const dist = Math.hypot(node.x - x, node.y - y);
+            if (dist < nearestDist) {
+                nearestDist = dist;
+                nearest = node;
+            }
+        });
+        if (nearest && nearestDist < 120) {
+            nearest.pulse = 1;
+        }
+    });
+
+    resize();
+    window.addEventListener('resize', resize);
+    update();
+});
+
+// ---------------------------------------------------------
+// Auto-scroll to AI section on slight hero scroll
+// ---------------------------------------------------------
+document.addEventListener('DOMContentLoaded', () => {
+    const heroSection = document.querySelector('.heroSection');
+    const aiSection = document.querySelector('.ai-skill-section');
+    if (!heroSection || !aiSection) return;
+
+    let scrollLock = false;
+    let touchStartY = null;
+
+    function isHeroActive() {
+        const rect = heroSection.getBoundingClientRect();
+        return rect.top <= 0 && rect.bottom > window.innerHeight * 0.6;
+    }
+
+    function smoothScrollTo(targetY, duration) {
+        const startY = window.scrollY;
+        const diff = targetY - startY;
+        const startTime = performance.now();
+        const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+
+        function step(now) {
+            const elapsed = now - startTime;
+            const progress = Math.min(1, elapsed / duration);
+            const eased = easeOutCubic(progress);
+            window.scrollTo(0, startY + diff * eased);
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            }
+        }
+
+        requestAnimationFrame(step);
+    }
+
+    function triggerScroll() {
+        if (scrollLock) return;
+        scrollLock = true;
+        const targetY = window.scrollY + aiSection.getBoundingClientRect().top;
+        smoothScrollTo(targetY, 1200);
+        setTimeout(() => {
+            scrollLock = false;
+        }, 1400);
+    }
+
+    window.addEventListener('wheel', event => {
+        if (event.deltaY > 8 && isHeroActive() && !scrollLock) {
+            event.preventDefault();
+            triggerScroll();
+        }
+    }, { passive: false });
+
+    window.addEventListener('touchstart', event => {
+        if (!event.touches.length) return;
+        touchStartY = event.touches[0].clientY;
+    }, { passive: true });
+
+    window.addEventListener('touchmove', event => {
+        if (touchStartY === null) return;
+        const delta = touchStartY - event.touches[0].clientY;
+        if (delta > 24 && isHeroActive() && !scrollLock) {
+            triggerScroll();
+        }
+    }, { passive: true });
+
+    window.addEventListener('touchend', () => {
+        touchStartY = null;
+    }, { passive: true });
 });
