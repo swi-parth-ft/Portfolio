@@ -1765,18 +1765,62 @@ document.addEventListener('DOMContentLoaded', () => {
         return (text || "").replace(/\s+/g, " ").trim();
     }
 
-    async function loadExtraContext() {
+    let contextCache = null;
+
+    async function loadContextFile() {
+        if (contextCache) return contextCache;
         try {
             const response = await fetch('ai-context.txt', { cache: 'no-store' });
-            if (!response.ok) return '';
-            const text = await response.text();
-            return normalizeText(text);
+            if (!response.ok) {
+                contextCache = { global: '', chunks: [], byId: {}, appChunks: [] };
+                return contextCache;
+            }
+            const raw = await response.text();
+            const firstChunkIndex = raw.indexOf('### CHUNK:');
+            const globalRaw = firstChunkIndex === -1 ? raw : raw.slice(0, firstChunkIndex);
+            const global = normalizeText(globalRaw).slice(0, 1200);
+
+            const chunkRegex = /### CHUNK: ([A-Z0-9_]+)\n([\s\S]*?)(?=\n### CHUNK:|$)/g;
+            const chunks = [];
+            const byId = {};
+            const appChunks = [];
+            let match;
+            while ((match = chunkRegex.exec(raw)) !== null) {
+                const id = match[1].trim();
+                const rawChunk = match[2].trim();
+                const content = normalizeText(rawChunk);
+                const appMatch = rawChunk.match(/^App:\s*(.+)$/m);
+                const aliasMatch = rawChunk.match(/^Aliases:\s*(.+)$/m);
+                const keywords = [];
+                if (appMatch) {
+                    keywords.push(appMatch[1]);
+                }
+                if (aliasMatch) {
+                    aliasMatch[1].split(',').forEach(item => keywords.push(item));
+                }
+                const keywordSet = Array.from(new Set(
+                    keywords
+                        .map(word => word.trim())
+                        .filter(Boolean)
+                        .map(word => word.toLowerCase())
+                ));
+                const chunk = { id, content, keywords: keywordSet };
+                chunks.push(chunk);
+                byId[id] = chunk;
+                if (keywordSet.length) {
+                    appChunks.push(chunk);
+                }
+            }
+
+            contextCache = { global, chunks, byId, appChunks };
+            return contextCache;
         } catch (error) {
-            return '';
+            contextCache = { global: '', chunks: [], byId: {}, appChunks: [] };
+            return contextCache;
         }
     }
 
-    async function buildSiteContext() {
+    function buildDomContext() {
         const sections = [
             document.querySelector('.heroText'),
             document.querySelector('.ai-skill-section'),
@@ -1789,20 +1833,40 @@ document.addEventListener('DOMContentLoaded', () => {
             .map(item => item.dataset.title)
             .filter(Boolean);
         const appsLine = appTitles.length ? `Featured apps: ${appTitles.join(", ")}.` : "";
-        const extraContext = await loadExtraContext();
-        const base = `${sectionText} ${appsLine} ${extraContext} Email: me@parthant.com.`;
-        return base.replace(/\s+/g, " ").trim().slice(0, 2000);
+        const base = `${sectionText} ${appsLine} Email: me@parthant.com.`;
+        return base.replace(/\s+/g, " ").trim().slice(0, 800);
     }
 
-    async function buildSystemMessage() {
-        const siteContext = await buildSiteContext();
+    async function buildContextForQuery(userText) {
+        const data = await loadContextFile();
+        if (!data.chunks.length) return '';
+        const query = normalizeText(userText).toLowerCase();
+        const matched = data.appChunks.filter(chunk =>
+            chunk.keywords.some(keyword => query.includes(keyword))
+        );
+        const selectedChunks = [];
+        if (data.byId.ABOUT_PARTH) selectedChunks.push(data.byId.ABOUT_PARTH);
+        matched.forEach(chunk => {
+            if (!selectedChunks.includes(chunk)) selectedChunks.push(chunk);
+        });
+        if (data.byId.CONTACT_AND_ESCALATION) {
+            selectedChunks.push(data.byId.CONTACT_AND_ESCALATION);
+        }
+        const combined = selectedChunks.map(chunk => chunk.content).join(' ');
+        return normalizeText(`${data.global} ${combined}`.trim()).slice(0, 3200);
+    }
+
+    async function buildSystemMessage(userText) {
+        const domContext = buildDomContext();
+        const fileContext = await buildContextForQuery(userText);
+        const siteContext = normalizeText(`${domContext} ${fileContext}`.trim());
         return {
             role: "system",
             content:
                 "You are AI Parth, the digital twin of Parth on his portfolio site. " +
                 "Speak in first person as Parth, avoid referring to yourself as an assistant, and answer as if you are Parth. " +
-                "Keep replies concise and confident, grounded in the site context. " +
-                "If something is unknown, ask one short follow-up question. " +
+                "Keep replies concise and confident, grounded in the site context only. " +
+                "If something is missing, say you don't have those details and ask to email me@parthant.com. " +
                 `Context: ${siteContext}`
         };
     }
@@ -1852,7 +1916,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const recentMessages = state.messages.slice(-10);
-            const systemMessage = await buildSystemMessage();
+            const systemMessage = await buildSystemMessage(userText);
             const payload = {
                 messages: [systemMessage, ...recentMessages],
                 temperature: 0.6,
