@@ -1803,158 +1803,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ---------------------------------------------------------
-// AI Chat Neural Network
-// ---------------------------------------------------------
-document.addEventListener('DOMContentLoaded', () => {
-    const canvas = document.getElementById('aiChatNetwork');
-    if (!canvas) return;
-
-    const panel = canvas.closest('.ai-chat-panel') || canvas.parentElement;
-    const ctx = canvas.getContext('2d');
-    let width = 0;
-    let height = 0;
-    let nodes = [];
-    const baseNodeDensity = 18;
-    let baseNodeCount = 0;
-    let maxNodes = 0;
-    let wasThinking = false;
-    let thinkingProgress = 0;
-    let thinkingClassState = false;
-
-    function resize() {
-        const dpr = window.devicePixelRatio || 1;
-        const target = panel || canvas.parentElement || canvas;
-        width = target.clientWidth || 520;
-        height = target.clientHeight || 640;
-        baseNodeCount = Math.max(20, Math.round(width / baseNodeDensity));
-        maxNodes = Math.min(90, baseNodeCount + 24);
-        canvas.width = width * dpr;
-        canvas.height = height * dpr;
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        if (!nodes.length) {
-            createNodes();
-        } else {
-            nodes.forEach(node => {
-                node.x = Math.min(Math.max(node.x, 10), width - 10);
-                node.y = Math.min(Math.max(node.y, 10), height - 10);
-            });
-        }
-    }
-
-    function createNodes() {
-        const count = baseNodeCount || Math.max(20, Math.round(width / baseNodeDensity));
-        nodes = Array.from({ length: count }, () => ({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            vx: (Math.random() - 0.5) * 0.45,
-            vy: (Math.random() - 0.5) * 0.45
-        }));
-    }
-
-    function update() {
-        ctx.clearRect(0, 0, width, height);
-        const thinking = window.__aiChatThinking === true;
-
-        if (thinking) {
-            thinkingProgress = Math.min(1, thinkingProgress + 0.02);
-        } else {
-            thinkingProgress = Math.max(0, thinkingProgress - 0.03);
-        }
-
-        if (thinking !== thinkingClassState && panel) {
-            panel.classList.toggle('is-thinking', thinking);
-            thinkingClassState = thinking;
-        }
-
-        if (!thinking && wasThinking) {
-            nodes.forEach(node => {
-                const angle = Math.random() * Math.PI * 2;
-                const push = 1.2 + Math.random() * 0.9;
-                node.vx += Math.cos(angle) * push;
-                node.vy += Math.sin(angle) * push;
-            });
-        }
-        wasThinking = thinking;
-
-        const centerX = width * 0.5;
-        const centerY = height * 0.5;
-        const swirl = thinkingProgress * 0.04;
-        const pullBase = 0.02 + thinkingProgress * 0.1;
-
-        nodes.forEach(node => {
-            node.x += node.vx;
-            node.y += node.vy;
-
-            if (node.x < 8 || node.x > width - 8) node.vx *= -1;
-            if (node.y < 8 || node.y > height - 8) node.vy *= -1;
-
-            if (thinkingProgress > 0) {
-                const dx = centerX - node.x;
-                const dy = centerY - node.y;
-                const dist = Math.hypot(dx, dy) || 1;
-                node.vx += (dx / dist) * pullBase;
-                node.vy += (dy / dist) * pullBase;
-                node.vx += (-dy / dist) * swirl;
-                node.vy += (dx / dist) * swirl;
-                node.vx *= 0.94;
-                node.vy *= 0.94;
-            } else {
-                node.vx *= 0.99;
-                node.vy *= 0.99;
-            }
-        });
-
-        const linkDist = thinkingProgress > 0.15 ? 170 : 140;
-        const lineBoost = thinkingProgress * 0.35;
-
-        for (let i = 0; i < nodes.length; i++) {
-            for (let j = i + 1; j < nodes.length; j++) {
-                const a = nodes[i];
-                const b = nodes[j];
-                const dx = a.x - b.x;
-                const dy = a.y - b.y;
-                const dist = Math.hypot(dx, dy);
-                if (dist < linkDist) {
-                    const alpha = 0.1 + (1 - dist / linkDist) * (0.4 + lineBoost);
-                    ctx.strokeStyle = `rgba(120, 200, 255, ${alpha})`;
-                    ctx.lineWidth = 1;
-                    ctx.beginPath();
-                    ctx.moveTo(a.x, a.y);
-                    ctx.lineTo(b.x, b.y);
-                    ctx.stroke();
-                }
-            }
-        }
-
-        nodes.forEach(node => {
-            const glow = thinkingProgress * 0.6;
-            const radius = 2.2 + glow * 2.6;
-            ctx.fillStyle = `rgba(200, 230, 255, ${0.45 + glow * 0.4})`;
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
-            ctx.fill();
-        });
-
-        const baseCount = baseNodeCount || Math.max(20, Math.round(width / baseNodeDensity));
-        if (nodes.length > maxNodes) nodes.splice(maxNodes);
-        if (nodes.length < baseCount) {
-            nodes.push({
-                x: Math.random() * width,
-                y: Math.random() * height,
-                vx: (Math.random() - 0.5) * 0.45,
-                vy: (Math.random() - 0.5) * 0.45
-            });
-        }
-
-        requestAnimationFrame(update);
-    }
-
-    resize();
-    window.addEventListener('resize', resize);
-    update();
-});
-
-// ---------------------------------------------------------
 // AI Chat Overlay
 // ---------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
@@ -1989,13 +1837,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const state = {
         messages: []
     };
-
-    function setChatThinking(isThinking) {
-        window.__aiChatThinking = isThinking;
-        if (panel) {
-            panel.classList.toggle('is-thinking', isThinking);
-        }
-    }
 
     function normalizeText(text) {
         return (text || "").replace(/\s+/g, " ").trim();
@@ -2147,7 +1988,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.add('chat-open');
         document.documentElement.classList.add('chat-open');
         input.focus();
-        setChatThinking(false);
         if (!messagesEl.children.length) {
             appendMessage('assistant', "Hey, I'm AI Parth. Ask me anything about my work, projects, or AI stack.", 'is-system');
         }
@@ -2158,7 +1998,6 @@ document.addEventListener('DOMContentLoaded', () => {
         overlay.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('chat-open');
         document.documentElement.classList.remove('chat-open');
-        setChatThinking(false);
     }
 
     function getApiEndpoint() {
@@ -2174,13 +2013,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const endpoint = getApiEndpoint();
         if (isPlaceholderEndpoint(endpoint)) {
             appendMessage('assistant', "AI chat is offline. Connect the Cloudflare Worker endpoint in the page meta tag.", 'is-system');
-            setChatThinking(false);
             return;
         }
 
         state.messages.push({ role: 'user', content: userText });
         const typingBubble = appendMessage('assistant', 'Thinking', 'is-typing');
-        setChatThinking(true);
         sendBtn.disabled = true;
 
         try {
@@ -2206,7 +2043,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             const reply = data.choices?.[0]?.message?.content?.trim();
             typingBubble.remove();
-            setChatThinking(false);
 
             if (!reply) {
                 appendMessage('assistant', "I couldn't generate a reply. Try again?", '');
@@ -2217,7 +2053,6 @@ document.addEventListener('DOMContentLoaded', () => {
             appendMessage('assistant', reply, '');
         } catch (error) {
             typingBubble.remove();
-            setChatThinking(false);
             appendMessage('assistant', "Something went wrong connecting to the AI API.", 'is-system');
         } finally {
             sendBtn.disabled = false;

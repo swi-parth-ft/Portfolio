@@ -436,24 +436,6 @@ html.chat-open {
     --ai-chat-form-height: 64px;
 }
 
-.ai-chat-network {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    opacity: 0.6;
-    pointer-events: none;
-}
-
-.ai-chat-panel.is-thinking .ai-chat-network {
-    opacity: 0.85;
-}
-
-.ai-chat-network canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
 .ai-chat-panel::before,
 .ai-chat-panel::after {
     content: "";
@@ -589,7 +571,7 @@ html.chat-open {
     gap: 12px;
     overflow-y: auto;
     flex: 1;
-    background: transparent;
+    background: #0b0b0d;
     position: absolute;
     inset: 0;
     z-index: 1;
@@ -602,9 +584,7 @@ html.chat-open {
     font-size: 0.9rem;
     line-height: 1.5;
     color: #f2f2f7;
-    background-color: #3a3a3c;
-    opacity: 1;
-    mix-blend-mode: normal;
+    background: #2c2c2e;
     align-self: flex-start;
 }
 
@@ -617,9 +597,9 @@ html.chat-open {
 }
 
 .ai-chat-message.is-system {
-    background-color: #3a3a3c;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.82rem;
 }
 
 .ai-chat-message.is-typing::after {
@@ -1309,6 +1289,12 @@ html.chat-open {
     perspective: 1000px;
     -webkit-mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0), #000 20%, #000 80%, rgba(0, 0, 0, 0));
     mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0), #000 20%, #000 80%, rgba(0, 0, 0, 0));
+}
+
+@media (max-width: 600px) {
+    .app-logos-container {
+        transform: translateY(-60px);
+    }
 }
 
 .app-logos-container::before,
