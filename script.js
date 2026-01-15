@@ -623,6 +623,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeDrag = null;
     let interactionsAttached = false;
     let focusedBody = null;
+    const scrollLogos = true;
+    const scrollSpeed = 0.35;
+    const tiltSpeedFactor = 0.5;
 
     // Global Physics Configuration
     let physicsConfig = {
@@ -688,11 +691,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function applyDriftToBody(body) {
-        body.vx = (Math.random() - 0.5) * 0.05;
-        body.vy = (Math.random() - 0.5) * 0.05;
-        body.rotSpeedX = (Math.random() - 0.5) * 0.2;
-        body.rotSpeedY = (Math.random() - 0.5) * 0.2;
-        body.rotSpeedZ = (Math.random() - 0.5) * 0.1;
+        body.vx = 0;
+        body.vy = 0;
+        body.rotSpeedX = (Math.random() - 0.5) * 0.2 * tiltSpeedFactor;
+        body.rotSpeedY = (Math.random() - 0.5) * 0.2 * tiltSpeedFactor;
+        body.rotSpeedZ = (Math.random() - 0.5) * 0.1 * tiltSpeedFactor;
     }
 
     function createFocusImage() {
@@ -981,6 +984,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         logos = Array.from(document.querySelectorAll('.app-logo'));
 
+        if (scrollLogos) {
+            const gap = 60 * physicsConfig.scale;
+            const step = physicsConfig.size + gap;
+            const needed = Math.max(1, Math.ceil((bounds.width + step) / step));
+            if (logos.length < needed) {
+                const originals = logos.slice();
+                let cloneIndex = 0;
+                while (logos.length < needed) {
+                    const source = originals[cloneIndex % originals.length];
+                    const clone = source.cloneNode(true);
+                    clone.dataset.clone = 'true';
+                    clone.classList.add('app-logo-clone');
+                    container.appendChild(clone);
+                    logos.push(clone);
+                    cloneIndex += 1;
+                }
+            }
+        }
+
         // -----------------------------------------------------
         // RESPONSIVE CONFIGURATION
         // -----------------------------------------------------
@@ -1056,7 +1078,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         isInitialized = true;
         if (!interactionsAttached) {
-            setupDragHandlers();
+            if (!scrollLogos) {
+                setupDragHandlers();
+            }
             interactionsAttached = true;
         }
         update();
@@ -1106,6 +1130,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function update() {
         if (!isInitialized) return;
 
+        const { width: w, height: h } = getContainerBounds();
+        const gap = 60 * physicsConfig.scale;
+        const step = physicsConfig.size + gap;
+        const baseWidth = Math.max(step * bodies.length, 1);
+        const startX = (w - baseWidth) / 2;
+        const minX = startX;
+        const maxX = startX + baseWidth;
+        const rowY = (h - physicsConfig.size) / 2;
+
         bodies.forEach((body, i) => {
             const focusTarget = body.isFocused ? 1 : 0;
             body.focusProgress += (focusTarget - body.focusProgress) * FOCUS.progressLerp;
@@ -1145,8 +1178,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     applyDriftToBody(body);
                 }
             } else if (!body.isDragging) {
-                body.x += body.vx;
-                body.y += body.vy;
+                if (scrollLogos) {
+                    if (typeof body.scrollX !== 'number') {
+                        body.scrollX = startX + i * step;
+                    }
+                    body.scrollX += scrollSpeed;
+                    if (body.scrollX > maxX) {
+                        body.scrollX = minX;
+                    }
+                    body.x = body.scrollX;
+                    body.y = rowY;
+                } else {
+                    body.x += body.vx;
+                    body.y += body.vy;
+                }
 
                 // 3D Rotation Updates
                 body.rotationX += body.rotSpeedX;
@@ -1175,7 +1220,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (body.rotationZ > limit) { body.rotationZ = limit; body.rotSpeedZ = -Math.abs(body.rotSpeedZ); }
             if (body.rotationZ < -limit) { body.rotationZ = -limit; body.rotSpeedZ = Math.abs(body.rotSpeedZ); }
 
-            if (!body.isFocused && !body.isDragging && !body.isReturning) {
+            if (!scrollLogos && !body.isFocused && !body.isDragging && !body.isReturning) {
                 // 2. Wall Collisions
                 // Constrain to HERO SECTION explicitly
                 const hero = document.querySelector('.hero');
@@ -1209,7 +1254,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            if (!isResetting && !body.isDragging && !body.isFocused && !body.isReturning) {
+            if (!scrollLogos && !isResetting && !body.isDragging && !body.isFocused && !body.isReturning) {
                 // 3. Object Collisions
                 for (let j = i + 1; j < bodies.length; j++) {
                     if (bodies[j].isDragging || bodies[j].isFocused || bodies[j].isReturning) continue;
@@ -1243,8 +1288,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         body.vy += (dy / distance) * pushStrength;
 
                         // Add rotation wobble
-                        body.rotSpeedX += (Math.random() - 0.5) * 0.2;
-                        body.rotSpeedY += (Math.random() - 0.5) * 0.2;
+                        body.rotSpeedX += (Math.random() - 0.5) * 0.2 * tiltSpeedFactor;
+                        body.rotSpeedY += (Math.random() - 0.5) * 0.2 * tiltSpeedFactor;
 
                         // Pause bug + show message on impact
 if (typeof window.__ladybugLogoCollision === "function") {
@@ -1253,6 +1298,27 @@ if (typeof window.__ladybugLogoCollision === "function") {
                         dampenSpeed(body);
 
                         // Cooldown to prevent rapid collisions
+                        body.bugCooldown = true;
+                        setTimeout(() => { body.bugCooldown = false; }, 500);
+                    }
+                }
+            } else if (scrollLogos && !isResetting && !body.isDragging && !body.isFocused && !body.isReturning) {
+                const ladybug = document.querySelector('.ladybug');
+                if (ladybug) {
+                    const bugRect = ladybug.getBoundingClientRect();
+                    const logoRect = body.element.getBoundingClientRect();
+                    const bugCenterX = bugRect.left + bugRect.width / 2;
+                    const bugCenterY = bugRect.top + bugRect.height / 2;
+                    const logoCenterX = logoRect.left + logoRect.width / 2;
+                    const logoCenterY = logoRect.top + logoRect.height / 2;
+                    const dx = logoCenterX - bugCenterX;
+                    const dy = logoCenterY - bugCenterY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    const collisionDist = 80;
+                    if (distance < collisionDist && !body.bugCooldown) {
+if (typeof window.__ladybugLogoCollision === "function") {
+    window.__ladybugLogoCollision();
+}
                         body.bugCooldown = true;
                         setTimeout(() => { body.bugCooldown = false; }, 500);
                     }
@@ -1321,6 +1387,17 @@ if (typeof window.__ladybugLogoCollision === "function") {
     logos.forEach((el, i) => {
         el.addEventListener('mouseenter', () => { if (bodies[i]) bodies[i].isHovered = true; });
         el.addEventListener('mouseleave', () => { if (bodies[i]) bodies[i].isHovered = false; });
+    });
+
+    container.addEventListener('pointerdown', event => {
+        const logoEl = event.target.closest('.app-logo');
+        if (!logoEl) return;
+        if (event.button !== undefined && event.button !== 0) return;
+        event.preventDefault();
+        const index = logos.indexOf(logoEl);
+        if (index !== -1 && bodies[index]) {
+            focusLogo(bodies[index]);
+        }
     });
 
     function setupDragHandlers() {
@@ -1854,7 +1931,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('.getInTouchSection')
         ].filter(Boolean);
         const sectionText = sections.map(section => normalizeText(section.textContent)).join(" ");
-        const appTitles = Array.from(document.querySelectorAll('.app-logo'))
+        const appTitles = Array.from(document.querySelectorAll('.app-logo:not([data-clone="true"])'))
             .map(item => item.dataset.title)
             .filter(Boolean);
         const appsLine = appTitles.length ? `Featured apps: ${appTitles.join(", ")}.` : "";
@@ -2022,6 +2099,17 @@ document.addEventListener('DOMContentLoaded', () => {
             closeChat();
         }
     });
+
+    if (window.visualViewport) {
+        const updateKeyboardOffset = () => {
+            const viewport = window.visualViewport;
+            const offset = Math.max(0, window.innerHeight - viewport.height - viewport.offsetTop);
+            document.documentElement.style.setProperty('--ai-chat-keyboard', `${offset}px`);
+        };
+        window.visualViewport.addEventListener('resize', updateKeyboardOffset);
+        window.visualViewport.addEventListener('scroll', updateKeyboardOffset);
+        updateKeyboardOffset();
+    }
 });
 
 // ---------------------------------------------------------
