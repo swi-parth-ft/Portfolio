@@ -1,3 +1,19 @@
+// Viewport height helper for mobile browsers with dynamic toolbars.
+(() => {
+    const setViewportVars = () => {
+        const viewport = window.visualViewport;
+        const height = viewport ? viewport.height : window.innerHeight;
+        const offset = viewport ? viewport.offsetTop : 0;
+        document.documentElement.style.setProperty('--app-vh', `${height * 0.01}px`);
+        document.documentElement.style.setProperty('--app-vh-offset', `${offset}px`);
+    };
+    setViewportVars();
+    window.addEventListener('resize', setViewportVars);
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', setViewportVars);
+        window.visualViewport.addEventListener('scroll', setViewportVars);
+    }
+})();
 
 // Fade Elements
 document.addEventListener('DOMContentLoaded', function () {
