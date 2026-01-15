@@ -754,12 +754,9 @@ document.addEventListener('DOMContentLoaded', () => {
         buttons.appendChild(askButton);
         details.appendChild(title);
         details.appendChild(notes);
-        const left = document.createElement('div');
-        left.className = 'logo-focus-left';
-        left.appendChild(frame);
-        left.appendChild(buttons);
-        content.appendChild(left);
+        content.appendChild(frame);
         content.appendChild(details);
+        content.appendChild(buttons);
         wrapper.appendChild(closeButton);
         frame.appendChild(img);
         wrapper.appendChild(content);

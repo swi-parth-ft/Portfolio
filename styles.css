@@ -1411,20 +1411,15 @@ body.ladybug-hover {
 }
 
 .logo-focus-content {
-    display: grid;
-    grid-template-columns: minmax(140px, 180px) minmax(260px, 560px);
-    gap: 40px;
-    align-items: center;
-    width: min(90%, 640px);
-    margin: 0 auto;
-    justify-content: center;
-}
-
-.logo-focus-left {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 60px;
+    gap: 24px;
+    width: 100%;
+    padding: 0 12px;
+    box-sizing: border-box;
+    margin: 0 auto;
+    justify-content: center;
 }
 
 .logo-focus-details {
@@ -1433,6 +1428,7 @@ body.ladybug-hover {
     align-items: flex-start;
     gap: 14px;
     width: 100%;
+    order: 2;
 }
 
 .logo-focus-title {
@@ -1454,11 +1450,7 @@ body.ladybug-hover {
     font-size: 1.55rem;
     line-height: 1.7;
     font-family: "Caveat", "Great Vibes", cursive;
-    max-width: 40ch;
-}
-
-.logo-focus-buttons {
-    justify-content: flex-end;
+    max-width: none;
 }
 
 .logo-focus-notes p {
@@ -1473,6 +1465,9 @@ body.ladybug-hover {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
+    width: 100%;
+    justify-content: flex-start;
+    order: 3;
 }
 
 .logo-focus-action {
@@ -1601,10 +1596,17 @@ body.ladybug-hover {
 }
 
 .logo-focus-frame {
-    width: min(170px, 26vw);
+    width: min(110px, 16vw);
     aspect-ratio: 1 / 1;
     position: relative;
     isolation: isolate;
+    order: 1;
+}
+
+@media (min-width: 601px) {
+    .logo-focus-frame {
+        margin-left: 20px;
+    }
 }
 
 
@@ -1624,24 +1626,21 @@ body.ladybug-hover {
     }
 
     .logo-focus-content {
-        grid-template-columns: 1fr;
-        justify-items: center;
-        text-align: center;
-    }
-
-    .logo-focus-details {
         align-items: center;
-    }
-
-    .logo-focus-title {
-        font-size: 2.8rem;
-    }
-
-    .logo-focus-content {
+        text-align: center;
         height: 100%;
         overflow-y: auto;
         padding-bottom: 24px;
         -webkit-overflow-scrolling: touch;
+    }
+
+    .logo-focus-details {
+        align-items: center;
+        order: 3;
+    }
+
+    .logo-focus-title {
+        font-size: 2.8rem;
     }
 
     .logo-focus-frame {
@@ -1649,10 +1648,11 @@ body.ladybug-hover {
         margin-top: 30px;
     }
 
-    .logo-focus-left {
-        align-items: center;
-        gap: 30px;
+    .logo-focus-buttons {
+        justify-content: center;
+        order: 2;
     }
+
 }
 
 .logo-focus-frame::after {
