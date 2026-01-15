@@ -1605,8 +1605,6 @@ body.ladybug-hover {
     aspect-ratio: 1 / 1;
     position: relative;
     isolation: isolate;
-    padding: 0 10px;
-    box-sizing: border-box;
 }
 
 
