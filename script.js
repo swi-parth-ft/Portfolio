@@ -65,7 +65,6 @@ document.addEventListener('DOMContentLoaded', function () {
         isStopped = stopReasons.size > 0;
     }
 
-
     // Random messages when the bug bumps into app logos.
     const logoCollisionMessages = [
         "Ouch!",
@@ -423,18 +422,15 @@ if (!foodTarget && isTargetingLogos && !hasLogoCollision) {
                     });
                 }
 
-                const maxX = window.innerWidth - ladybug.offsetWidth;
-                const maxY = window.innerHeight - ladybug.offsetHeight;
-
                 if (x <= 0) {
-                    x = maxX;
-                } else if (x >= maxX) {
+                    x = window.innerWidth - ladybug.offsetWidth;
+                } else if (x >= window.innerWidth - ladybug.offsetWidth) {
                     x = 0;
                 }
 
                 if (y <= 0) {
-                    y = maxY;
-                } else if (y >= maxY) {
+                    y = window.innerHeight - ladybug.offsetHeight;
+                } else if (y >= window.innerHeight - ladybug.offsetHeight) {
                     y = 0;
                 }
 
@@ -495,12 +491,6 @@ if (!foodTarget && isTargetingLogos && !hasLogoCollision) {
     });
     document.addEventListener('pointerdown', event => {
         if (event.button !== 0) return;
-        if (hammerActive) {
-            triggerHammerSwing();
-            updateHammerCursor(event.clientX, event.clientY);
-            killbug();
-            return;
-        }
         const target = event.target;
         if (target.closest('a, button, input, textarea, select, .app-logo, .logo-focus-image, .logo-focus-action, .logo-focus-title, .logo-focus-frame, .ladybug, .ladybug-hammer-cursor, .hero-social-bar, .ai-chat-overlay, .ai-chat-panel')) {
             return;
