@@ -1,0 +1,41 @@
+DEV NOTES FOR APP SHEETS
+Last updated: 2026-01-15
+
+## APP: AudioHut
+Aliases: Audio Converter, Audio Converter: AudioHut
+AudioHut was built as a frictionless, offline-first media utility: drop in a video, extract clean audio immediately, and only then offer editing for the moments when you actually need it. I focused on a reliable on-device export pipeline that stays fast even with long recordings, a simple in-app library for managing edits without clutter, and a share-to-Files flow that feels native. The Plus tier expands the same core pipeline to additional formats and ringtone creation, so the feature set scales without changing the product's core promise: quick, private conversion and editing that just works.
+
+## APP: Imagine Tales
+Imagine Tales was designed around two priorities that usually conflict: kids' creativity and parental safety. The system is built on a parent/child model where creation is playful but sharing is gated, so the app stays safe while still feeling exciting for kids. I optimized the story builder to feel like a guided creative studio with themes, genres, and characters, then layered AI illustrations as a reward loop that brings stories to life without adding complexity.
+
+## APP: iDrift
+Aliases: iDrift Receiver
+iDrift Receiver was engineered as a lightweight, no-drama macOS menu-bar companion that disappears until you need it, then connects instantly and stays stable. The core work was building a low-latency local pairing and transport layer, then translating controller input into consistent keyboard and mouse events that games understand, without jitter or stuck states. QR token pairing and a trusted device list keep the flow secure and intentional, and Accessibility permission is surfaced clearly because it is fundamental to input injection on macOS.
+
+## APP: It's Here
+Aliases: Its Here
+It's Here is built as a practical AR product rather than a showcase: the goal is to reduce real-world friction by turning a space into a reusable map you can navigate with confidence. I focused on an interaction model that is instantly understandable and on keeping mapped spaces persistent and shareable so the feature scales from personal use to collaborative environments. iCloud sync is central because it keeps maps current across devices and makes sharing feel seamless, while the architecture stays ready for iterative AR improvements.
+
+## APP: Keycal
+Keycal was a constraint-driven build: keyboard extensions demand extreme efficiency, minimal UI, and fast input handling. The calculator and unit conversion logic stays local and instant, with strong defaults and a theme system that keeps it personal without adding complexity. Haptics and sound are treated as subtle feedback cues, and the design philosophy is simple: never break the user's flow.
+
+## APP: Health Up
+Health Up was built for people who want consistency more than complexity, so the app is engineered around speed-first meal capture and a clear daily and weekly feedback loop. Pro features expand that workflow into planning and goal-aligned AI insights, but the product remains grounded in practical UX: minimal steps, fast widgets, and Shortcuts that reduce friction at the moment of logging. Health data is treated as context rather than noise, and the architecture is designed for hybrid AI with privacy and offline resilience as default principles.
+
+## APP: Noted
+Noted is deliberately minimal: it is a voice-first capture tool where the primary UI is Siri and the secondary UI is a clean, searchable library. The key engineering focus was making capture feel instant and reliable, then keeping organization simple enough that retrieval stays effortless months later. iCloud sync is treated as a trust feature, and the one-time purchase model fits the product philosophy: no gimmicks, no subscriptions, just a private memory vault.
+
+## APP: Pixera
+Pixera was built as a creator and developer workflow tool: the point is not editing, it is producing a polished, share-ready screenshot in seconds with smart defaults that look good every time. The editor is intentionally lightweight and responsive, with background styles and framing controls that cover real-world use cases without overwhelming the user. Premium features focus on repeatability and sensitive data redaction so Pixera fits both personal sharing and workplace contexts.
+
+## APP: Nucleus
+Nucleus is designed as a private, on-device assistant that feels truly integrated into the Apple ecosystem rather than a generic chat box. The core engineering work is tool-centric: wiring real data surfaces into a conversational system that can produce daily briefings and execute practical tasks without shipping data to servers. Personal Space is a memory-first layer, and the product stays defensible on privacy with no login, no tracking, and on-device processing by default.
+
+## APP: Peekaboo
+Peekaboo is engineered around a simple creative promise: turn any photo into something share-worthy fast, with playful power that does not require design skills. I built the editing model around subject-aware layers and gesture-first controls so users can move quickly with stickers, background edits, bold text effects, and story formatting in a few taps. Apple Intelligence features are optional acceleration on supported devices rather than a dependency, and the freemium structure lets people create immediately while reserving heavier AI tools for Peekaboo+.
+
+## APP: Audoris
+Audoris was built to feel like your words are alive the moment you speak: live transcription, word-by-word highlighting, and playback that stays aligned with the transcript so review feels effortless. The design goal was privacy-first productivity: offline transcription, iCloud sync across devices, and quick capture via widgets, Live Activities, and Shortcuts. Pro features extend the same foundation into summaries, translation with preserved timestamps, transcript chat, and export so recordings become a searchable, reusable knowledge base.
+
+## APP: Subly
+Subly is designed as an end-to-end offline subtitle pipeline: transcribe fast, edit precisely, style consistently, and export professionally without an internet dependency. The editor emphasizes control where creators actually need it, while presets make styling repeatable across projects. Translation preserves timestamps, and exports are engineered to be crisp and reliable for both short clips and long-form content.

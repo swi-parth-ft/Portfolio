@@ -717,8 +717,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function createFocusImage() {
         const wrapper = document.createElement('div');
         wrapper.className = 'logo-focus-image';
+        const closeButton = document.createElement('button');
+        closeButton.className = 'logo-focus-close';
+        closeButton.type = 'button';
+        closeButton.setAttribute('aria-label', 'Close');
+        closeButton.textContent = '✕';
+        const content = document.createElement('div');
+        content.className = 'logo-focus-content';
         const title = document.createElement('div');
         title.className = 'logo-focus-title';
+        const notes = document.createElement('div');
+        notes.className = 'logo-focus-notes';
+        const details = document.createElement('div');
+        details.className = 'logo-focus-details';
         const frame = document.createElement('div');
         frame.className = 'logo-focus-frame';
         const img = document.createElement('img');
@@ -727,7 +738,7 @@ document.addEventListener('DOMContentLoaded', () => {
         action.className = 'logo-focus-action';
         action.setAttribute('role', 'button');
         action.setAttribute('href', '#');
-        action.innerHTML = '<i class="fa-brands fa-apple" aria-hidden="true"></i><span>View on App Store</span>';
+        action.innerHTML = '<i class="fa-brands fa-apple" aria-hidden="true"></i><span>App Store</span>';
         action.addEventListener('click', event => {
             if (action.getAttribute('href') === '#') {
                 event.preventDefault();
@@ -736,15 +747,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const askButton = document.createElement('button');
         askButton.className = 'logo-focus-ask hero-ai-trigger';
         askButton.type = 'button';
-        askButton.textContent = 'Ask AIParth';
-        wrapper.appendChild(title);
+        askButton.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles ai-icon" aria-hidden="true"></i><span>Ask AIParth</span>';
+        const buttons = document.createElement('div');
+        buttons.className = 'logo-focus-buttons';
+        buttons.appendChild(action);
+        buttons.appendChild(askButton);
+        details.appendChild(title);
+        details.appendChild(notes);
+        const left = document.createElement('div');
+        left.className = 'logo-focus-left';
+        left.appendChild(frame);
+        left.appendChild(buttons);
+        content.appendChild(left);
+        content.appendChild(details);
+        wrapper.appendChild(closeButton);
         frame.appendChild(img);
-        wrapper.appendChild(frame);
-        wrapper.appendChild(action);
-        wrapper.appendChild(askButton);
+        wrapper.appendChild(content);
         document.body.appendChild(wrapper);
 
-        return { wrapper, frame, img, title, action, askButton };
+        return { wrapper, frame, img, title, notes, action, askButton, closeButton };
     }
 
     function createFocusBackdrop() {
@@ -857,6 +878,68 @@ document.addEventListener('DOMContentLoaded', () => {
     const focusSpotlight = createFocusSpotlight();
     const focusDust = createFocusDust();
     const focusImage = createFocusImage();
+    let logoNotesCache = null;
+
+    function normalizeMatch(value) {
+        return (value || '')
+            .toLowerCase()
+            .replace(/[’']/g, '')
+            .replace(/[^a-z0-9]+/g, ' ')
+            .trim();
+    }
+
+    async function loadLogoNotes() {
+        if (logoNotesCache) return logoNotesCache;
+        try {
+            const response = await fetch('dev-notes.txt', { cache: 'no-store' });
+            if (!response.ok) return [];
+            const raw = await response.text();
+            const chunkRegex = /## APP:\s*(.+)\n([\s\S]*?)(?=\n## APP:|$)/g;
+            const chunks = [];
+            let match;
+            while ((match = chunkRegex.exec(raw)) !== null) {
+                const appName = match[1].trim();
+                let body = match[2].trim();
+                const aliasMatch = body.match(/^Aliases:\s*(.+)$/m);
+                const keywords = [appName];
+                if (aliasMatch) {
+                    aliasMatch[1].split(',').forEach(alias => {
+                        const trimmed = alias.trim();
+                        if (trimmed) keywords.push(trimmed);
+                    });
+                    body = body.replace(aliasMatch[0], '').trim();
+                }
+                const paragraphs = body
+                    .split(/\n\s*\n/)
+                    .map(line => line.replace(/\s+/g, ' ').trim())
+                    .filter(Boolean);
+                chunks.push({ keywords, paragraphs, rawLower: body.toLowerCase() });
+            }
+            logoNotesCache = chunks;
+            return chunks;
+        } catch (error) {
+            return [];
+        }
+    }
+
+    async function applyLogoNotes(title) {
+        if (!focusImage.notes) return;
+        focusImage.notes.innerHTML = '';
+        const chunks = await loadLogoNotes();
+        const key = normalizeMatch(title);
+        const match = chunks.find(chunk =>
+            chunk.keywords.some(keyword => {
+                const normalized = normalizeMatch(keyword);
+                return normalized && (key.includes(normalized) || normalized.includes(key));
+            })
+        ) || chunks.find(chunk => chunk.rawLower && normalizeMatch(chunk.rawLower).includes(key));
+        const paragraphs = match?.paragraphs?.length ? match.paragraphs : ['Details coming soon.'];
+        paragraphs.forEach(line => {
+            const p = document.createElement('p');
+            p.textContent = line;
+            focusImage.notes.appendChild(p);
+        });
+    }
 
     function showFocusImage(body) {
         const imgEl = body.element.querySelector('.face.front img');
@@ -864,11 +947,12 @@ document.addEventListener('DOMContentLoaded', () => {
         focusImage.img.src = imgEl.getAttribute('src');
         focusImage.img.alt = body.element.dataset.title || 'App logo';
         focusImage.title.textContent = body.element.dataset.title || 'App Title';
-        const label = body.element.dataset.button || 'View on App Store';
+        const label = body.element.dataset.button || 'App Store';
         const labelEl = focusImage.action.querySelector('span');
         if (labelEl) labelEl.textContent = label;
         focusImage.action.setAttribute('href', body.element.dataset.link || '#');
         focusImage.askButton.dataset.askTitle = body.element.dataset.title || 'this app';
+        applyLogoNotes(body.element.dataset.title || '');
         focusImage.wrapper.style.opacity = '';
         focusImage.frame.style.transform = '';
         focusImage.wrapper.classList.add('is-visible');
@@ -880,9 +964,6 @@ document.addEventListener('DOMContentLoaded', () => {
         focusImage.wrapper.style.opacity = '';
         focusImage.frame.style.transform = '';
         focusBackdrop.classList.remove('is-visible');
-        focusSpotlight.classList.remove('is-visible');
-        focusDust.canvas.classList.remove('is-visible');
-        focusDust.visible = false;
     }
 
     function focusLogo(body) {
@@ -899,18 +980,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         focusedBody = body;
         body.isFocused = true;
-        body.isReturning = false;
-        body.returnX = body.x;
-        body.returnY = body.y;
         body.isDragging = false;
-        body.vx = 0;
-        body.vy = 0;
-        body.rotationX = 0;
-        body.rotationY = 0;
-        body.rotationZ = 0;
-        body.rotSpeedX = 0;
-        body.rotSpeedY = 0;
-        body.rotSpeedZ = 0;
         body.element.classList.add('is-focused');
         showFocusImage(body);
     }
@@ -919,13 +989,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!focusedBody) return;
         const body = focusedBody;
         body.isFocused = false;
-        body.isReturning = true;
         body.element.classList.remove('is-focused');
         focusedBody = null;
         hideFocusImage();
     }
 
     window.__clearLogoFocus = clearFocus;
+    if (focusImage.closeButton) {
+        focusImage.closeButton.addEventListener('click', event => {
+            event.stopPropagation();
+            clearFocus();
+        });
+    }
 
     function resetLogosToInitialPositions() {
         if (!isInitialized) return;
@@ -1160,7 +1235,7 @@ document.addEventListener('DOMContentLoaded', () => {
             body.focusProgress += (focusTarget - body.focusProgress) * FOCUS.progressLerp;
 
             // 1. Update Position
-            if (body.isFocused) {
+            if (body.isFocused && !scrollLogos) {
                 const { width: w, height: h } = getContainerBounds();
                 const targetX = (w - physicsConfig.size) / 2;
                 const targetY = (h - physicsConfig.size) / 2;
@@ -1345,9 +1420,9 @@ if (typeof window.__ladybugLogoCollision === "function") {
             // Scale logic: Base from config
             const baseScale = physicsConfig.scale;
             const hoverScale = body.isHovered && !body.isFocused ? 1.15 : 1;
-            const focusScale = 1 + body.focusProgress * FOCUS.scaleBoost;
+            const focusScale = scrollLogos ? 1 : 1 + body.focusProgress * FOCUS.scaleBoost;
             const currentScale = baseScale * hoverScale * focusScale;
-            const displayRotationY = body.rotationY + body.focusProgress * FOCUS.flipDeg;
+            const displayRotationY = scrollLogos ? body.rotationY : body.rotationY + body.focusProgress * FOCUS.flipDeg;
 
             // Offset logic: Align visual center (65px element) with physics center
             const displayX = body.x + physicsConfig.offset;
@@ -1365,10 +1440,7 @@ if (typeof window.__ladybugLogoCollision === "function") {
                 const focusScaleValue = 1 + focusedBody.focusProgress * 0.35;
                 focusImage.frame.style.transform = `scale(${focusScaleValue}) rotateY(${focusedBody.focusProgress * FOCUS.flipDeg}deg)`;
                 focusImage.wrapper.style.opacity = focusedBody.focusProgress;
-                const spotlightOn = focusedBody.focusProgress > 0.97;
-                focusSpotlight.classList.toggle('is-visible', spotlightOn);
-                focusDust.visible = spotlightOn;
-                focusDust.canvas.classList.toggle('is-visible', spotlightOn);
+                // Spotlight/dust removed; keep a simple sheet focus.
             }
         });
 
