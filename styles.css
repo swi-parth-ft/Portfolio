@@ -974,27 +974,24 @@ html.chat-open {
      transform: translate(-50%, -50%);
  }
 
- .ladybug-container {
-     position: fixed;
-     top: 20px;
-     /* Adjust as needed */
-     left: 20px;
-     /* Adjust as needed */
-     transform: translate(-50%, -50%);
-     z-index: 1000;
-     /* Ensure it stays on top of other content */
- }
+.ladybug-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: none;
+    z-index: 1000;
+    /* Ensure it stays on top of other content */
+}
 
- .ladybug {
+.ladybug {
      width: 15px;
      /* Adjust size as needed */
      height: 15px;
      /* Adjust size as needed */
      cursor: none;
      background-size: cover;
-     padding: 50px;
-     /* Add padding to increase the clickable area */
-    box-sizing: content-box;
+     padding: 0;
+     box-sizing: border-box;
 
 }
 
@@ -1283,7 +1280,7 @@ html.chat-open {
 
 @media (max-width: 600px) {
     .app-logos-container {
-        transform: translateY(-60px);
+        transform: translateY(-100px);
     }
 }
 
@@ -1611,6 +1608,16 @@ body.ladybug-hover {
 
 
 @media (max-width: 600px) {
+    .ladybug-container {
+        top: 0;
+        left: 0;
+        transform: none;
+    }
+
+    .ladybug {
+        padding: 0;
+    }
+
     .logo-focus-image {
         left: 0;
         top: 0;

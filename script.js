@@ -92,28 +92,19 @@ document.addEventListener('DOMContentLoaded', function () {
     window.__ladybugLogoCollision = function () {
         if (logoCollisionCooldown) return;
         logoCollisionCooldown = true;
-// After first logo hit, switch bug movement to fully random
-hasLogoCollision = true;
-isTargetingLogos = false;
+        // After first logo hit, switch bug movement to fully random
+        hasLogoCollision = true;
+        isTargetingLogos = false;
         const msg = logoCollisionMessages[Math.floor(Math.random() * logoCollisionMessages.length)];
 
-        // Pause briefly on impact
-        setStopped("logo", true);
         bugMessage.innerHTML = msg;
         bugMessage.style.opacity = "1";
-
-        // Small impact emphasis
-        ladybug.style.height = "25px";
-        ladybug.style.width = "25px";
 
         if (logoCollisionTimer) clearTimeout(logoCollisionTimer);
         logoCollisionTimer = setTimeout(() => {
             bugMessage.style.opacity = "0";
-            ladybug.style.height = "15px";
-            ladybug.style.width = "15px";
-            setStopped("logo", false);
             logoCollisionCooldown = false;
-        }, 1400);
+        }, 1000);
     };
 
     const ladybugImages = [
@@ -297,8 +288,10 @@ setStopped("kill", false);
     };
     //Animate and Move
     let isTargetingLogos = true; // Start by targeting logos
-let hasLogoCollision = false; // After first logo hit, always use random movement/speed
+    let hasLogoCollision = false; // After first logo hit, always use random movement/speed
     let nextDirectionChangeAt = performance.now();
+    let dx = getRandomSpeed();
+    let dy = getRandomSpeed();
 
     function animate() {
         if (isStopped) {
