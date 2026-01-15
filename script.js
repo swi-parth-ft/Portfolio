@@ -491,6 +491,12 @@ if (!foodTarget && isTargetingLogos && !hasLogoCollision) {
     });
     document.addEventListener('pointerdown', event => {
         if (event.button !== 0) return;
+        if (hammerActive) {
+            triggerHammerSwing();
+            updateHammerCursor(event.clientX, event.clientY);
+            killbug();
+            return;
+        }
         const target = event.target;
         if (target.closest('a, button, input, textarea, select, .app-logo, .logo-focus-image, .logo-focus-action, .logo-focus-title, .logo-focus-frame, .ladybug, .ladybug-hammer-cursor, .hero-social-bar, .ai-chat-overlay, .ai-chat-panel')) {
             return;
