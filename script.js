@@ -64,6 +64,9 @@ document.addEventListener('DOMContentLoaded', function () {
         else stopReasons.delete(reason);
         isStopped = stopReasons.size > 0;
     }
+    function canShowBugMessage() {
+        return bugAlive;
+    }
 
     // Random messages when the bug bumps into app logos.
     const logoCollisionMessages = [
@@ -90,6 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Called by the physics engine when the ladybug hits any logo.
     window.__ladybugLogoCollision = function () {
+        if (!canShowBugMessage()) return;
         if (logoCollisionCooldown) return;
         logoCollisionCooldown = true;
         // After first logo hit, switch bug movement to fully random
@@ -208,6 +212,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showFoodMessage() {
+        if (!canShowBugMessage()) return;
         const msg = foodMessages[Math.floor(Math.random() * foodMessages.length)];
         bugMessage.innerHTML = msg;
         bugMessage.style.opacity = "1";
@@ -220,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     // Stop Bug
     function stopLadybug() {
-        if (!isStopped) {
+        if (!isStopped && canShowBugMessage()) {
 setStopped("section", true);
             bugMessage.innerHTML = 'Hey, Check it out'
             bugMessage.style.opacity = '1';
@@ -237,7 +242,7 @@ setStopped("section", false);
 
     // Stop Bug
     function stopLadybug2() {
-        if (!isStopped && alert) {
+        if (!isStopped && alert && canShowBugMessage()) {
 
 setStopped("intro", true);
             bugMessage.innerHTML = "Hey, I'm Poo, a friendly Bug! <br> I might mess things up, <br>you can kill me to fix that. <br>but please don't 🙂‍↔️"
@@ -523,6 +528,9 @@ if (!foodTarget && isTargetingLogos && !hasLogoCollision) {
     });
     //check Collision
     function checkCollision() {
+        if (!canShowBugMessage()) {
+            return;
+        }
         const rect = ladybug.getBoundingClientRect();
         const bugCenterX = rect.left + rect.width / 2;
         const bugCenterY = rect.top + rect.height / 2;
