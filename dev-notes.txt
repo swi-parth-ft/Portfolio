@@ -1,5 +1,5 @@
 DEV NOTES FOR APP SHEETS
-Last updated: 2026-01-15
+Last updated: 2026-03-08
 
 ## APP: AudioHut
 Aliases: Audio Converter, Audio Converter: AudioHut
@@ -27,6 +27,11 @@ Noted is deliberately minimal: it is a voice-first capture tool where the primar
 
 ## APP: Pixera
 Pixera was built as a creator and developer workflow tool: the point is not editing, it is producing a polished, share-ready screenshot in seconds with smart defaults that look good every time. The editor is intentionally lightweight and responsive, with background styles and framing controls that cover real-world use cases without overwhelming the user. Premium features focus on repeatability and sensitive data redaction so Pixera fits both personal sharing and workplace contexts.
+
+## APP: Bezel Studio
+Bezel Studio is a compact design studio for building polished Apple-device mockups and marketing visuals from screenshots and screen recordings. I centered it on a layered canvas workflow with projects, multiple canvases, elegant bezels, strong typography, rich or transparent backgrounds, and precise controls that make visual iteration feel fast and satisfying.
+
+Pro features expand that workflow with Bezel AI editing, on-device translation, a broader pattern and lighting library, Apple Intelligence sticker generation, and higher-end animated exports. iCloud sync keeps work current across iPhone and iPad, so the app feels like a portable studio instead of a one-device editor.
 
 ## APP: Nucleus
 Nucleus is designed as a private, on-device assistant that feels truly integrated into the Apple ecosystem rather than a generic chat box. The core engineering work is tool-centric: wiring real data surfaces into a conversational system that can produce daily briefings and execute practical tasks without shipping data to servers. Personal Space is a memory-first layer, and the product stays defensible on privacy with no login, no tracking, and on-device processing by default.

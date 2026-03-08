@@ -423,6 +423,39 @@ Designed-for / architecture-ready:
 - Workflow scaling from quick clips to long-form projects without compromising privacy
 
 ================================================================================
+### CHUNK: APP_BEZEL_STUDIO
+
+App: Bezel Studio
+Aliases: Bezel Studio, App Mockup Studio
+Platforms: iPhone, iPad
+Positioning (one line): A portable design studio for Apple-device mockups, layered marketing visuals, and animated canvas compositions.
+
+Shipped features:
+- Projects with multiple canvases, each with independent layout, layers, backgrounds, and motion
+- Apple device bezels with multiple frame/color options for screenshots and screen recordings
+- Layer-based editing for text, images, stickers, drawings, and annotations
+- Transparent background support for clean compositing workflows
+- Typography tools with styles, gradients, shadows, alignment, and gesture-driven refinement
+- Canvas Motion and keyframe animation for stills, videos, and full-scene transitions
+- Background system with gradients, abstract patterns, animated pattern effects, and lighting
+- Guides, snapping, soft outlines, and haptic feedback for precise editing
+- iCloud sync across devices
+- High-quality export ready for sharing
+- Pro features:
+  - Bezel AI mode for voice/text editing with natural language
+  - One-tap on-device translation for a canvas or full project
+  - Expanded pattern/lighting library, Apple Intelligence stickers, and animated exports
+
+Shipped tech (high-level, defensible):
+- Layered canvas editor with motion/keyframe timeline concepts
+- On-device AI-assisted editing on supported devices/OS versions
+- On-device translation for design localization
+- iCloud sync + high-resolution render/export pipeline
+
+Designed-for / architecture-ready:
+- Fast iteration from raw screenshot to polished marketing asset, including motion-rich exports and localized variants
+
+================================================================================
 ### CHUNK: CONTACT_AND_ESCALATION
 
 If the user asks something not covered in this file, or wants details beyond the published scope:
