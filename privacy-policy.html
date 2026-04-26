@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pebble Privacy Policy</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4efe7;
+      --panel: rgba(255, 255, 255, 0.76);
+      --text: #1e1a17;
+      --muted: #63584f;
+      --line: rgba(30, 26, 23, 0.12);
+      --accent: #8a5b3d;
+      --accent-soft: rgba(138, 91, 61, 0.12);
+      --shadow: 0 22px 60px rgba(64, 42, 28, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(138, 91, 61, 0.12), transparent 34%),
+        linear-gradient(180deg, #faf7f2 0%, var(--bg) 100%);
+      min-height: 100vh;
+      line-height: 1.65;
+    }
+
+    .wrap {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 48px 20px 72px;
+    }
+
+    .card {
+      background: var(--panel);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    header {
+      padding: 42px 34px 28px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.78), rgba(255,255,255,0.5));
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .meta {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .content {
+      padding: 8px 34px 36px;
+    }
+
+    section {
+      padding: 26px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    section:last-child {
+      border-bottom: 0;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    p {
+      margin: 0 0 12px;
+      color: var(--text);
+    }
+
+    ul {
+      margin: 10px 0 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin: 7px 0;
+    }
+
+    .note {
+      padding: 14px 16px;
+      border-left: 4px solid var(--accent);
+      background: rgba(138, 91, 61, 0.06);
+      border-radius: 14px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(138, 91, 61, 0.3);
+    }
+
+    a:hover {
+      border-bottom-color: currentColor;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    @media (max-width: 640px) {
+      .wrap { padding: 18px 12px 36px; }
+      header, .content { padding-left: 20px; padding-right: 20px; }
+      header { padding-top: 30px; }
+      .card { border-radius: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <main class="card">
+      <header>
+        <span class="eyebrow">Privacy Policy</span>
+        <h1>Pebble</h1>
+        <p class="meta">Effective date: April 26, 2026</p>
+        <p class="meta">Pebble is a manual subscription tracker. It does not require bank login or Plaid access.</p>
+      </header>
+
+      <div class="content">
+        <section>
+          <h2>Overview</h2>
+          <p>
+            This policy explains how Pebble handles information when you use the app and related services.
+            Pebble is designed for private, manual tracking of subscriptions, renewals, reminders, and related notes.
+          </p>
+        </section>
+
+        <section>
+          <h2>Information You Add</h2>
+          <p>You choose what goes into Pebble. The app may store:</p>
+          <ul>
+            <li>Subscription names, prices, billing cycles, renewal dates, and trial dates</li>
+            <li>Categories, reminders, notes, payment method labels, and custom fields you enter</li>
+            <li>Images or screenshots you import for Magic Import or reference</li>
+            <li>Settings, preferences, and dashboard data</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Sync and Backup</h2>
+          <p>
+            Pebble can sync data through Apple iCloud features, including the private iCloud key-value store used by the app.
+            If you enable sync, your Pebble data may be stored in your Apple account so it can appear on your other Apple devices.
+          </p>
+          <p class="small">
+            Manual JSON backup and restore features may also be available inside the app.
+          </p>
+        </section>
+
+        <section>
+          <h2>Purchases</h2>
+          <p>
+            Pebble uses RevenueCat and Apple purchase systems to handle app unlocks and restore purchases.
+            When you buy Pebble Pro, information about the purchase and entitlement status may be processed by Apple and RevenueCat so the app can verify access.
+          </p>
+        </section>
+
+        <section>
+          <h2>How We Use Information</h2>
+          <ul>
+            <li>Provide subscription tracking, reminders, widgets, and sync</li>
+            <li>Unlock Pebble Pro and restore purchases</li>
+            <li>Keep your data available across devices when you choose iCloud sync</li>
+            <li>Fix bugs, prevent abuse, and improve the app experience</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>What We Share</h2>
+          <p>
+            Pebble does not sell your personal data. The app may share limited data with service providers that are required to run the product,
+            including Apple for iCloud and in-app purchase features and RevenueCat for purchase verification.
+          </p>
+        </section>
+
+        <section>
+          <h2>Data Retention</h2>
+          <p>
+            Your subscription data stays in the app, in iCloud if sync is enabled, or in any backup you export. You can remove data by deleting it in the app and by managing your Apple/iCloud settings.
+          </p>
+        </section>
+
+        <section>
+          <h2>Children</h2>
+          <p>
+            Pebble is not intended for children under 13.
+          </p>
+        </section>
+
+        <section>
+          <h2>Security</h2>
+          <p>
+            Pebble is built for privacy-first manual tracking, but no app or storage system is perfectly secure.
+            Use the app on devices you control and keep your Apple account protected.
+          </p>
+        </section>
+
+        <section>
+          <h2>Changes</h2>
+          <p>
+            We may update this policy when the app changes. The latest version should always be published at the Pebble privacy URL.
+          </p>
+        </section>
+
+        <section>
+          <h2>Contact</h2>
+          <p>
+            For questions, use the Pebble support page at
+            <a href="https://parthantala.com/pebble">parthantala.com/pebble</a>
+            or the privacy page location at
+            <a href="https://parthantala.com/pebble/privacy">parthantala.com/pebble/privacy</a>.
+          </p>
+        </section>
+
+        <p class="note">
+          Draft copy for Pebble. Review before publishing if you want exact legal wording for your distribution region.
+        </p>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
